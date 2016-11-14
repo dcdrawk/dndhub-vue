@@ -5,6 +5,32 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+  @import './styles/variables';
+
+  .xen-ripple {
+    overflow: hidden;
+    position: relative;
+
+    &.round {
+      border-radius: 50%;
+    }
+
+  }
+  
+  .xen-ripple-dot {
+    position: absolute;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background-color: currentColor;
+    opacity: .2;
+    border-radius: 50%;
+    transform: scale(1);
+    pointer-events: none;
+  }
+</style>
+
 <script>
   import gsap from 'gsap'
 
@@ -61,30 +87,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-  @import '../../styles/variables';
-
-  .xen-ripple {
-    overflow: hidden;
-    position: relative;
-
-    &.round {
-      border-radius: 50%;
-    }
-
-  }
-  
-  .xen-ripple-dot {
-    position: absolute;
-    left: 0;
-    width: 24px;
-    height: 24px;
-    background-color: currentColor;
-    opacity: .2;
-    border-radius: 50%;
-    transform: scale(1);
-    pointer-events: none;
-  }
-</style>

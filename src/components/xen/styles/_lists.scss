@@ -1,12 +1,12 @@
-@import '../variables';
+@import './variables';
 
 .xen-list {
   list-style: none;
   padding: 0;
   margin: 8px 0;
+
   .xen-list-item {
     font-size: 16px;
-    // height: 48px;
     width: 100%;
     display: flex;
     flex-shrink: 0;
@@ -17,47 +17,61 @@
     user-select: none;
     vertical-align: middle;
     cursor: pointer;
+
     &.avatar {
       height: 56px;
     }
+
     &:hover {
       background-color: rgba(0,0,0,.09);
     }
+
     &.bold {
       font-weight: 500;
     }
+
     .xen-list-item-text-container {
       vertical-align: middle;
       display: inline-block;
       width: 100%;
       pointer-events: none;
     } 
+
     &.two-line .xen-list-item-text-container,
     &.multi-line .xen-list-item-text-container {
       padding: 20px 0;
     }
+
     &.one-line .xen-list-item-text-container {
       padding: 16px 0;
     }
+
   }
+
   &.dense {
+
     .xen-list-item {
       font-size: 14px;
       height: 40px;
     }
+
     .xen-list-item.avatar {
       height: 48px;
     }
+
   }
+
   .xen-list-item-icon {
     width: 40px;
     opacity: .54;
     flex-shrink: 0;
     user-select: none;
     cursor: default;
+
     i {
       user-select: none;
     }
+
   }
 
   .xen-list-item-avatar {
@@ -70,20 +84,23 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
+
     i {
       vertical-align: middle;
       text-align: center;
       width: 100%;
       color: #fff;
     }
+
   }
+
   .xen-item-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    pointer-events: none;
-    
+    pointer-events: none;    
   }
+
   .secondary-text {
     font-size: 14px;
     color: $secondary-text;
@@ -102,48 +119,60 @@
   .multi-line span {
     display: block;
   }
+
   .xen-list-item-text-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
 }
 
 .xen-list {
+
   .xen-list-item.two-line {
     height: 72px;
+
     .xen-list-item-avatar i {
       position: relative;
       top: 8px;
     }
+
     &.avatar {
       height: 72px;
     }
+
   }
 
   .xen-list-item.multi-line {
     height: auto;
+
     .secondary-text {
       white-space: normal;
       line-height: 1.25;
     }
+
     .xen-list-item-avatar i {
       position: relative;
       top: 8px;
     }
+
     &.avatar {
-      height: 72px;
-      
+      height: 72px;      
     }
+
   }
 
   &.dense {
+
     .xen-list-item.two-line {
       height: 60px;
     }
+
     .xen-list-item.avatar {
       height: 60px;
     }
+    
   }
 
 }

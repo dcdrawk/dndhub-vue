@@ -20,6 +20,9 @@
   </div>
 </template>
 
+<style scoped>
+</style>
+
 <script>
   import XenPageToolbar from './xen/PageToolbar'
   import XenButton from './xen/Button'
@@ -48,8 +51,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-

@@ -4,18 +4,25 @@
   </div>
 </template>
 
+<style lang="scss">
+</style>
+
 <script>
   export default {
+
+    // Props
     props: [
       'value'
     ],
 
+    // Data
     data () {
       return {
         radioButtons: []
       }
     },
 
+    // Mounted
     mounted () {
       setTimeout(() => {
         this.$on('radioSelect', (value) => {
@@ -26,6 +33,7 @@
       }, 0)
     },
 
+    // Methods
     methods: {
       getSelected () {
         for (var i in this.radioButtons) {
@@ -41,6 +49,7 @@
       }
     },
 
+    // Watch
     watch: {
       'value': {
         handler: function (val, oldVal) {
@@ -50,6 +59,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-</style>

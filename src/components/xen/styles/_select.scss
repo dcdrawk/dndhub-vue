@@ -1,5 +1,5 @@
-@import '../whiteframe';
-@import '../variables';
+@import './whiteframe';
+@import './variables';
 
 .xen-select-container {
   position: relative;
@@ -29,22 +29,24 @@
       color: $primary-color;
     }
 
-    input,
-    textarea {
+    input, textarea {
       border-bottom: 2px solid $primary-color;
       margin-bottom: 15px;
     }
   }
 
   &.xen-dense {
+
     span {
       font-size: 14px;
     }
+
     .xen-select-option {
       height: 40px;
     }
   }
 }
+
 .xen-select {
   align-items: center;
   display: inline-flex;
@@ -63,12 +65,12 @@
     top: 4px;
     opacity: .54;
   }
+
 }
 
 .xen-select-option-container {
   @extend .whiteframe-z2;
   position: absolute;
-  // top: -19px;
   left: -12px;
   z-index: 10;
   background-color: #fff;
@@ -78,7 +80,6 @@
   overflow: auto;
   width: 100%;
   transform-origin: 50%;
-  // opacity: .5;
 }
 
 .xen-select-option {
@@ -93,6 +94,7 @@
   &:hover {
     background-color: #EEEEEE;
   }
+  
 }
 
 .xen-select-backdrop {

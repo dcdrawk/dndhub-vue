@@ -6,28 +6,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '../../styles/xen/_chips.scss';
-
-  .xen-chip-remove {
-    border-radius: 50%;
-    background-color: rgba(0,0,0,.54);
-    margin: 0 -4px 0 8px;
-    vertical-align: middle;
-    color: rgb(224, 224, 224);
-    font-size: 14px;
-    padding: 2px;
-    font-weight: 600;
-    cursor: pointer;
-    opacity: .54;
-    width: 18px;
-    height: 18px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
-
-
+  @import './styles/chips';
 </style>
+
 <script>
   import { focus } from 'vue-focus'
 

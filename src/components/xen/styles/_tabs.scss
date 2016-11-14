@@ -1,40 +1,14 @@
-@import '../variables';
-@import '../whiteframe';
+@import './variables';
+@import './whiteframe';
 
 .xen-tabs {
   width: 100%;
-  &.primary > {
 
-    .xen-tab-items-container {
-      background-color: $primary-color;
-      .active-tab-bar {
-        background-color: #fff;
-      }
-      button {
-        color: #fff;
-      }
-    }
-  }
-
-  &.secondary > {
-
-    .xen-tab-items-container {
-      background-color: $secondary-color;
-
-      .active-tab-bar {
-        background-color: #fff;
-
-      }
-
-      button {
-        color: #fff;
-      }
-    }
-  }
   > span {
     line-height: 24px;
     white-space: nowrap;
   }
+
   &.icons > .xen-tab-items-container .xen-tab-items >  {
     button,
     button span {
@@ -50,71 +24,89 @@
     min-width: 24px;
     min-height: 24px;
   }
+
 }
+
 .xen-tab-items-container {
   overflow: hidden;
-  // padding: 0 8px;
+
   span {
-    //width: 80px;
     text-overflow: ellipsis;
     overflow: hidden;
     display: block;
   }
 
-  &.primary > {
-    background-color: $primary-color;
-    button {
-      color: #fff;
-    }
-  }
-
-  &.secondary > {
-    background-color: $secondary-color;
-    button {
-      color: #fff;
-    }
-  }
 }
 
 .xen-tab-items-container .xen-tab-items {
-  //background-color: #fff;
   display: flex;
   transition: transform .2s $swift-in;
+  position: relative;
 
   button {
     margin: 0;
     padding: 12px 16px;
     border-radius: 0;
-    //flex-grow: 1;
   }
 
   &.panning {
     transition: none;
   }
-  position: relative;
+  
   i {
     display: block;
     margin-bottom: 10px;
   }
+
 }
 
 .xen-tab-items {
   display: inline-block;
 }
+
 .xen-active-tab-bar {
+
   width: 100px;
-  height: 2px;
-  
+  height: 2px;  
   position: relative;
   top:-2px;
   transform-origin: 0px 0px 0px;
   transition: all .2s $swift-in;
   z-index: 5;
   margin-bottom: -2px;
+
   &.panning {
     transition: none;
   }
+
   &.xen-theme-white {
     background-color: $white;
   }
+
+}
+
+.xen-button-container.xen-tab-button {
+  margin: 0;
+  display: inline-table;
+
+  .xen-button {
+    padding: 10px 16px;
+  }
+
+}
+
+.xen-tabs {
+
+  .xen-tab-icon  {
+    margin: auto;
+    text-align: center;
+    pointer-events: none;
+  }
+  
+}
+
+.xen-tab-text {
+  pointer-events: none;
+  display: block;
+  position: relative;
 }

@@ -24,13 +24,15 @@ import XenButton from './Button'
 import Hammer from 'hammerjs'
 
 export default {
-
+  // Name
   name: 'xen-tabs',
 
+  // Components
   components: {
     XenButton
   },
 
+  // Props
   props: [
     'defaultTab',
     'theme',
@@ -39,6 +41,7 @@ export default {
     'iconsOnly'
   ],
 
+  // Data
   data () {
     return {
       active: this.defaultTab,
@@ -54,6 +57,7 @@ export default {
     }
   },
 
+  // Mounted
   mounted () {
     this.$nextTick(() => {
       this.offset = 0
@@ -67,6 +71,7 @@ export default {
     })
   },
 
+  // Methods
   methods: {
     // Select a tab
     selectTab (key, index) {
@@ -195,6 +200,7 @@ export default {
     }
   },
 
+  // Watch
   watch: {
     // Watch the icons only property, update the tab bar accordingly
     'iconsOnly': {
@@ -202,45 +208,12 @@ export default {
         this.updateBar(this.defaultTab)
         this.active = this.defaultTab
       }
-    }// ,
-
-    // '$refs': {
-    //   handler: function (val, oldVal) {
-    //     this.updateBar(this.defaultTab)
-    //     this.active = this.defaultTab
-    //   }
-    // }
+    }
   }
 
 }
 </script>
 
 <style lang="scss">
-  @import '../../styles/xen/tabs';
-
-  .xen-button-container.xen-tab-button {
-    margin: 0;
-    display: inline-table;
-
-    .xen-button {
-      padding: 10px 16px;
-    }
-
-  }
-
-  .xen-tabs {
-
-    .xen-tab-icon  {
-      margin: auto;
-      text-align: center;
-      pointer-events: none;
-    }
-    
-  }
-
-  .xen-tab-text {
-    pointer-events: none;
-    display: block;
-    position: relative;
-  }
+  @import './styles/tabs';
 </style>

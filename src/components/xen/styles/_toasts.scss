@@ -1,0 +1,72 @@
+@import './variables';
+
+.xen-toast-container {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  right: 0;
+  z-index: 10;
+  display: flex;
+
+  .xen-toast {
+    color: #fff;
+    background-color: #323232;
+    height: 48px;
+    padding: 14px 24px;
+    min-width: 288px;
+    max-width: 568px;
+    border-radius: 2px;
+    margin: 0 auto;
+    display: flex;
+    align-content: space-between;
+    position: relative;
+
+    @media (max-width: $small-breakpoint) {
+      min-width: 100%;
+      max-width: 100%;
+    }
+
+    span {
+      font-size: 14px;
+      line-height: 22px;
+      vertical-align: middle;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+      overflow: hidden;
+    }
+
+    .xen-button-container {
+      display: block;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      color: #fff;
+    }
+
+  }
+
+}
+
+// For the Toast Transitions
+.toast-enter-active,
+.toast-leave-active {
+  transition: transform .4s $swift-in;
+  transform: translateY(0px);
+
+  span {
+    transition: opacity .4s $swift-in .1s;
+    opacity: 1;
+  }
+  
+}
+
+/* .expand-enter defines the starting state for entering */
+/* .expand-leave-active defines the ending state for leaving */
+.toast-enter,
+.toast-leave-active {
+  transform: translateY(48px);
+  span {
+    opacity: 0;
+  }
+}

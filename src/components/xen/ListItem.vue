@@ -19,6 +19,9 @@
   </div>
 </template>
 
+<style lang="scss">
+</style>
+
 <script>
   import XenRipple from '../xen/Ripple'
 
@@ -44,8 +47,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-  // @import '../../styles/xen/lists';
-</style>

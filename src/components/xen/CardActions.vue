@@ -4,6 +4,9 @@
   </div>
 </template>
 
+<style scoped>
+</style>
+
 <script>
   export default {
     // Name
@@ -11,8 +14,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

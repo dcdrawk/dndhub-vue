@@ -9,28 +9,33 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/radio-button'
+  @import './styles/radio-button';
 </style>
 
 <script>
   import XenRipple from './Ripple'
 
-  export default{
+  export default {
+
+    // Props
     props: [
       'value',
       'secondaryColor'
     ],
 
+    // Components
     components: {
       XenRipple
     },
 
+    // Data
     data () {
       return {
         selected: false
       }
     },
 
+    // Methods
     methods: {
       toggleCheckbox () {
         this.$parent.$children.forEach((item, index) => {

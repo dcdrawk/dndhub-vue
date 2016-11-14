@@ -6,27 +6,33 @@
     </xen-ripple>
   </div>
 </template>
+
 <style lang="scss">
-  @import '../../styles/xen/checkbox'
+  @import './styles/checkbox';
 </style>
+
 <script>
   import XenRipple from './Ripple'
 
-  export default{
+  export default {
+    // Props
     props: [
       'value'
     ],
 
+    // Components
     components: {
       XenRipple
     },
 
+    // Data
     data () {
       return {
         checkboxValue: this.value || false
       }
     },
 
+    // Methods
     methods: {
       toggleCheckbox (value) {
         if (value === true || value === false) {
@@ -34,10 +40,10 @@
         } else {
           this.checkboxValue = !this.checkboxValue
         }
-        // this.$emit('input', this.checkboxValue)
       }
     },
 
+    // Watch
     watch: {
       'checkboxValue': {
         handler: function (val, oldVal) {

@@ -4,17 +4,8 @@
   </div>
 </template>
 
-<script>
-  export default {
-    // Name
-    name: 'xen-card'
-
-  }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  @import '../../styles/whiteframe';
+  @import './styles/whiteframe';
 
   .xen-card {
     @extend .whiteframe-z1;
@@ -25,3 +16,11 @@
   }
 
 </style>
+
+<script>
+  export default {
+    // Name
+    name: 'xen-card'
+
+  }
+</script>

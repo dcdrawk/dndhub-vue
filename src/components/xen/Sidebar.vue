@@ -4,6 +4,10 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+  @import './styles/sidebar';
+</style>
+
 <script>
   export default {
     // Name
@@ -11,8 +15,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-  @import '../../styles/xen/_sidebar.scss';
-</style>

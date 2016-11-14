@@ -7,14 +7,21 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/_input.scss';
+  @import './styles/input';
 </style>
+
 <script>
   import { focus } from 'vue-focus'
 
   export default {
+
+    // Directives
     directives: { focus: focus },
+
+    // Name
     name: 'xen-input',
+
+    // Props
     props: [
       'label',
       'value',
@@ -23,6 +30,7 @@
       'placeholder'
     ],
 
+    // Data
     data () {
       return {
         focused: false,
@@ -30,6 +38,7 @@
       }
     },
 
+    // Watch
     watch: {
       'inputValue': {
         handler: function (val, oldVal) {

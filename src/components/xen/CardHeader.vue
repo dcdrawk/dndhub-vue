@@ -4,6 +4,21 @@
   </div>
 </template>
 
+<style scoped>
+  .xen-card-title-container {
+    display: flex;
+  }
+
+  .xen-card-title {
+    margin: 16px;
+  }
+
+  .xen-custom-background {
+    padding: 16px;
+    margin: 0;
+  }
+</style>
+
 <script>
   export default {
     // Name
@@ -16,19 +31,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .xen-card-title-container {
-    display: flex;
-  }
-
-  .xen-card-title {
-    margin: 16px;
-  }
-
-  .xen-custom-background {
-    margin: 0;
-    padding: 16px;
-  }
-</style>

@@ -4,15 +4,6 @@
   </div>
 </template>
 
-<script>
-  export default {
-    // Name
-    name: 'card-media'
-
-  }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .xen-card-media {
 
@@ -22,3 +13,11 @@
 
   }
 </style>
+
+<script>
+  export default {
+    // Name
+    name: 'card-media'
+
+  }
+</script>

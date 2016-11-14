@@ -1,6 +1,5 @@
 <template>
   <div ref="panel" class="xen-expansion-panel" @click="togglePanel();" :class="{ 'closed': !panelOpen, 'open': panelOpen}">
-    <!--<slot></slot>-->
     <div ref="container" class="row">
       <div class="col-xs-3 xen-expansion-title">
         <strong>{{ title }}</strong>
@@ -26,13 +25,16 @@
   </div>
 
 </template>
+
 <style lang="scss">
-  @import '../../styles/xen/expansion-panels';
+  @import './styles/expansion-panels';
 </style>
+
 <script>
   import gsap from 'gsap'
 
-  export default{
+  export default {
+    // Props
     props: [
       'open',
       'title',
@@ -40,6 +42,7 @@
       'secondaryText'
     ],
 
+    // Data
     data () {
       return {
         startHeight: 48,
@@ -47,6 +50,7 @@
       }
     },
 
+    // Methods
     methods: {
       togglePanel () {
         this.panelOpen = !this.panelOpen

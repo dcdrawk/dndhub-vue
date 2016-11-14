@@ -14,16 +14,21 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/slider';
+  @import './styles/slider';
 </style>
+
 <script>
   import { focus } from 'vue-focus'
   import Hammer from 'hammerjs'
-  // import gsap from 'gsap'
-
+  
   export default {
+    // Directives
     directives: { focus: focus },
-    name: 'MaterialButton',
+
+    // Name
+    name: 'xen-slider',
+
+    // Props
     props: [
       'value',
       'min',
@@ -32,6 +37,7 @@
       'showBubble'
     ],
 
+    // Data
     data () {
       return {
         focused: false,
@@ -43,9 +49,10 @@
       }
     },
 
+    // Methods
     methods: {
       clickSlider (ev) {
-        var value = (ev.clientX - this.$refs.container.offsetLeft - 16) / this.$refs.slider.clientWidth * (+this.maxValue - +this.minValue) + +this.minValue
+        let value = (ev.clientX - this.$refs.container.offsetLeft - 16) / this.$refs.slider.clientWidth * (+this.maxValue - +this.minValue) + +this.minValue
 
         if (value > this.minValue && value < this.maxValue) {
           this.sliderValue = (ev.clientX - this.$refs.container.offsetLeft - 16) / this.$refs.slider.clientWidth * (+this.maxValue - +this.minValue) + +this.minValue
@@ -65,18 +72,18 @@
 
       // Takes a value from 0 - 1
       setPosition (value) {
-        var translate = (this.$refs.slider.clientWidth * value)
+        let translate = (this.$refs.slider.clientWidth * value)
         this.$refs.circle.style.transform = `translateX(${translate}px)`
         this.$refs.bubble.style.transform = `translateX(${translate}px)`
         this.$refs.indicator.style.transform = `scaleX(${value})`
       },
 
       createSteps () {
-        var steps = []
+        let steps = []
         // Set up the steps array
-        for (var i = 0; i < this.steps; i++) {
+        for (let i = 0; i < this.steps; i++) {
           steps[i] = i * this.$refs.slider.clientWidth / (this.steps - 1)
-          var sliderDot = document.createElement('span')
+          let sliderDot = document.createElement('span')
           sliderDot.classList.add('slider-dot')
           sliderDot.style.transform = `translate3d(${steps[i] - 4}px, -2px, 0px)`
           this.$refs.slider.append(sliderDot)
@@ -85,16 +92,16 @@
 
       // Snap to steps
       stepSnap (value) {
-        var steps = []
-        var position = ((value - this.minValue) / (this.maxValue - this.minValue)) * this.$refs.slider.clientWidth
+        let steps = []
+        let position = ((value - this.minValue) / (this.maxValue - this.minValue)) * this.$refs.slider.clientWidth
 
         // Set up the steps array
-        for (var i = 0; i < this.steps; i++) {
+        for (let i = 0; i < this.steps; i++) {
           steps[i] = i * this.$refs.slider.clientWidth / (this.steps - 1)
         }
 
         // Go through each step, determine where the value is closest to.
-        for (var j in steps) {
+        for (let j in steps) {
           if (+j !== steps.length - 1) {
             if (position >= steps[j] && position < steps[+j + 1]) {
               // If it's between the two steps
@@ -117,9 +124,9 @@
       }
     },
 
+    // Mounted
     mounted () {
       var circle = new Hammer(this.$refs.circle)
-      // var container = this.$refs.container
       setTimeout(() => {
         if (this.steps) {
           this.createSteps()
@@ -149,13 +156,13 @@
       circle.on('panend', (ev) => {
         this.focused = false
         this.translate = this.translate + ev.deltaX
-
         if (this.steps) {
           this.stepSnap(this.value)
         }
       })
     },
 
+    // Watch
     watch: {
       'sliderValue': {
         handler: function (val, oldVal) {

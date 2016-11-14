@@ -1,4 +1,4 @@
-@import '../variables';
+@import './variables';
 
 .xen-radio-button-container {
   width: 42px;
@@ -10,8 +10,8 @@
   user-select: none;
   overflow: hidden;
   border-radius: 50%;
-  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
-  
+  z-index: 1;
+
   .circle {
     width: 10px;
     height: 10px;
@@ -68,7 +68,9 @@
         background-color: $secondary-color;
         border-color: $secondary-color;
       }
+      
     }
+
   }
 
 }

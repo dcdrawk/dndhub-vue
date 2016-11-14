@@ -7,14 +7,19 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/input';
+  @import './styles/input';
 </style>
 <script>
   import { focus } from 'vue-focus'
 
   export default {
+    // Directives
     directives: { focus: focus },
+
+    // Name
     name: 'xen-textarea',
+
+    // Props
     props: [
       'label',
       'value',
@@ -25,6 +30,7 @@
       'autoGrow'
     ],
 
+    // Data
     data () {
       return {
         focused: false,
@@ -32,6 +38,7 @@
       }
     },
 
+    // Methods
     methods: {
       auto_grow () {
         var element = this.$refs.textarea
@@ -40,6 +47,7 @@
       }
     },
 
+    // Watch
     watch: {
       'inputValue': {
         handler: function (val, oldVal) {

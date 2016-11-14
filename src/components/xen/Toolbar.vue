@@ -4,20 +4,6 @@
   </div>
 </template>
 
-<script>
-  export default {
-    // Name
-    name: 'xen-toolbar',
-
-    // Props
-    props: [
-      'title'
-    ]
-
-  }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   @import '../../styles/variables';
 
@@ -30,3 +16,16 @@
     line-height: 1.2;
   }
 </style>
+
+<script>
+  export default {
+    // Name
+    name: 'xen-toolbar',
+
+    // Props
+    props: [
+      'title'
+    ]
+
+  }
+</script>

@@ -7,6 +7,27 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+  @import './styles/variables';
+
+  .xen-page-toolbar {
+    position: fixed;
+    width: 100%;
+    padding: 16px;
+    top: 0;
+    z-index: 8;
+  }
+
+  i {
+    margin-right: 16px;
+  }
+
+  .title {
+    vertical-align: middle;
+    line-height: 1.2;
+  }
+</style>
+
 <script>
   import XenToolbar from './Toolbar'
   import XenIconButton from './IconButton'
@@ -28,25 +49,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-  @import '../../styles/variables';
-
-  .xen-page-toolbar {
-    position: fixed;
-    width: 100%;
-    padding: 16px;
-    top: 0;
-    z-index: 8;
-  }
-
-  i {
-    margin-right: 16px;
-  }
-
-  .title {
-    vertical-align: middle;
-    line-height: 1.2;
-  }
-</style>

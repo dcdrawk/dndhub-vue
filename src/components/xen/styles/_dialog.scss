@@ -1,6 +1,6 @@
-@import '../variables';
-@import '../whiteframe';
-@import '../transitions';
+@import './variables';
+@import './whiteframe';
+@import './transitions';
 
 .xen-dialog-container {
   display: flex;
@@ -10,15 +10,10 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  z-index: 10;
   pointer-events: none;
-
   margin: auto;
   min-width: 280px;
-  // background-color: #fff;
-  // max-width: 80%;
   z-index: 10;
-  // max-height: 80%;
   overflow: hidden;
 
   &.show {
@@ -27,13 +22,11 @@
 
   .xen-dialog {
     margin: auto;
-    // min-width: 280px;
     background-color: #fff;
     max-width: 80%;
     z-index: 10;
     max-height: 80%;
-    position: relative;
-    // overflow: hidden;
+    position: relative;                                                                                              
 
     @extend .whiteframe-z5;
 

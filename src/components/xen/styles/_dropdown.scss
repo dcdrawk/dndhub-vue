@@ -1,20 +1,19 @@
-@import '../whiteframe';
-@import '../variables';
+@import './whiteframe';
+@import './variables';
 
 .xen-dropdown-container {
   @extend .whiteframe-z1;
   min-width: 112px;
   max-width: 280px;
-  //padding: 8px 0;
   display: inline-block;
   position: absolute;
   background-color: #fff;
   overflow: hidden;
   opacity: 0;
   z-index: 10;
+
   &.closed {
     opacity: 0;
-    //height: 0px;
   }
 
   &.open {
@@ -22,12 +21,14 @@
   }
 
   .list-item {
-    //font-size: 15px;
     transition: all .25s $swift-in;
+
     &:hover {
       background-color: rgba(0,0,0,.12);
     }
+
   }
+  
 }
 
 .xen-dropdown-backdrop {

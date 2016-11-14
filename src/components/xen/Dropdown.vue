@@ -9,21 +9,28 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/dropdown'
+  @import './styles/dropdown';
 </style>
+
 <script>
   import { focusModel } from 'vue-focus'
   import gsap from 'gsap'
 
   export default {
+    // Directives
     directives: { focusModel: focusModel },
+
+    // Name
     name: 'xen-dropwo',
+
+    // Props
     props: [
       'options',
       'open',
       'position'
     ],
 
+    // Methods
     methods: {
       openDropdown () {
         var container = this.$refs.container
@@ -38,6 +45,7 @@
       }
     },
 
+    // Data
     data () {
       return {
         totalHeight: 0,
@@ -45,6 +53,7 @@
       }
     },
 
+    // Mounted
     mounted () {
       setTimeout(() => {
         var container = this.$refs.container
@@ -59,6 +68,7 @@
       }, 0)
     },
 
+    // Watch
     watch: {
       'open': {
         handler: function (val, oldVal) {

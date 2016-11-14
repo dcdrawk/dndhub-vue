@@ -1,0 +1,60 @@
+@import './variables';
+
+.xen-chip-container {
+  border-bottom: 1px solid rgba(0,0,0,.12);
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px 0;
+
+  input {
+    background-color: transparent;
+    border: none;
+    flex-grow: 1;
+    font-size: 14px;
+    height: 40px;
+    max-width: 100%;
+    outline: none;
+    padding: 4px 0;
+  }
+
+  &.focused {
+    border-bottom: 2px solid $primary-color;
+    margin-bottom: -1px;
+  }
+  
+}
+
+.xen-chip {
+  align-items: center;
+  background-color: rgb(224,224,224);
+  border-radius: 16px;
+  display: flex;
+  font-size: 13px;
+  height: 32px;
+  line-height: 32px;
+  margin: 4px 8px 4px 0;  
+  padding: 0 12px;
+
+  span {
+    vertical-align: middle
+  }
+
+}
+
+.xen-chip-remove {
+  border-radius: 50%;
+  background-color: rgba(0,0,0,.54);
+  margin: 0 -4px 0 8px;
+  vertical-align: middle;
+  color: rgb(224, 224, 224);
+  font-size: 14px;
+  padding: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: .54;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

@@ -2,6 +2,10 @@
   <div class="xen-divider"></div>
 </template>
 
+<style lang="scss">
+  @import './styles/dividers';
+</style>
+
 <script>
   export default {
     // Name
@@ -9,8 +13,3 @@
 
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-  @import '../../styles/xen/dividers';
-</style>

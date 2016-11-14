@@ -20,10 +20,13 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/select'
+  @import './styles/select'
 </style>
+
 <script>
   export default {
+
+    // Props
     props: [
       'label',
       'value',
@@ -32,6 +35,7 @@
       'dense'
     ],
 
+    // Methods
     methods: {
       openSelect () {
         this.open = true
@@ -74,6 +78,7 @@
       }
     },
 
+    // Data
     data () {
       return {
         open: false,
@@ -82,10 +87,12 @@
       }
     },
 
+    // Mounted
     mounted () {
       this.getSelectedIndex()
     },
 
+    // Watch
     watch: {
       'selectValue': {
         handler: function (val, oldVal) {

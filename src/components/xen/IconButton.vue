@@ -9,6 +9,10 @@
   </span>
 </template>
 
+<style lang="scss">
+  @import './styles/button';
+</style>
+
 <script>
   import XenRipple from './Ripple'
 
@@ -33,27 +37,3 @@
     }
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-  @import '../../styles/xen/button';
-
-  .xen-icon-button-container {
-
-    &.disabled {
-      color: $disabled-text;
-      cursor: not-allowed;
-      
-      &.raised {
-        background-color: rgba(0, 0, 0, .12);        
-      }
-
-    }
-
-    &.disabled > * {
-      pointer-events: none;
-      transition: all 375ms $swift-in;
-    }
-
-  }
-</style>

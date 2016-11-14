@@ -28,8 +28,7 @@
 </template>
 
 <style lang="scss">
-  @import '../../styles/xen/dialog';
-  /**/
+  @import './styles/dialog';
 </style>
 
 <script>

@@ -1,5 +1,5 @@
-@import '../variables';
-@import '../whiteframe';
+@import './variables';
+@import './whiteframe';
 
 .xen-expansion-panel {
   @extend .whiteframe-z1;
@@ -35,6 +35,7 @@
   .xen-expansion-panel-content {
     padding-bottom: 16px;
   }
+  
 }
 
 .xen-expansion-title {

@@ -4,15 +4,6 @@
   </div>
 </template>
 
-<script>
-  export default {
-    // Name
-    name: 'xen-card-content'
-
-  }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   .xen-card-content {
     margin: 16px;
@@ -27,3 +18,11 @@
     margin-bottom: 0;
   }
 </style>
+
+<script>
+  export default {
+    // Name
+    name: 'xen-card-content'
+
+  }
+</script>
