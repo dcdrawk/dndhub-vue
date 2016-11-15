@@ -13,14 +13,19 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "firebase": "^3.6.0",
     "gsap": "^1.19.0",
     "hammerjs": "^2.0.8",
     "node-sass": "^3.10.1",
     "prismjs": "^1.5.1",
+    "ramda": "^0.22.1",
     "sass-loader": "^4.0.2",
+    "vee-validate": "^2.0.0-beta.14",
     "vue": "^2.0.1",
+    "vue-focus": "^2.0.0",
     "vue-router": "^2.0.1",
-    "vue-socket.io": "^2.0.0"
+    "vue-socket.io": "^2.0.0",
+    "vuefire": "^1.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

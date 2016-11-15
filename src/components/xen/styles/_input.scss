@@ -1,7 +1,8 @@
 @import './variables';
+@import './material-color';
 
 .xen-input-container {
-  margin: 16px 0 0 0;
+  margin: 16px 0;
   position: relative;
   width: 100%;
 
@@ -15,6 +16,9 @@
     position: absolute;
     background-color: rgba(0, 0, 0, .12);
     bottom: 16px;
+    &.xen-theme-red {
+      background-color: $clr-red;
+    }
   }
 
   label {
@@ -26,6 +30,9 @@
     pointer-events: none;
     font-size: 16px;
     transform-origin: 0%;
+    // &.xen-color-red {
+    //   color: $clr-red;
+    // }
   }
 
   textarea {
@@ -58,15 +65,24 @@
   &.focus {
 
     label {
-      color: $primary-color;
+      // color: $primary-color;
+      color: currentColor;
+      &.xen-color-red {
+        color: $clr-red;
+      }
     }
 
     .xen-input-border {
       width: 100%;
       height: 2px;
       position: absolute;
-      background-color: $primary-color;
+      background-color: currentColor;
       bottom: 14px;
+
+      &.xen-theme-red {
+        background-color: $clr-red;
+      }
+      
     }
 
   }
@@ -82,4 +98,10 @@
 ::-moz-placeholder,
 :-ms-input-placeholder {
   color: rgba(0,0,0,.54);
+}
+
+.xen-input-error {
+  position: absolute;
+  font-size: 12px;
+  bottom: -4px;
 }

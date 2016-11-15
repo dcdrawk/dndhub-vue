@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\devin.cook\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add vue-focus
+  C:\Program Files\nodejs\node.exe C:\Users\devin.cook\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add firebase
 
 PATH: 
-  C:\Users\devin.cook\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\cmd;C:\Program Files\ConEmu\ConEmu\Scripts;C:\Program Files\ConEmu;C:\Program Files\ConEmu\ConEmu;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\HashiCorp\Vagrant\bin;C:\Ruby23-x64\bin;C:\Users\devin.cook\AppData\Roaming\npm;C:\Users\devin.cook\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  C:\Users\devin.cook\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\cmd;C:\Program Files\ConEmu\ConEmu\Scripts;C:\Program Files\ConEmu;C:\Program Files\ConEmu\ConEmu;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\HashiCorp\Vagrant\bin;C:\Ruby23-x64\bin;C:\Users\devin.cook\AppData\Roaming\npm;C:\Users\devin.cook\AppData\Local\Microsoft\WindowsApps;C:\Users\devin.cook\AppData\Local\atom\bin;C:\Program Files\MongoDB\Server\3.2\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
 
 Yarn version: 
   0.16.1
@@ -30,11 +30,16 @@ npm manifest:
     },
     "dependencies": {
       "gsap": "^1.19.0",
+      "hammerjs": "^2.0.8",
       "node-sass": "^3.10.1",
       "prismjs": "^1.5.1",
+      "ramda": "^0.22.1",
       "sass-loader": "^4.0.2",
+      "vee-validate": "^2.0.0-beta.14",
       "vue": "^2.0.1",
-      "vue-router": "^2.0.1"
+      "vue-focus": "^2.0.0",
+      "vue-router": "^2.0.1",
+      "vue-socket.io": "^2.0.0"
     },
     "devDependencies": {
       "autoprefixer": "^6.4.0",
@@ -952,6 +957,10 @@ Lockfile:
   base64-arraybuffer@0.1.2:
     version "0.1.2"
     resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.1.2.tgz#474df4a9f2da24e05df3158c3b1db3c3cd46a154"
+  
+  base64-arraybuffer@0.1.5:
+    version "0.1.5"
+    resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz#73926771923b5a19747ad666aa5cd4bf9c6e9ce8"
   
   base64-js@^1.0.2:
     version "1.2.0"
@@ -1884,6 +1893,23 @@ Lockfile:
       xmlhttprequest-ssl "1.5.1"
       yeast "0.1.2"
   
+  engine.io-client@1.7.2:
+    version "1.7.2"
+    resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-1.7.2.tgz#12f01d3d9d676908a86339cee067ff799a585c3d"
+    dependencies:
+      component-emitter "1.1.2"
+      component-inherit "0.0.3"
+      debug "2.2.0"
+      engine.io-parser "1.3.1"
+      has-cors "1.1.0"
+      indexof "0.0.1"
+      parsejson "0.0.1"
+      parseqs "0.0.2"
+      parseuri "0.0.4"
+      ws "1.1.1"
+      xmlhttprequest-ssl "1.5.1"
+      yeast "0.1.2"
+  
   engine.io-parser@1.2.4:
     version "1.2.4"
     resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-1.2.4.tgz#e0897b0bf14e792d4cd2a5950553919c56948c42"
@@ -1894,6 +1920,17 @@ Lockfile:
       blob "0.0.4"
       has-binary "0.1.6"
       utf8 "2.1.0"
+  
+  engine.io-parser@1.3.1:
+    version "1.3.1"
+    resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-1.3.1.tgz#9554f1ae33107d6fbd170ca5466d2f833f6a07cf"
+    dependencies:
+      after "0.8.1"
+      arraybuffer.slice "0.0.6"
+      base64-arraybuffer "0.1.5"
+      blob "0.0.4"
+      has-binary "0.1.6"
+      wtf-8 "1.0.0"
   
   engine.io@1.6.10:
     version "1.6.10"
@@ -2585,6 +2622,10 @@ Lockfile:
   gsap@^1.19.0:
     version "1.19.0"
     resolved "https://registry.yarnpkg.com/gsap/-/gsap-1.19.0.tgz#f36b78c6b1a449028d89efbb4c161db29f5991dd"
+  
+  hammerjs@^2.0.8:
+    version "2.0.8"
+    resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
   
   handlebars@^4.0.1:
     version "4.0.5"
@@ -3654,6 +3695,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.2.0.tgz#69a65aad3de542cf4ee0f4fe74e8e33c709ccb0f"
     dependencies:
       js-tokens "^1.0.1"
+  
+  loose-envify@^1.2.0:
+    version "1.3.0"
+    resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.3.0.tgz#6b26248c42f6d4fa4b0d8542f78edfcde35642a8"
+    dependencies:
+      js-tokens "^2.0.0"
   
   loud-rejection@^1.0.0:
     version "1.6.0"
@@ -5227,6 +5274,22 @@ Lockfile:
       debug "2.2.0"
       socket.io-parser "2.2.2"
   
+  socket.io-client@^1.4.6:
+    version "1.5.1"
+    resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-1.5.1.tgz#0f366eae7de34bc880ebd71106e1ce8143775827"
+    dependencies:
+      backo2 "1.0.2"
+      component-bind "1.0.0"
+      component-emitter "1.2.0"
+      debug "2.2.0"
+      engine.io-client "1.7.2"
+      has-binary "0.1.7"
+      indexof "0.0.1"
+      object-component "0.0.3"
+      parseuri "0.0.4"
+      socket.io-parser "2.3.1"
+      to-array "0.1.4"
+  
   socket.io-client@1.4.6:
     version "1.4.6"
     resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-1.4.6.tgz#49b0ba537efd15b8297c84016e642e1c7c752c3d"
@@ -5258,6 +5321,15 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-2.2.6.tgz#38dfd61df50dcf8ab1d9e2091322bf902ba28b99"
     dependencies:
       benchmark "1.0.0"
+      component-emitter "1.1.2"
+      debug "2.2.0"
+      isarray "0.0.1"
+      json3 "3.3.2"
+  
+  socket.io-parser@2.3.1:
+    version "2.3.1"
+    resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-2.3.1.tgz#dd532025103ce429697326befd64005fcfe5b4a0"
+    dependencies:
       component-emitter "1.1.2"
       debug "2.2.0"
       isarray "0.0.1"
@@ -5768,6 +5840,12 @@ Lockfile:
     version "2.0.1"
     resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   
+  vue-focus:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/vue-focus/-/vue-focus-2.0.0.tgz#31dbf7a91a0f9c3d752354d6c63fe2d62cb3b37a"
+    dependencies:
+      loose-envify "^1.2.0"
+  
   vue-hot-reload-api@^2.0.1:
     version "2.0.6"
     resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.0.6.tgz#817d4bfb30f55428aa1012d029499e07f3147d21"
@@ -5793,6 +5871,12 @@ Lockfile:
   vue-router:
     version "2.0.1"
     resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.0.1.tgz#88b83cdc9497bad5b20b579e847a7e7240e221dd"
+  
+  vue-socket.io@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/vue-socket.io/-/vue-socket.io-2.0.0.tgz#26e37a91c6c28477494f25fd1b3be82cf6c84c81"
+    dependencies:
+      socket.io-client "^1.4.6"
   
   vue-style-loader@^1.0.0:
     version "1.0.0"
@@ -5951,6 +6035,17 @@ Lockfile:
       options ">=0.0.5"
       ultron "1.0.x"
   
+  ws@1.1.1:
+    version "1.1.1"
+    resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.1.tgz#082ddb6c641e85d4bb451f03d52f06eabdb1f018"
+    dependencies:
+      options ">=0.0.5"
+      ultron "1.0.x"
+  
+  wtf-8@1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/wtf-8/-/wtf-8-1.0.0.tgz#392d8ba2d0f1c34d1ee2d630f15d0efb68e1048a"
+  
   xml-char-classes@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/xml-char-classes/-/xml-char-classes-1.0.0.tgz#64657848a20ffc5df583a42ad8a277b4512bbc4d"
@@ -6032,5 +6127,5 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
 
 Trace: 
-  Error: EBUSY: resource busy or locked, open 'C:\work\projects\xen-ui\node_modules\node-sass\vendor\win32-x64-48\binding.node'
+  Error: EBUSY: resource busy or locked, open 'C:\work\projects\dndhub-vue\node_modules\node-sass\vendor\win32-x64-48\binding.node'
       at Error (native)

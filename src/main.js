@@ -9,37 +9,98 @@ import App from './App'
 // Docs: http://router.vuejs.org/en/index.html
 import VueRouter from 'vue-router'
 
-// Socket io implementation for VueJS
-import VueSocketio from 'vue-socket.io'
+// Vue validation
+// https://github.com/logaretm/vee-validate
+import VeeValidate from 'vee-validate'
+
+import VueFire from 'vuefire'
+import Firebase from 'firebase'
 
 // Import the components for each page
 import Home from './components/Home'
-import GettingStartedPage from './components/pages/GettingStartedPage'
+// import GettingStartedPage from './components/pages/GettingStartedPage'
+
+// Authentication
+import SignIn from './components/pages/SignIn'
+import SignUp from './components/pages/SignUp'
+import Profile from './components/pages/Profile'
+
+Vue.use(VueFire)
+
+var bus = new Vue({})
+
+let firebaseConfig = {
+  apiKey: 'AIzaSyACdSfcm596fdnyoIFiovJWlq_15g0Vuag',
+  authDomain: 'codex-9bc8c.firebaseapp.com',
+  databaseURL: 'https://codex-9bc8c.firebaseio.com',
+  storageBucket: 'codex-9bc8c.appspot.com',
+  messagingSenderId: '726793024913'
+}
+
+var firebaseApp = Firebase.initializeApp(firebaseConfig)
+var db = firebaseApp.database()
+
+Object.defineProperty(Vue.prototype, '$bus', {
+  get () {
+    return bus
+  }
+})
+
+Object.defineProperty(Vue.prototype, '$db', {
+  get () {
+    return db
+  }
+})
+
+Object.defineProperty(Vue.prototype, '$firebase', {
+  get () {
+    return Firebase
+  }
+})
+// var eventHub = new Vue()
+// Vue.use(eventHub)
+
+// Characters
+// import CharacterList from './components/pages/CharacterList'
+// import General from './components/pages/General'
+// import Stats from './components/pages/Stats'
+// import Feats from './components/pages/Feats'
+// import Weapons from './components/pages/Weapons'
+// import Armor from './components/pages/Armor'
+// import Spells from './components/pages/Spells'
 
 // Component Pages
-import CardsPage from './components/pages/CardsPage'
-import ButtonsPage from './components/pages/ButtonsPage'
-import ListsPage from './components/pages/ListsPage'
-import TabsPage from './components/pages/TabsPage'
-import DividersPage from './components/pages/DividersPage'
-import ChipsPage from './components/pages/ChipsPage'
-import DataTablesPage from './components/pages/DataTablesPage'
-import DialogPage from './components/pages/DialogPage'
-import DropdownPage from './components/pages/DropdownPage'
-import ExpansionPanelPage from './components/pages/ExpansionPanelPage'
-import FormsPage from './components/pages/FormsPage'
-import SlidersPage from './components/pages/SlidersPage'
-import ToastsPage from './components/pages/ToastsPage'
+// import CardsPage from './components/pages/CardsPage'
+// import ButtonsPage from './components/pages/ButtonsPage'
+// import ListsPage from './components/pages/ListsPage'
+// import TabsPage from './components/pages/TabsPage'
+// import DividersPage from './components/pages/DividersPage'
+// import ChipsPage from './components/pages/ChipsPage'
+// import DataTablesPage from './components/pages/DataTablesPage'
+// import DialogPage from './components/pages/DialogPage'
+// import DropdownPage from './components/pages/DropdownPage'
+// import ExpansionPanelPage from './components/pages/ExpansionPanelPage'
+// import FormsPage from './components/pages/FormsPage'
+// import SlidersPage from './components/pages/SlidersPage'
+// import ToastsPage from './components/pages/ToastsPage'
 
 // Example Pages
-import ChatPage from './components/pages/ChatPage'
-
-console.log(GettingStartedPage)
+// import ChatPage from './components/pages/ChatPage'
 // use Vue Router
 Vue.use(VueRouter)
 
 // use Vue Socket.io
-Vue.use(VueSocketio, '10.5.0.74:3000')
+// Vue.use(VueSocketio, '10.5.0.74:3000')
+
+const config = {
+  errorBagName: 'errors', // change if property conflicts.
+  delay: 0,
+  locale: 'en',
+  messages: null,
+  strict: true
+}
+
+Vue.use(VeeValidate, config)
 
 // Map the Routes and Components
 var router = new VueRouter({
@@ -49,68 +110,16 @@ var router = new VueRouter({
       component: Home
     },
     {
-      path: '/getting',
-      component: GettingStartedPage
-    },
-    // Components
-    {
-      path: '/components/cards',
-      component: CardsPage,
-      keepAlive: true
+      path: '/sign-in',
+      component: SignIn
     },
     {
-      path: '/components/buttons',
-      component: ButtonsPage,
-      keepAlive: true
+      path: '/sign-up',
+      component: SignUp
     },
     {
-      path: '/components/lists',
-      component: ListsPage,
-      keepAlive: true
-    },
-    {
-      path: '/components/tabs',
-      component: TabsPage
-    },
-    {
-      path: '/components/dividers',
-      component: DividersPage
-    },
-    {
-      path: '/components/chips',
-      component: ChipsPage
-    },
-    {
-      path: '/components/datatables',
-      component: DataTablesPage
-    },
-    {
-      path: '/components/dialogs',
-      component: DialogPage
-    },
-    {
-      path: '/components/dropdowns',
-      component: DropdownPage
-    },
-    {
-      path: '/components/expansion-panels',
-      component: ExpansionPanelPage
-    },
-    {
-      path: '/components/forms',
-      component: FormsPage
-    },
-    {
-      path: '/components/sliders',
-      component: SlidersPage
-    },
-    {
-      path: '/examples/chat',
-      component: ChatPage
-    },
-    {
-      path: '/components/toasts',
-      component: ToastsPage
+      path: '/profile',
+      component: Profile
     }
 
   ]

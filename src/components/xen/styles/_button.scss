@@ -101,7 +101,6 @@
   display: inline-block;
   margin: 4px;
   overflow: hidden;
-  transition: all 375ms $swift-in;
 
   &.raised {
     @extend .whiteframe-z3;
@@ -118,7 +117,6 @@
 
   &.disabled > * {
     pointer-events: none;
-    transition: all 375ms $swift-in;
   }
 }
 
