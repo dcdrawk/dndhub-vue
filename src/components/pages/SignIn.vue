@@ -1,10 +1,14 @@
 <template>
   <div>
-    <xen-page-toolbar class="xen-theme-indigo" title="dndhub"></xen-page-toolbar>
+    <xen-page-toolbar class="xen-theme-indigo" title="Sign In"></xen-page-toolbar>
     <div class="xen-page-content xen-page-background">
       <div class="row  space-around"  v-if="$root.user">
         <div class="col-lg-4 col-md-6 col-xs-12">
-          <p>You are currently signed in as <strong>{{ $root.user.displayName }}</strong></p>
+          <xen-card class="xen-no-margin success-message">
+            <xen-card-content>
+             <p>You are currently signed in as <strong>{{ $root.user.displayName }}</strong></p>
+            </xen-card-content>
+          </xen-card>
         </div>
       </div>
       <div class="row space-around">        
@@ -38,6 +42,9 @@
 </template>
 
 <style scoped>
+  .success-message {
+    background-color: #e8f5e9;
+  }
 </style>
 
 <script>

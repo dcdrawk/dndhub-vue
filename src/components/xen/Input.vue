@@ -1,8 +1,8 @@
 <template>
-  <div class="xen-input-container" v-bind:class="{ 'has-value': inputValue, 'focus': focused }">
+  <div class="xen-input-container" v-bind:class="{ 'has-value': inputValue, 'focus': focused, 'has-error-msg': rules, 'xen-disabled': disabled }">
     <label :class="{ 'xen-color-red': errors.has(name) }" v-if="label">{{label}}</label>
-    <input ref="input" v-model="inputValue" v-focus="focused" @focus="focused = true" @blur="focused = false" :placeholder="placeholder" :name="name" v-if="type === 'text' || !type" type="text" v-validate :data-rules="rules ? rules : ''"/>
-    <input ref="input" v-model="inputValue" v-focus="focused" @focus="focused = true" @blur="focused = false" :placeholder="placeholder" :name="name" v-if="type === 'password'" type="password" v-validate :data-rules="rules ? rules : ''"/>
+    <input ref="input" v-model="inputValue" v-focus="focused" @focus="focused = true" @blur="focused = false" :placeholder="placeholder" :name="name" v-if="type === 'text' || !type" type="text" v-validate :data-rules="rules ? rules : ''" :disabled="disabled"/>
+    <input ref="input" v-model="inputValue" v-focus="focused" @focus="focused = true" @blur="focused = false" :placeholder="placeholder" :name="name" v-if="type === 'password'" type="password" v-validate :data-rules="rules ? rules : ''" :disabled="disabled"/>
     <span v-show="errors.has(name)" class="xen-input-error xen-color-red">{{ errors.first(name) }}</span>
     <div class="xen-input-border" :class="{ 'xen-theme-red': errors.has(name) }" ></div>
   </div>
@@ -31,7 +31,8 @@
       'name',
       'model',
       'placeholder',
-      'rules'
+      'rules',
+      'disabled'
     ],
 
     // Data

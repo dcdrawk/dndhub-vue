@@ -12,7 +12,7 @@
     background-color: #fff;
     display: inline-block;
     width: 100%;
-    margin-bottom: 16px;
+    // margin-bottom: 16px;
   }
 
 </style>

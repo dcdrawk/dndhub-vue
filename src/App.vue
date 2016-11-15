@@ -99,6 +99,7 @@
           console.log(user)
           this.user = user
           console.log('a user has signed in')
+          this.$bus.$emit('user-signin', user)
           // User is signed in.
         } else {
           console.log('there is no user signed in')

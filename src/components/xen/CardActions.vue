@@ -4,7 +4,10 @@
   </div>
 </template>
 
-<style scoped>
+<style>
+.xen-card-actions .xen-button-container {
+	vertical-align: middle;
+}
 </style>
 
 <script>
