@@ -1,0 +1,208 @@
+<template>
+  <div>
+    <xen-page-toolbar class="xen-theme-indigo" title="Character List"></xen-page-toolbar>
+    <div class="xen-page-content xen-page-background character-list-page">
+      <xen-card>
+        <xen-card-header :actions="true" background="#fafafa" v-if="Object.keys($root.gameData).length > 0">
+          <xen-button :raised="true" class="xen-theme-primary" @click.native="newCharacter = true">New Character</xen-button>
+          </xen-card-header>
+          <div class="row" v-if="Object.keys($root.gameData).length === 0">
+            <div class="col-xs-12">
+              <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
+            </div>
+          </div>
+          <xen-list v-if="menuIndexes">
+            <xen-list-item v-for="(character, key, index) in $root.characters" :text="character.name">
+              <div slot="dropdown">
+
+                <xen-dropdown :open="menuIndexes[key]" @toggle="closeMenu(key)" position="right" :offset-y="0">
+
+                  <xen-icon-button style="position: relative;" slot="target" icon="more_vert" @click.native="openMenu(key)"></xen-icon-button>
+                  <div slot="menu">
+                    <xen-list :dense="true">
+                      <xen-list-item text="Delete" icon="delete" @click.native="deleteCharacter(key)"></xen-list-item>
+                    </xen-list>
+                  </div>
+                  </xen-dropdown>
+              </div>
+            </xen-list-item>
+          </xen-list>
+      </xen-card>
+    </div>
+
+    <xen-dialog :show="newCharacter" @hide="newCharacter = false" title="New Character" :large="true">
+      <div class="row xen-color-primary">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <xen-input label="Name" class="xen-color-primary xen-no-margin" type="text" :value="character.name" @input="$set(character, 'name', $event)"></xen-input>
+        </div>
+        <div class="col-xs-6 col-md-6 col-lg-4 xen-no-margin">
+          <xen-input label="Level" class="xen-color-primary xen-no-margin" type="number" :value="character.level" @input="$set(character, 'level', $event)"></xen-input>
+        </div>
+        <div class="col-xs-6 col-md-6 col-lg-4 xen-no-margin">
+          <xen-input label="Experience" class="xen-color-primary xen-no-margin" type="number" :value="character.experience" @input="$set(character, 'experience', $event)"></xen-input>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 xen-no-margin">
+          <xen-select label="Class" :options="$root.gameData.classes" optionKey="name" :value="character.class" @input="$set(character, 'class', $event)"></xen-select>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="$set(character, 'race', $event); getSubraces($event);"></xen-select>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <xen-select label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event);"></xen-select>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 xen-no-margin">
+          <xen-select label="Alignment" :options="$root.gameData.alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event)"></xen-select>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <xen-select label="Background" :options="$root.gameData.backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event);"></xen-select>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-4">
+          <xen-input label="Adventure Group" class="xen-color-primary" type="text" :value="character.adventureGroup" @input="$set(character, 'adventureGroup', $event)"></xen-input>
+        </div>
+      </div>
+      <div slot="actions">
+        <xen-button @click.native="cancel()">Cancel</xen-button>
+        <xen-button class="xen-color-primary" @click.native="createCharacter()">Confirm</xen-button>
+      </div>
+    </xen-dialog>    
+  </div>
+</template>
+
+<style scoped>
+  .profile-pic {
+    width: 100%;
+    border-radius: 50%;
+    padding: 32px;
+    max-width: 250px;
+    margin: auto;
+    display: block;
+  }
+  .character-list-page .xen-button-container {
+    vertical-align: middle;
+  }
+</style>
+
+<script>
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenButton from '../xen/Button'
+  import XenDivider from '../xen/Divider'
+  import XenCard from '../xen/Card'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCardContent from '../xen/CardContent'
+  import XenCardMedia from '../xen/CardMedia'
+  import XenCardActions from '../xen/CardActions'
+  import XenInput from '../xen/Input'
+  import XenToast from '../xen/Toast'
+  import XenDialog from '../xen/Dialog'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenList from '../xen/List'
+  import XenListItem from '../xen/ListItem'
+  import XenDropdown from '../xen/Dropdown'
+  import XenIconButton from '../xen/IconButton'
+  import XenSelect from '../xen/Select'
+
+  export default {
+    name: 'profile',
+
+    components: {
+      XenPageToolbar,
+      XenButton,
+      XenDivider,
+      XenCard,
+      XenCardHeader,
+      XenCardContent,
+      XenCardMedia,
+      XenCardActions,
+      XenInput,
+      XenToast,
+      XenDialog,
+      XenLoadingSpinner,
+      XenList,
+      XenListItem,
+      XenDropdown,
+      XenIconButton,
+      XenSelect
+    },
+
+    data () {
+      return {
+        editing: false,
+        successToast: false,
+        errorToast: false,
+        updatePhoto: false,
+        uploading: false,
+        uploadErrorMessage: undefined,
+        user: this.$root.user || undefined,
+        newCharacter: false,
+        menuIndexes: {},
+        character: {},
+        subraces: [],
+        test: {
+          open: false
+        },
+        tempUser: {
+          displayName: '',
+          email: ''
+        }
+      }
+    },
+
+    mounted () {
+      this.$bus.$on('user-signin', user => {
+        this.user = Object.assign({}, user)
+      })
+
+      this.$bus.$on('characters-loaded', characters => {
+        for (let i in characters) {
+          this.$set(this.menuIndexes, i, false)
+        }
+      })
+    },
+
+    methods: {
+      openMenu (key) {
+        // window.alert('test!!')ss
+        this.$nextTick(() => {
+          this.menuIndexes[key] = true
+          // console.log(this.menuIndexes)
+          // this.$set(this.menuIndexes, this.menuIndexes)
+        })
+      },
+
+      closeMenu (key) {
+        this.menuIndexes[key] = false
+      },
+
+      cancel () {
+        this.character = {}
+        this.newCharacter = false
+      },
+
+      createCharacter () {
+        this.$firebase.database().ref('characters/' + this.$root.user.uid + '/').push(this.character).then(() => {
+          this.newCharacter = false
+          this.$root.getCharacters()
+        })
+      },
+
+      deleteCharacter (characterId) {
+        console.log(characterId)
+        this.$firebase.database().ref('characters/' + this.$root.user.uid + '/' + characterId).remove().then(() => {
+          this.$root.getCharacters()
+        })
+      },
+
+      getSubraces (raceName) {
+        if (this.character.subrace) {
+          this.character.subrace = undefined
+        }
+        this.$root.gameData.races.forEach((race, index) => {
+          if (race.name === raceName) {
+            this.subraces = race.subraces
+          }
+        })
+      }
+    }
+
+  }
+</script>
