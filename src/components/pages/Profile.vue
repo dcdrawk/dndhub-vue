@@ -121,7 +121,6 @@
     mounted () {
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
-        // console.log(this.user)
       })
     },
 
@@ -134,11 +133,9 @@
 
       cancelEdit () {
         this.editing = false
-        console.log(this)
         this.$nextTick(() => {
           this.user.writable = true
           this.user.displayName = this.tempUser.displayName
-          // this.user.email.writable = true
           this.user.email = this.tempUser.email
         })
       },
@@ -163,13 +160,13 @@
           this.uploadErrorMessage = 'No File Selected'
           return
         }
-        // reader.readAsDataURL(file)
 
         // Set up references for firebase file upload
-        // console.log(this)
-        var storageRef = this.$firebase.storage().ref()
-        var uploadTask = storageRef.child('images/' + file.name).put(file)
+        let storageRef = this.$firebase.storage().ref()
+        let uploadTask = storageRef.child('images/' + file.name).put(file)
         this.uploading = true
+
+        // Upload the file to firebase
         uploadTask.on('state_changed', function (snapshot) {
           // Observe state change events such as progress, pause, and resume
           // See below for more detail
@@ -178,8 +175,8 @@
           // Handle unsuccessful uploads
         }, () => {
           // Handle successful uploads on complete
-          var downloadURL = uploadTask.snapshot.downloadURL
           this.$nextTick(() => {
+            let downloadURL = uploadTask.snapshot.downloadURL
             this.user.photoURL = downloadURL
             let user = Object.assign({}, this.user)
             this.$root.user.updateProfile(user)

@@ -1,16 +1,24 @@
 <template>
   <div id="app">
     <xen-sidebar :class="{ 'xen-sidebar-open': sidebarOpen, 'xen-sidebar-closed': !sidebarOpen }">
-      <p v-if="user">Welcome, {{user.displayName}}<p>
-      <section class="xen-nav">        
+      <!-- <p v-if="user">Welcome, {{user.displayName}}<p> -->
+      <section class="dndhub-profile-info" v-if="user">
+        <div class="dndhub-avatar">
+          <img :src="user.photoURL" />
+        </div>
+        <p class="dndhub-email"><strong>{{ user.email }}</strong></p>
+        <!-- {{ characters }} -->
+        <xen-select class="character-select xen-color-primary" placeholder="Select a Character" :options="characters" optionKey="name"></xen-select>
+      </section>
+      <section class="xen-nav">
         <xen-list :dense="true">
-          <router-link to="/sign-in">
+          <router-link to="/sign-in" v-if="!user">
             <xen-list-item text="Sign In" :bold="true"></xen-list-item>
           </router-link>
-          <router-link to="/sign-up">
+          <router-link to="/sign-up" v-if="!user">
             <xen-list-item text="Sign Up" :bold="true"></xen-list-item>
           </router-link>
-          <router-link to="/profile">
+          <router-link to="/profile" v-if="user">
             <xen-list-item text="Profile" :bold="true"></xen-list-item>
           </router-link>
           <router-link to="/character-list">
@@ -48,6 +56,7 @@
   import XenListItem from './components/xen/ListItem'
   import XenDivider from './components/xen/Divider'
   import Firebase from 'firebase'
+  import XenSelect from './components/xen/Select'
 
   export default {
     name: 'app',
@@ -57,18 +66,20 @@
       XenToolbar,
       XenList,
       XenListItem,
-      XenDivider
+      XenDivider,
+      XenSelect
     },
 
     data () {
       return {
         sidebarOpen: false,
-        user: undefined
+        user: undefined,
+        characters: [],
+        gameData: {}
       }
     },
 
     mounted () {
-      console.log(this)
       var path = window.location.hash
       var pathArray = path.replace(/-+/, '').replace(/#+/, '').replace(/\/+/, '').split('/')
 
@@ -96,11 +107,12 @@
       // Firebase
       Firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          console.log(user)
           this.user = user
-          console.log('a user has signed in')
+          console.log('a user has signed in', user)
           this.$bus.$emit('user-signin', user)
           // User is signed in.
+          this.getCharacters()
+          this.getGameData()
         } else {
           console.log('there is no user signed in')
           // No user is signed in.
@@ -130,6 +142,41 @@
         // }
         // this.$refs[listItem].$el.classList.add('active')
         // this.active = this.$refs[listItem].text
+      },
+
+      getCharacters () {
+        var userId = this.$firebase.auth().currentUser.uid
+        return this.$firebase.database().ref('/characters/' + userId).once('value').then((snapshot) => {
+          this.characters = snapshot.val()
+          this.$bus.$emit('characters-loaded', this.characters)
+        })
+      },
+
+      getGameData () {
+        const endpoints = [
+          'alignments',
+          'armor',
+          'backgrounds',
+          'classes',
+          'skills',
+          'classFeatures',
+          'feats',
+          'languages',
+          'races',
+          'weapons',
+          'spells'
+        ]
+
+        var promises = endpoints.map((endpoint) => {
+          return new Promise((resolve, reject) => {
+            this.$firebase.database().ref('/' + endpoint).once('value').then((snapshot) => {
+              this.gameData[endpoint] = snapshot.val()
+              resolve()
+              this.$set(this.gameData, this.gameData)
+            })
+          })
+        })
+        return Promise.all(promises)
       }
     }
   }
@@ -194,6 +241,34 @@
 
   .xen-list.xen-sublist .xen-list-item {
     padding-left: 32px;
+  }
+
+  .dndhub-profile-info {
+    padding: 16px;
+    background-color: $clr-grey-100;
+    border-bottom: 1px solid $clr-grey-200;
+    p {
+      color: rgba(0, 0, 0, .54);
+    }
+  }
+
+  .dndhub-email {
+    font-size: 14px;
+    font-weight: $medium;
+  }
+
+  .dndhub-avatar {
+    width: 56px;
+    img {
+      margin-bottom: 16px;
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+
+  .character-select.xen-select-container {
+    margin-bottom: 0;
+    margin-top: 16px;
   }
 
   @media only screen and (max-width: $small-breakpoint) {

@@ -1,6 +1,6 @@
 <template>
   <div ref="target" >
-    <xen-ripple v-cloak>
+    <!-- <xen-ripple v-cloak> -->
       <div class="xen-list-item" :class="{ 'avatar': avatar, 'one-line': !secondaryText, 'two-line': secondaryText && !multiLine, 'multi-line': multiLine && secondaryText, 'bold': bold}">
         <span v-if="icon && avatar" class="xen-list-item-avatar">
           <i class="material-icons">{{ icon }}</i>
@@ -14,8 +14,10 @@
           <span class="item-text">{{ text }}</span>
           <span v-if="secondaryText" class="secondary-text">{{ secondaryText }}</span>
         </span>
+
+        <slot name="dropdown"></slot>
       </div>
-    </xen-ripple>
+    <!-- </xen-ripple> -->
   </div>
 </template>
 
@@ -43,7 +45,16 @@
     // Components
     components: {
       XenRipple
-    }
+    },
 
+    // Watch
+    watch: {
+      'text': {
+        handler: function (val, oldVal) {
+          console.log('text changed...')
+          this.text = val
+        }
+      }
+    }
   }
 </script>

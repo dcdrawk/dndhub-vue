@@ -42,6 +42,11 @@
       overflow-y: auto;
     }
 
+    .xen-dialog-content.show-overflow {
+      overflow-x: visible;
+      overflow-y: visible;
+    }
+
     &.has-actions .xen-dialog-content {
       max-height: calc(80vh - 68px - 44px);
     }

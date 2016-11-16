@@ -24,6 +24,7 @@ import Home from './components/Home'
 import SignIn from './components/pages/SignIn'
 import SignUp from './components/pages/SignUp'
 import Profile from './components/pages/Profile'
+import CharacterList from './components/pages/CharacterList'
 
 Vue.use(VueFire)
 
@@ -120,6 +121,10 @@ var router = new VueRouter({
     {
       path: '/profile',
       component: Profile
+    },
+    {
+      path: '/character-list',
+      component: CharacterList
     }
 
   ]

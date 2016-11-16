@@ -1,5 +1,5 @@
 <template>
-  <div class="xen-card-title" :class="{ 'xen-custom-background': background }" :style="background ? 'background-color:' + background + '; border-bottom: 1px solid rgba(0,0,0,.12);' : ''">
+  <div class="xen-card-title" :class="{ 'xen-custom-background': background, 'xen-card-header-actions': actions }" :style="background ? 'background-color:' + background + '; border-bottom: 1px solid rgba(0,0,0,.12);' : ''">
     <slot></slot>
   </div>
 </template>
@@ -17,6 +17,13 @@
     padding: 16px;
     margin: 0;
   }
+
+  .xen-card-header-actions,
+  .xen-card-header-actions.xen-custom.background {
+    margin: 0;
+    padding: 8px;
+  }
+
 </style>
 
 <script>
@@ -26,7 +33,8 @@
 
     // Props
     props: [
-      'background'
+      'background',
+      'actions'
     ]
 
   }

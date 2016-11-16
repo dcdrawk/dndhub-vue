@@ -2,12 +2,13 @@
 @import './material-color';
 
 .xen-input-container {
-  margin: 16px 0 0 0;
+  // margin: 16px 0 0 0;
   position: relative;
   width: 100%;
+  margin-bottom: 16px;
   
   &.has-error-msg {
-    margin-bottom: 16px;
+    margin-bottom: 32px;
   }
 
   &.xen-label {

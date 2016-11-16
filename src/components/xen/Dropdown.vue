@@ -27,20 +27,24 @@
     props: [
       'options',
       'open',
-      'position'
+      'position',
+      'offsetY',
+      'offsetX'
     ],
 
     // Methods
     methods: {
       openDropdown () {
         var container = this.$refs.container
-        gsap.TweenLite.to(container, 0.375, { height: this.totalHeight + 'px', opacity: 1, ease: gsap.Power1.easeOut })
+        let numItems = container.querySelectorAll('.xen-list-item').length
+        gsap.TweenLite.to(container, 0.025 * numItems + 0.15, { height: this.totalHeight + 'px', opacity: 1, ease: gsap.Power1.easeOut })
         console.log(this.target)
       },
 
       closeDropdown () {
         var container = this.$refs.container
-        gsap.TweenLite.to(container, 0.375, { height: '0px', opacity: 0, ease: gsap.Power1.easeOut })
+        let numItems = container.querySelectorAll('.xen-list-item').length
+        gsap.TweenLite.to(container, 0.025 * numItems + 0.15, { height: '0px', opacity: 0, ease: gsap.Power1.easeOut })
         this.$emit('toggle')
       }
     },
@@ -62,6 +66,7 @@
         this.target = this.$slots.target[0].elm
         if (this.position === 'right') {
           container.style.left = this.target.offsetLeft + this.target.clientWidth - container.clientWidth + 'px'
+          container.style.top = this.offsetY ? this.offsetY + 'px' : '0px'
         } else {
           container.style.left = this.target.offsetLeft + 'px'
         }
@@ -72,6 +77,7 @@
     watch: {
       'open': {
         handler: function (val, oldVal) {
+          console.log('open changed!')
           if (val === true) {
             this.openDropdown()
           } else {
