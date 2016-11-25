@@ -1,0 +1,29 @@
+@import 'material-color';
+//$primary-color: #3F51B5;
+//$secondary-color: #e91e63;
+$primary-color: $clr-indigo;
+$secondary-color: #e91e63;
+$accent-color: $clr-pink;
+
+
+$transition-timing: all .3s cubic-bezier(.55,0,.1,1);
+$swift-out: cubic-bezier(0.55, 0.0, 0.1, 1);
+$swift-in: cubic-bezier(0.0, 0.0, 0.2, 1);
+$material-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+//Fonts
+$light: 300;
+$regular: 400;
+$medium: 500;
+
+//Text Colors
+$primary-text: rgba(0, 0, 0, .87);
+$secondary-text: rgba(0, 0, 0, .54);
+$disabled-text: rgba(0, 0, 0, .26);
+$hint-text: rgba(0, 0, 0, .38);
+$white: rgba(255, 255, 255, 1);
+
+//Break Points
+$large-breakpoint: 1200px;
+$medium-breakpoint: 922px;
+$small-breakpoint: 768px;

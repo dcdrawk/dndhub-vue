@@ -1,0 +1,119 @@
+@import "variables";
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-weight: 400;
+}
+
+strong {
+  font-weight: $medium;
+}
+
+//Inspired by https://material.google.com/style/typography.html#typography-styles
+.display-4 {
+  font-size: 112px;
+  font-weight: $light;
+}
+
+.display-3 {
+  font-size: 56px;
+  font-weight: $regular;
+}
+
+.display-2 {
+  font-size: 45px;
+  font-weight: $regular;
+}
+
+.display-1 {
+  font-size: 34px;
+  font-weight: $regular;
+}
+
+.headline {
+  font-size: 24px;
+  font-weight: $regular;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: $medium;
+}
+
+.subheading {
+  font-size: 16px;
+}
+
+.body-1 {
+  font-size: 14px;
+  font-weight: $regular;
+
+  strong {
+    font-weight: $medium;
+  }
+}
+
+.body-2 {
+  font-size: 14px;
+  font-weight: $medium;
+}
+
+.caption {
+  font-size: 12px;
+  font-weight: $regular;
+}
+
+.button {
+  font-size: 14px;
+  font-weight: $medium;
+  text-transform: uppercase;
+}
+
+.secondary-text {
+  color: $secondary-text;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+p {
+  @extend .body-1;
+  margin-bottom: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: $primary-text;
+}
+
+i {
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+}
+
+.xen-primary-text {
+  color: $primary-text;
+}
+
+// .disable-scroll {
+//   overflow: hidden;
+// }
