@@ -56,7 +56,7 @@
           <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="$set(character, 'race', $event); getSubraces($event);"></xen-select>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <xen-select label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event);"></xen-select>
+          <xen-select :disabled="subraces.length === 0 || !character.race" :label="subraceLabel" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event);"></xen-select>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 xen-no-margin">
           <xen-select label="Alignment" :options="$root.gameData.alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event)"></xen-select>
@@ -212,16 +212,30 @@
       },
 
       getSubraces (raceName) {
+        this.subraces = []
         if (this.character.subrace) {
           this.character.subrace = undefined
         }
         this.$root.gameData.races.forEach((race, index) => {
-          if (race.name === raceName) {
+          if (race.name === raceName && race.subraces) {
+            console.log(race)
             this.subraces = race.subraces
           }
         })
       }
-    }
+    },
 
+    // Computed
+    computed: {
+      subraceLabel: function () {
+        if (!this.character.race) {
+          return 'Select a Race'
+        } else if (!this.subraces || this.subraces.length === 0) {
+          return 'No Subraces Available'
+        } else {
+          return 'Select a Subrace'
+        }
+      }
+    }
   }
 </script>

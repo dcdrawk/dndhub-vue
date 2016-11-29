@@ -35,16 +35,16 @@
           <router-link to="/stats">
             <xen-list-item text="Stats" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
-          <router-link to="/general">
+          <router-link to="/feats">
             <xen-list-item text="Feats" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
-          <router-link to="/general">
+          <router-link to="/weapons">
             <xen-list-item text="Weapons" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
-          <router-link to="/general">
+          <router-link to="/armor">
             <xen-list-item text="Armor" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
-          <router-link to="/general">
+          <router-link to="/spells">
             <xen-list-item text="Spells" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
         </xen-list>
@@ -104,8 +104,8 @@
         if (pathArray.length === 1 && pathArray[0] === '') {
           this.setActive('home')
         } else {
-          this.expand(pathArray[0])
-          this.setActive(pathArray[1])
+          // this.expand(pathArray[0])
+          // this.setActive(pathArray[1])
         }
       })
 
@@ -147,25 +147,6 @@
     methods: {
       toggleSidebar () {
         if (window.innerWidth < 768) this.sidebarOpen = !this.sidebarOpen
-      },
-      expand (list) {
-        // if (this.$refs[list].$el.style.height === '0px') {
-        //   this.$refs[list].$el.style.height = this.$refs[list].$el.scrollHeight + 'px'
-        // } else {
-        //   this.$refs[list].$el.style.height = 0
-        // }
-      },
-      collapseAll () {
-        // for (var i in this.$refs) {
-        //   this.$refs[i].$el.style.height = 0
-        // }
-      },
-      setActive (listItem) {
-        // for (var i in this.$refs) {
-        //   this.$refs[i].$el.classList.remove('active')
-        // }
-        // this.$refs[listItem].$el.classList.add('active')
-        // this.active = this.$refs[listItem].text
       },
 
       getCharacters () {
@@ -225,12 +206,10 @@
       // Save a character, requires a path to the property and value being assigned
       // e.g. path = 'skills/dexterity' value: {5}
       updateCharacter (path, prop, value) {
-        console.log('updating...')
+        console.log('updating ' + prop + '...')
         let userId = this.$firebase.auth().currentUser.uid
         let update = {}
         update[prop] = value
-        // let url = '/characters/' + userId + '/' + this.selectedCharacter.id
-        console.log(this.selectedCharacter)
         this.$firebase.database().ref('/characters/' + userId + '/' + this.characterId + '/' + path).update(update)
       }
     }

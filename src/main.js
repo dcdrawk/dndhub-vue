@@ -27,6 +27,10 @@ import Profile from './components/pages/Profile'
 import CharacterList from './components/pages/CharacterList'
 import General from './components/pages/General'
 import Stats from './components/pages/Stats'
+import Feats from './components/pages/Feats'
+import Weapons from './components/pages/Weapons'
+import Armor from './components/pages/Armor'
+import Spells from './components/pages/Spells'
 
 Vue.use(VueFire)
 
@@ -135,6 +139,22 @@ var router = new VueRouter({
     {
       path: '/stats',
       component: Stats
+    },
+    {
+      path: '/feats',
+      component: Feats
+    },
+    {
+      path: '/weapons',
+      component: Weapons
+    },
+    {
+      path: '/armor',
+      component: Armor
+    },
+    {
+      path: '/spells',
+      component: Spells
     }
   ]
 })

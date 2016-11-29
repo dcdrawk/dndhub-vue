@@ -31,7 +31,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                   <xen-select label="Background" :options="$root.gameData.backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event); $root.updateCharacter('', 'background', character.background);"></xen-select>
                 </div> -->
-                <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-md-12 col-lg-6">
                   <xen-input label="Adventure Group" class="xen-color-primary card-last" type="text" :value="character.adventuringGroup" @input="$set(character, 'adventureGroup', $event); $root.updateCharacter('', 'adventureGroup', character.adventureGroup);"></xen-input>
                 </div>
               </div>
@@ -101,7 +101,7 @@
               <div slot="actions">
                 <xen-button @click.native="showFeat = false" class="xen-color-primary">Close</xen-button>
               </div>
-            </xen-dialog> 
+            </xen-dialog>
           </div>
 
         </section>

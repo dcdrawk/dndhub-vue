@@ -1,0 +1,3 @@
+[submodule "src/components/xen"]
+	path = src/components/xen
+	url = https://github.com/dcdrawk/xen-components.git
