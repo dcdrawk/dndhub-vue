@@ -1,0 +1,53 @@
+@import './whiteframe';
+
+.property-list {
+  width: 100%;
+}
+
+.filters {
+	background-color: #fafafa;
+	padding: 0 16px;
+	.col-xs-6.xen-no-margin {
+		margin-bottom: 0;
+		margin-top: 0;
+		.xen-select-container {
+			margin: 8px 0 16px 0;
+		}
+	}
+}
+
+.bottom-pagination {
+	position: fixed;
+	bottom: 0;
+	width: 100vw;
+	// padding: 8px;
+	background-color: #fff;
+	z-index: 5;
+	// border-top: 1px solid rgba(0,0,0,.24);
+	// opacity: .75;
+	text-align: right;
+	@extend .whiteframe-z5;
+	.xen-button-container {
+		vertical-align: middle;
+	}
+	.xen-button {
+		padding: 8px;
+	}
+}
+
+.dndhub-table {
+	td {
+		white-space: nowrap;
+		div {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	// thead {
+	// 	display: none;
+	// }
+	margin-bottom: 48px;
+}
+.hidden {
+	display: none;
+}
