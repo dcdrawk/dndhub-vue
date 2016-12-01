@@ -7,7 +7,7 @@
           <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
         </div>
       </div>
-      <div class="row" v-if="user">                
+      <div class="row" v-if="user">
 
         <div class="col-lg-3 col-md-3 col-xs-12">
           <xen-card>
@@ -75,10 +75,8 @@
   import XenCard from '../xen/Card'
   import XenCardActions from '../xen/CardActions'
   import XenCardContent from '../xen/CardContent'
-  import XenCardHeader from '../xen/CardHeader'
   import XenCardMedia from '../xen/CardMedia'
   import XenDialog from '../xen/Dialog'
-  import XenDivider from '../xen/Divider'
   import XenInput from '../xen/Input'
   import XenLoadingSpinner from '../xen/LoadingSpinner'
   import XenPageToolbar from '../xen/PageToolbar'
@@ -94,10 +92,8 @@
       XenCard,
       XenCardActions,
       XenCardContent,
-      XenCardHeader,
       XenCardMedia,
       XenDialog,
-      XenDivider,
       XenInput,
       XenLoadingSpinner,
       XenPageToolbar,

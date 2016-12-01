@@ -21,7 +21,7 @@
             <xen-card-content>
               <form ref="signin" name="signin" class="row">
                 <div class="col-xs-12">
-                <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                  <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
                   <input style="display:none" type="text" name="fakeusernameremembered"/>
                   <input style="display:none" type="password" name="fakepasswordremembered"/>
                   <xen-input ref="email" label="Email" name="email" class="xen-color-primary" rules="required|email" :value="email" @input="email = $event"></xen-input>
@@ -51,33 +51,36 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenCardMedia from '../xen/CardMedia'
   import XenCardActions from '../xen/CardActions'
+  import XenCardContent from '../xen/CardContent'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCardMedia from '../xen/CardMedia'
+  import XenDivider from '../xen/Divider'
   import XenInput from '../xen/Input'
   import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
 
   export default {
-    name: 'sign-in',
+    // Name
+    name: 'sign-up',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
-      XenCardContent,
-      XenCardMedia,
       XenCardActions,
+      XenCardContent,
+      XenCardHeader,
+      XenCardMedia,
+      XenDivider,
       XenInput,
-      XenLoadingSpinner
+      XenLoadingSpinner,
+      XenPageToolbar
     },
 
+    // Data
     data () {
       return {
         email: '',
@@ -88,7 +91,9 @@
       }
     },
 
+    // Methods
     methods: {
+      // Sign Up with Email / Password
       signUp () {
         console.log('sign up')
         this.$bus.$emit('xen-validate')
@@ -107,18 +112,12 @@
             }).catch((error) => {
               this.errorMsg = error.message
             })
-            // this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
-            //   this.signingIn = false
-            //   this.errorMsg = undefined
-            // }).catch((error) => {
-            //   this.errorMsg = error.message
-            //   this.signingIn = false
-            // })
           }
         }, 0)
       }
     },
 
+    // Mounted
     mounted () {
       // Listen on the bus for changers to the child components error bag and merge in/remove errors
       this.$bus.$on('errors-changed', (newErrors, oldErrors) => {

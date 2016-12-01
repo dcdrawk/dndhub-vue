@@ -48,47 +48,50 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenCardMedia from '../xen/CardMedia'
   import XenCardActions from '../xen/CardActions'
+  import XenCardContent from '../xen/CardContent'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCardMedia from '../xen/CardMedia'
+  import XenDivider from '../xen/Divider'
   import XenInput from '../xen/Input'
   import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
 
   export default {
+    // Name
     name: 'sign-in',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
-      XenCardContent,
-      XenCardMedia,
       XenCardActions,
+      XenCardContent,
+      XenCardHeader,
+      XenCardMedia,
+      XenDivider,
       XenInput,
-      XenLoadingSpinner
+      XenLoadingSpinner,
+      XenPageToolbar
     },
 
+    // Data
     data () {
       return {
         email: '',
-        password: '',
         errorMsg: undefined,
+        password: '',
         signingIn: false
       }
     },
 
+    // Methods
     methods: {
+      // Sign in
       signIn () {
-        console.log('sign in')
         this.$bus.$emit('xen-validate')
-
         setTimeout(() => {
           if (this.errors.errors.length > 0) {
             return
@@ -107,6 +110,7 @@
       }
     },
 
+    // Mounted
     mounted () {
       // Listen on the bus for changers to the child components error bag and merge in/remove errors
       this.$bus.$on('errors-changed', (newErrors, oldErrors) => {
@@ -122,6 +126,5 @@
         }
       })
     }
-
   }
 </script>
