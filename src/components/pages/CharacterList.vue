@@ -11,22 +11,25 @@
               <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
             </div>
           </div>
-          <xen-list v-if="menuIndexes">
+          <xen-list v-if="menuIndexes && $root.characters">
             <xen-list-item v-for="(character, key, index) in $root.characters" :text="character.name">
               <div slot="dropdown">
-
-                <xen-dropdown :open="menuIndexes[key]" @toggle="closeMenu(key)" position="right" :offset-y="0">
+              <xen-icon-button style="position: relative;" slot="target" icon="delete" @click.native="showDeleteDialog(key)"></xen-icon-button>
+                <!-- <xen-dropdown :open="menuIndexes[key]" @toggle="closeMenu(key)" position="right" :offset-y="0">
                   <xen-icon-button style="position: relative;" slot="target" icon="more_vert" @click.native="openMenu(key)"></xen-icon-button>
                   <div slot="menu">
                     <xen-list :dense="true">
                       <xen-list-item text="Delete" icon="delete" @click.native="showDeleteDialog(key)"></xen-list-item>
                     </xen-list>
                   </div>
-                </xen-dropdown>
+                </xen-dropdown> -->
 
               </div>
             </xen-list-item>
           </xen-list>
+          <xen-card-content v-else>
+            <p class="">You haven't created any characters yet</p>
+          </xen-card-content>
       </xen-card>
     </div>
 

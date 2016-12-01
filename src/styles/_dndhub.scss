@@ -19,7 +19,7 @@
 .bottom-pagination {
 	position: fixed;
 	bottom: 0;
-	width: 100vw;
+	width: 100%;
 	background-color: #fff;
 	z-index: 5;
 	text-align: right;
@@ -104,6 +104,10 @@
 .small-table-input input {
   text-align: center;
   width: 40px;
+}
+
+.padding {
+	padding: 16px;
 }
 
 @media screen and (max-width: $small-breakpoint) {

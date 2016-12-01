@@ -68,7 +68,7 @@
               <thead>
                 <tr>
                   <th class="xen-first-col">
-                    Name
+                    Stat
                   </th>
                   <th class="text-center">
                     Base
@@ -76,9 +76,6 @@
                   <th class="text-center">
                     Bonus
                   </th>
-                  <!-- <th class="text-center">
-                    Total
-                  </th> -->
                   <th class="text-center">
                     Modifier
                   </th>
@@ -91,13 +88,12 @@
                   <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].base || 0"
                     @input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>
                   </td>
-                  <td v-if="character.abilityScores[score.name]">
-                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
-                     @input="character.abilityScores[score.name].bonus = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
-                  <!-- <td v-if="character.abilityScores[score.name]">
-                    <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="character.abilityScores[score.name].base + character.abilityScores[score.name].bonus"></xen-input>
-                  </td> -->
-                  <td>
+                  <td class="text-center" v-if="character.abilityScores[score.name]">
+                    <!-- <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
+                     @input="character.abilityScores[score.name].bonus = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input> -->
+                     <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
+                     @input="$set(character.abilityScores[score.name], 'bonus', $event); $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
+                  <td class="text-center">
                     <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(+character.abilityScores[score.name].base, +character.abilityScores[score.name].bonus)"></xen-input>
                   </td>
                 </tr>
@@ -117,7 +113,7 @@
               <thead>
                 <tr>
                   <th class="xen-first-col">
-                    Name
+                    Skill
                   </th>
                   <th class="text-center">
                     Trained
@@ -137,7 +133,7 @@
                     <xen-checkbox class="xen-color-primary" :value="character.skills[skill.name].trained"
                      @input="character.skills[skill.name].trained = $event; $root.updateCharacter('skills/' + skill.name + '/', 'trained', character.skills[skill.name].trained);"></xen-checkbox>
                   </td>
-                  <td>
+                  <td class="text-center">
                     <xen-input class="xen-color-primary small-table-input" type="number" :value="character.skills[skill.name].bonus || 0"
                     @input="character.skills[skill.name].bonus = $event; $root.updateCharacter('skills/' + skill.name + '/', 'bonus', character.skills[skill.name].bonus);"></xen-input>
                   </td>
@@ -309,6 +305,36 @@
     },
 
     methods: {
+      setAbilityScores () {
+        // console.log(this.character)
+        this.$set(this.character, 'abilityScores', {
+          Strength: {
+            base: 0,
+            bonus: 0
+          },
+          Dexterity: {
+            base: 0,
+            bonus: 0
+          },
+          Constitution: {
+            base: 0,
+            bonus: 0
+          },
+          Intelligence: {
+            base: 0,
+            bonus: 0
+          },
+          Wisdom: {
+            base: 0,
+            bonus: 0
+          },
+          Charisma: {
+            base: 0,
+            bonus: 0
+          }
+        })
+        this.$root.updateCharacter('', 'abilityScores', this.character.abilityScores)
+      },
       getAbilityScoreModifier (score, bonus) {
         score = !isNaN(score) ? score : 0
         bonus = !isNaN(bonus) ? bonus : 0
@@ -318,7 +344,7 @@
 
       checkAbilityScores () {
         if (!this.character.abilityScores) {
-          this.$set(this.character, 'abilityScores', {})
+          this.setAbilityScores()
         }
         this.abilityScores.forEach(score => {
           if (!this.character.abilityScores.hasOwnProperty(score.name)) {

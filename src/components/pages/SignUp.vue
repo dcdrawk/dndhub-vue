@@ -11,7 +11,7 @@
           </xen-card>
         </div>
       </div>
-      <div class="row space-around">        
+      <div class="row space-around">
         <div class="col-lg-4 col-md-6 col-xs-12">
           <xen-card>
             <xen-card-header>
@@ -21,6 +21,9 @@
             <xen-card-content>
               <form ref="signin" name="signin" class="row">
                 <div class="col-xs-12">
+                <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                  <input style="display:none" type="text" name="fakeusernameremembered"/>
+                  <input style="display:none" type="password" name="fakepasswordremembered"/>
                   <xen-input ref="email" label="Email" name="email" class="xen-color-primary" rules="required|email" :value="email" @input="email = $event"></xen-input>
                   <xen-input ref="password" label="Password" name="password" type="password" class="xen-color-primary" rules="required|min:6" :value="password" @input="password = $event"></xen-input>
                   <xen-input ref="repassword" label="Confirm Password" name="confirm password" type="password" class="xen-color-primary" rules="required|confirmed:password|min:6" :alue="repassword" @input="repassword = $event"></xen-input>
@@ -99,13 +102,18 @@
               return
             }
             this.signingIn = true
-            this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
-              this.signingIn = false
-              this.errorMsg = undefined
+            this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(() => {
+              this.$router.push({ path: 'profile' })
             }).catch((error) => {
               this.errorMsg = error.message
-              this.signingIn = false
             })
+            // this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
+            //   this.signingIn = false
+            //   this.errorMsg = undefined
+            // }).catch((error) => {
+            //   this.errorMsg = error.message
+            //   this.signingIn = false
+            // })
           }
         }, 0)
       }

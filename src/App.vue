@@ -13,22 +13,25 @@
       <section class="xen-nav">
         <xen-list :dense="true">
           <router-link to="/sign-in" v-if="!user">
-            <xen-list-item text="Sign In" :bold="true"></xen-list-item>
+            <xen-list-item text="Sign In" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
           <router-link to="/sign-up" v-if="!user">
-            <xen-list-item text="Sign Up" :bold="true"></xen-list-item>
+            <xen-list-item text="Sign Up" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
+          </router-link>
+          <router-link to="/sign-in" v-if="user">
+            <xen-list-item text="Sign Out" :bold="true"  @click.native="signOut(); toggleSidebar();"></xen-list-item>
           </router-link>
           <router-link to="/profile" v-if="user">
-            <xen-list-item text="Profile" :bold="true"></xen-list-item>
+            <xen-list-item text="Profile" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
           <router-link to="/character-list">
-            <xen-list-item text="Character List" :bold="true"></xen-list-item>
+            <xen-list-item text="Character List" :bold="true"  @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
         </xen-list>
 
         <xen-divider></xen-divider>
 
-        <xen-list :dense="true">
+        <xen-list :dense="true" v-if="user && selectedCharacter">
           <router-link to="/general">
             <xen-list-item text="General" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
@@ -51,7 +54,7 @@
 
         <xen-divider></xen-divider>
 
-        <xen-list :dense="true">
+        <xen-list :dense="true" v-if="user && selectedCharacter">
           <router-link to="/groups">
             <xen-list-item text="Groups" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
@@ -211,8 +214,8 @@
       selectCharacter (characterName) {
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
-            // this.selectedCharacter = this.characters[i]
-
+            this.selectedCharacter = this.characters[i]
+            this.$bus.$emit('character-selected', this.selectedCharacter)
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
               // updateStarCount(postElement, snapshot.val());
@@ -222,10 +225,21 @@
               window.localStorage.setItem('selected-character', this.selectedCharacter.name)
               this.characterName = this.selectedCharacter.name
               this.characterId = i
-              this.$bus.$emit('character-selected', this.selectedCharacter)
             })
           }
         }
+      },
+
+      signOut () {
+        this.$firebase.auth().signOut().then(() => {
+          // Sign-out successful.
+          window.localStorage.removeItem('selected-character')
+          this.user = undefined
+          // this.$bus.$emit('user-signout')
+        }, (error) => {
+          console.error(error)
+          // An error happened.
+        })
       },
 
       getDbVersion () {

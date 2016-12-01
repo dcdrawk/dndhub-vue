@@ -11,7 +11,7 @@
           </xen-card>
         </div>
       </div>
-      <div class="row space-around">        
+      <div class="row space-around">
         <div class="col-lg-4 col-md-6 col-xs-12">
           <xen-card>
             <xen-card-header>
@@ -97,6 +97,7 @@
             this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
               this.signingIn = false
               this.errorMsg = undefined
+              this.$router.push({ path: 'profile' })
             }).catch((error) => {
               this.errorMsg = error.message
               this.signingIn = false
