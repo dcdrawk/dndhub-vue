@@ -65,7 +65,7 @@
               <tbody>
                 <tr v-for="armor in gameArmor">
                   <td class="xen-first-col icon-col">
-                  <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addArmor(armor)"></xen-icon-button>
+                  <xen-icon-button :raised="true" icon="add" class="xen-theme-blue table-icon-button" @click.native="addArmor(armor)"></xen-icon-button>
                   </td>
                   <td class="text-left" @click="selectArmor(armor, true);">
                     {{ armor.name }}
@@ -80,40 +80,41 @@
         </section>
       </div>
     </xen-tabs>
-      <!-- Feat Dialog -->
-      <div v-if="selectedArmor">
-        <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedArmor.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
-          <div class="row">            <ul class="property-list">
-              <li>
-                <xen-input label="Name" class="xen-color-primary" :value="selectedArmor.name" :disabled="disableInput" @input="selectedArmor.name = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Armor Class" class="xen-color-primary" :value="selectedArmor.ac" :disabled="disableInput" @input="selectedArmor.ac = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Armor Type" class="xen-color-primary" :value="selectedArmor.armorType" :disabled="disableInput" @input="selectedArmor.armorType = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Weight" class="xen-color-primary" :value="selectedArmor.weight" :disabled="disableInput" @input="selectedArmor.weight = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Cost" class="xen-color-primary" :value="selectedArmor.cost" :disabled="disableInput" @input="selectedArmor.cost = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li v-if="!disableInput">
-                <xen-textarea label="Notes" class="xen-color-primary" :value="selectedArmor.notes" :disabled="disableInput" @input="selectedArmor.notes = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
-              </li>
-              <li>
-                <h2 class="caption secondary-text">Properties</h2>
-                <xen-chips :chips="selectedArmor.properties" :read-only="disableInput"></xen-chips>
-              </li>
-            </ul>
-          </div>
-          <div slot="actions">
-            <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
-          </div>
-        </xen-dialog>
-      </div>
-      <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
+
+    <!-- Armor Dialog -->
+    <div v-if="selectedArmor">
+      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedArmor.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
+        <div class="row">            <ul class="property-list">
+            <li>
+              <xen-input label="Name" class="xen-color-primary" :value="selectedArmor.name" :disabled="disableInput" @input="selectedArmor.name = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Armor Class" class="xen-color-primary" :value="selectedArmor.ac" :disabled="disableInput" @input="selectedArmor.ac = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Armor Type" class="xen-color-primary" :value="selectedArmor.armorType" :disabled="disableInput" @input="selectedArmor.armorType = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Weight" class="xen-color-primary" :value="selectedArmor.weight" :disabled="disableInput" @input="selectedArmor.weight = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Cost" class="xen-color-primary" :value="selectedArmor.cost" :disabled="disableInput" @input="selectedArmor.cost = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li v-if="!disableInput">
+              <xen-textarea label="Notes" class="xen-color-primary" :value="selectedArmor.notes" :disabled="disableInput" @input="selectedArmor.notes = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
+            </li>
+            <li>
+              <h2 class="caption secondary-text">Properties</h2>
+              <xen-chips :chips="selectedArmor.properties" :read-only="disableInput"></xen-chips>
+            </li>
+          </ul>
+        </div>
+        <div slot="actions">
+          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+        </div>
+      </xen-dialog>
+    </div>
+    <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
 
@@ -174,9 +175,12 @@
     },
 
     mounted () {
+      // When a user signs in
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
+
+      // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
         this.loaded = this.checkLoaded()
@@ -184,6 +188,8 @@
           this.checkArmor()
         }
       })
+
+      // When the data is loaded
       this.$bus.$on('data-loaded', () => {
         this.loaded = this.checkLoaded()
         if (this.loaded) {
@@ -191,25 +197,29 @@
         }
       })
 
-      if (this.character && this.$root.gameData) {
-        this.loaded = this.checkLoaded()
-        if (this.loaded) {
-          this.checkArmor()
-        }
+      // Check if the game data is loaded
+      this.loaded = this.checkLoaded()
+      if (this.loaded) {
+        this.checkArmor()
       }
     },
 
     methods: {
+      // check if character and game data are loaded
       checkLoaded () {
         if (this.character && this.$root.gameData) {
           return true
         }
       },
+
+      // Check to make sure character has an armor attribute
       checkArmor () {
         if (!this.character.armor) {
           this.$set(this.character, 'armor', [])
         }
       },
+
+      // Remove a piece of armor
       removeArmor (armor, index) {
         let array = _.orderBy(this.character.armor, 'name')
         array.splice(index, 1)
@@ -219,6 +229,7 @@
         this.$root.updateCharacter('', 'armor', this.character.armor)
       },
 
+      // Select a piece of armor to display in the dialog
       selectArmor (armor, disabled) {
         this.disableInput = disabled
         this.selectedArmor = armor
@@ -227,32 +238,23 @@
         })
       },
 
+      // Add a piece of armor to a character
       addArmor (armor) {
         this.character.armor.push(armor)
         this.showToast = true
         this.toastMsg = armor.name + ' equipped'
-        this.$root.updateCharacter('', 'armor', this.character.armor)
-      },
-
-      toggleArmor (event, armor) {
-        if (event) {
-          this.character.armor.push(armor)
-        } else {
-          this.character.armor.forEach((charWeap, index) => {
-            if (charWeap.name === armor.name) {
-              this.character.armor.splice(index, 1)
-            }
-          })
-        }
         this.$root.updateCharacter('', 'armor', this.character.armor)
       }
     },
 
     // Computed
     computed: {
+      // Order the armor alphabetically
       filteredArmor: function () {
         return _.orderBy(this.character.armor, 'name')
       },
+
+      // Filter the list of in-game armor
       gameArmor: function () {
         return this.$root.gameData.armor.filter((row) => {
           return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
