@@ -3,47 +3,45 @@
     <xen-page-toolbar class="xen-theme-indigo" title="Feats"></xen-page-toolbar>
     <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Known">
 
-      <!-- Combat Tab -->
+      <!-- Known Feats Tab -->
       <div slot="Known">
-        <!-- Combat Info -->
         <section class="page-tab-content">
 
-            <xen-card class="margin-bottom" v-if="!loaded">
-              <xen-card-content>
-                <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
-              </xen-card-content>
-            </xen-card>
-          <!-- <xen-card> -->
-            <div class="xen-data-table bordered hover" v-if="loaded">
-              <table>
-                <thead>
-                  <tr>
-                    <th class="text-left xen-first-col">
-                      Name
-                    </th>
-                    <th class="checkbox-col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(feat, index) in filteredFeats">
-                    <td class="text-left xen-first-col" @click="selectFeat(feat);">
-                      {{ feat.name }}
-                    </td>
-                    <td class="text-right xen-last-col">
-                      <xen-icon-button class="table-button" icon="delete" @click.native="removeFeat(feat)"></xen-icon-button>
-                    </td>
-                  </tr>
-                  <tr v-if="filteredFeats.length === 0">
-                    <td colspan="2" class="xen-first-col">You haven't added any feats yet</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          <!-- </xen-card> -->
+          <!-- Loading Spinner -->
+          <xen-card class="margin-bottom" v-if="!loaded">
+            <xen-card-content>
+              <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
+            </xen-card-content>
+          </xen-card>
+          <div class="xen-data-table bordered hover" v-if="loaded">
+            <table>
+              <thead>
+                <tr>
+                  <th class="text-left xen-first-col">
+                    Name
+                  </th>
+                  <th class="checkbox-col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(feat, index) in filteredFeats">
+                  <td class="text-left xen-first-col" @click="selectFeat(feat);">
+                    {{ feat.name }}
+                  </td>
+                  <td class="text-right xen-last-col">
+                    <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeFeat(feat)"></xen-icon-button>
+                  </td>
+                </tr>
+                <tr v-if="filteredFeats.length === 0">
+                  <td colspan="2" class="xen-first-col">You haven't added any feats yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
 
-      <!-- Ability Scores Tab -->
+      <!-- Browse Feats Tab -->
       <div slot="Browse All">
         <section class="page-tab-content">
           <div class="xen-data-table bordered hover" v-if="loaded">
@@ -73,137 +71,87 @@
         </section>
       </div>
     </xen-tabs>
-      <!-- Feat Dialog -->
-      <div v-if="selectedFeat">
-        <xen-dialog :show="showFeat" @hide="showFeat = false" :title="selectedFeat.name" :large="true" :fullscreen="true" :primary="true">
-          <div class="row">
-            <div class="dialog-description" v-html="selectedFeat.description"></div>
-          </div>
-          <div slot="actions">
-            <xen-button @click.native="showFeat = false" class="xen-color-primary">Close</xen-button>
-          </div>
-        </xen-dialog>
-      </div>
+
+    <!-- Feat Dialog -->
+    <div v-if="selectedFeat">
+      <xen-dialog :show="showFeat" @hide="showFeat = false" :title="selectedFeat.name" :large="true" :fullscreen="true" :primary="true">
+        <div class="row">
+          <div class="dialog-description" v-html="selectedFeat.description"></div>
+        </div>
+        <div slot="actions">
+          <xen-button @click.native="showFeat = false" class="xen-color-primary">Close</xen-button>
+        </div>
+      </xen-dialog>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-@import '../xen/styles/data-tables';
-@import '../xen/styles/variables';
-.checkbox-col {
-  width: 96px;
-}
-
-.table-button {
-  margin: 0;
-  i {
-    opacity: .5;
-  }
-}
-.xen-data-table td.xen-first-col .table-checkbox i {
-  margin-left: 12px;
-}
-
-.combat-divider {
-  margin-bottom: 16px;
-}
-.small-table-input {
-  margin: auto;
-  padding-top: 16px;
-}
-.small-table-input,
-.small-table-input input {
-  text-align: center;
-  width: 40px;
-}
-@media screen and (max-width: $small-breakpoint) {
-  th.xen-first-col {
-    width: 100px;
-  }
-  .xen-data-table th,
-  .xen-data-table td {
-    padding-right: 0;
-  }
-}
-.dialog-description {
-  width: 100%;
-  ul {
-    margin-bottom: 0;
-    background-color: #fafafa;
-    border: 1px solid #BDBDBD;
-    li {
-      padding: 8px;
-      border-bottom: 1px solid #BDBDBD;
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
-  import XenButton from '../xen/Button'
-  import XenIconButton from '../xen/IconButton'
-  import XenDivider from '../xen/Divider'
-  import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
-  import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
-  import XenList from '../xen/List'
-  import XenListItem from '../xen/ListItemCustom'
-  import XenCheckbox from '../xen/Checkbox'
-  import XenTabs from '../xen/Tabs'
   import _ from 'lodash'
+  import XenButton from '../xen/Button'
+  import XenCard from '../xen/Card'
+  import XenCardContent from '../xen/CardContent'
+  import XenCheckbox from '../xen/Checkbox'
+  import XenDialog from '../xen/Dialog'
+  import XenIconButton from '../xen/IconButton'
+  import XenInput from '../xen/Input'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenSelect from '../xen/Select'
+  import XenTabs from '../xen/Tabs'
+  import XenTextarea from '../xen/Textarea'
 
   export default {
-    name: 'profile',
+    // Name
+    name: 'feats',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenIconButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
       XenCheckbox,
       XenDialog,
+      XenIconButton,
+      XenInput,
       XenLoadingSpinner,
+      XenPageToolbar,
       XenSelect,
-      XenList,
-      XenListItem,
-      XenTabs
+      XenTabs,
+      XenTextarea
     },
 
+    // Data
     data () {
       return {
-        user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
-        loaded: false,
         feats: this.$root.gameData.feats || undefined,
+        loaded: false,
+        selectedFeat: undefined,
         showFeat: false,
-        selectedFeat: undefined
+        user: this.$root.user || undefined
       }
     },
 
+    // Mounted
     mounted () {
+      // When a user signs in (page-load)
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
+
+      // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
         this.checkFeats()
         this.getKnownFeats()
         this.loaded = true
       })
+
+      // When the game data has loaded
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
           this.checkFeats()
@@ -212,6 +160,7 @@
         }
       })
 
+      // Run this on mount
       if (this.character && this.$root.gameData) {
         this.checkFeats()
         this.getKnownFeats()
@@ -219,8 +168,9 @@
       }
     },
 
+    // Methods
     methods: {
-
+      // Check the character for the feats attribute
       checkFeats () {
         if (!this.character.feats) {
           this.$set(this.character, 'feats', [])
@@ -230,6 +180,7 @@
         }
       },
 
+      // Remove a feat
       removeFeat (feat) {
         this.character.feats.forEach((charFeat, index) => {
           if (charFeat.name === feat.name) {
@@ -240,6 +191,7 @@
         this.getKnownFeats()
       },
 
+      // Get the list of known feats
       getKnownFeats () {
         this.feats.forEach(gameFeat => {
           gameFeat.known = false
@@ -253,6 +205,7 @@
         })
       },
 
+      // Select a feat
       selectFeat (feat) {
         this.selectedFeat = feat
         this.$nextTick(() => {
@@ -260,6 +213,7 @@
         })
       },
 
+      // Toggle a feat on / off
       toggleFeat (event, feat) {
         console.log(event)
         console.log('toggle feat!')
@@ -278,7 +232,7 @@
 
     // Computed
     computed: {
-
+      // Filter the character's feats alphabetically
       filteredFeats: function () {
         return _.orderBy(this.character.feats, 'name')
       }

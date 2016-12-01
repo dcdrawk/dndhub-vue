@@ -33,7 +33,7 @@
                       {{ armor.ac || '-' }}
                     </td>
                     <td class="text-right xen-last-col">
-                      <xen-icon-button class="table-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
+                      <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
                     </td>
                   </tr>
                   <tr v-if="filteredArmor.length === 0">
@@ -84,7 +84,8 @@
     <!-- Armor Dialog -->
     <div v-if="selectedArmor">
       <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedArmor.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
-        <div class="row">            <ul class="property-list">
+        <div class="row">
+          <ul class="property-list">
             <li>
               <xen-input label="Name" class="xen-color-primary" :value="selectedArmor.name" :disabled="disableInput" @input="selectedArmor.name = $event; $root.updateCharacter('', 'armor', character.armor);"></xen-input>
             </li>

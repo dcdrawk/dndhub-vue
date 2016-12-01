@@ -82,10 +82,7 @@
   import XenCardActions from '../xen/CardActions'
   import XenCardContent from '../xen/CardContent'
   import XenCardHeader from '../xen/CardHeader'
-  import XenCardMedia from '../xen/CardMedia'
   import XenDialog from '../xen/Dialog'
-  import XenDivider from '../xen/Divider'
-  import XenDropdown from '../xen/Dropdown'
   import XenIconButton from '../xen/IconButton'
   import XenInput from '../xen/Input'
   import XenList from '../xen/List'
@@ -106,10 +103,7 @@
       XenCardActions,
       XenCardContent,
       XenCardHeader,
-      XenCardMedia,
       XenDialog,
-      XenDivider,
-      XenDropdown,
       XenIconButton,
       XenInput,
       XenList,
