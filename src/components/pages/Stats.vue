@@ -153,8 +153,7 @@
   </div>
 </template>
 
-<style lang="scss">
-@import '../xen/styles/data-tables';
+<style lang="scss" scoped>
 @import '../xen/styles/variables';
 
 .combat-divider {
@@ -181,43 +180,42 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
   import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
-  import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
-  import XenList from '../xen/List'
-  import XenListItem from '../xen/ListItem'
+  import XenCardHeader from '../xen/CardHeader'
   import XenCheckbox from '../xen/Checkbox'
+  import XenDialog from '../xen/Dialog'
+  import XenDivider from '../xen/Divider'
+  import XenInput from '../xen/Input'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenSelect from '../xen/Select'
   import XenTabs from '../xen/Tabs'
+  import XenTextarea from '../xen/Textarea'
 
   export default {
-    name: 'profile',
+    // Name
+    name: 'stats',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
+      XenCardHeader,
       XenCheckbox,
       XenDialog,
+      XenDivider,
+      XenInput,
       XenLoadingSpinner,
+      XenPageToolbar,
       XenSelect,
-      XenList,
-      XenListItem,
-      XenTabs
+      XenTabs,
+      XenTextarea
     },
 
+    // Data
     data () {
       return {
         user: this.$root.user || undefined,
@@ -276,10 +274,14 @@
       }
     },
 
+    // Mounted
     mounted () {
+      // When a user signs in
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
+
+      // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
         if (this.$root.gameData) {
@@ -289,6 +291,7 @@
         }
       })
 
+      // When the data is loaded
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
           this.checkAbilityScores()
@@ -304,7 +307,9 @@
       }
     },
 
+    // Methods
     methods: {
+      // Set the ability scores
       setAbilityScores () {
         // console.log(this.character)
         this.$set(this.character, 'abilityScores', {
@@ -335,6 +340,8 @@
         })
         this.$root.updateCharacter('', 'abilityScores', this.character.abilityScores)
       },
+
+      // Return the modifier for an ability score
       getAbilityScoreModifier (score, bonus) {
         score = !isNaN(score) ? score : 0
         bonus = !isNaN(bonus) ? bonus : 0
@@ -342,6 +349,7 @@
         return Math.floor((parseInt(total, 0) / 2 - 5))
       },
 
+      // check the character for the abilityScores attribute
       checkAbilityScores () {
         if (!this.character.abilityScores) {
           this.setAbilityScores()
@@ -353,6 +361,7 @@
         })
       },
 
+      // Check the character for the skills attribute
       checkSkills () {
         if (!this.character.skills) {
           this.$set(this.character, 'skills', {})

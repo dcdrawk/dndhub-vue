@@ -3,9 +3,8 @@
     <xen-page-toolbar class="xen-theme-indigo" title="Spells"></xen-page-toolbar>
     <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Known">
 
-      <!-- Combat Tab -->
+      <!-- Known Spells Tab -->
       <div slot="Known">
-        <!-- Combat Info -->
         <section class="dndhub-tab-content">
 
             <xen-card class="margin-bottom" v-if="!loaded">
@@ -41,10 +40,11 @@
                 </tbody>
               </table>
             </div>
+
         </section>
       </div>
 
-      <!-- Ability Scores Tab -->
+      <!-- Browse Spells Tab -->
       <div slot="Browse All">
         <section class="dndhub-tab-content">
           <div class="filters">
@@ -101,112 +101,105 @@
         </section>
       </div>
     </xen-tabs>
-      <!-- Feat Dialog -->
-      <div v-if="selectedSpell">
-        <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true" class="spell-dialog">
-          <div class="row spell-info">
-            <div class="col-xs-12 spell-school">
-              <span class="text-center body-2 xen-color-primary">{{ selectedSpell.level }} {{ selectedSpell.school }}</span>
-              <span class="text-center">{{ selectedSpell.class }}</span>
-            </div>
-            <div class="col-xs-6 text-center">
-              <span class="body-2 xen-color-primary">Casting Time</span>
-              <span class="body-1">{{ selectedSpell.casting_time }}</span>
-            </div>
-            <div class="col-xs-6 text-center">
-              <span class="body-2 xen-color-primary">Range</span>
-              <span class="body-1">{{ selectedSpell.range }}</span>
-            </div>
-            <div class="col-xs-6 text-center">
-              <span class="body-2 xen-color-primary">Components</span>
-              <span class="body-1">{{ selectedSpell.components }}</span>
-            </div>
-            <div class="col-xs-6 text-center">
-              <span class="body-2 xen-color-primary">Duration</span>
-              <span class="body-1">{{ selectedSpell.duration }}</span>
-            </div>
-            <div class="col-xs-12">
-            </div>
-            <div class="col-xs-12 spell-description">
-              <div v-html="selectedSpell.desc"></div>
-            </div>
+    <!-- Feat Dialog -->
+    <div v-if="selectedSpell">
+      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true" class="spell-dialog">
+        <div class="row spell-info">
+          <div class="col-xs-12 spell-school">
+            <span class="text-center body-2 xen-color-primary">{{ selectedSpell.level }} {{ selectedSpell.school }}</span>
+            <span class="text-center">{{ selectedSpell.class }}</span>
           </div>
-          <div slot="actions">
-            <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+          <div class="col-xs-6 text-center">
+            <span class="body-2 xen-color-primary">Casting Time</span>
+            <span class="body-1">{{ selectedSpell.casting_time }}</span>
           </div>
-        </xen-dialog>
-      </div>
-      <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
+          <div class="col-xs-6 text-center">
+            <span class="body-2 xen-color-primary">Range</span>
+            <span class="body-1">{{ selectedSpell.range }}</span>
+          </div>
+          <div class="col-xs-6 text-center">
+            <span class="body-2 xen-color-primary">Components</span>
+            <span class="body-1">{{ selectedSpell.components }}</span>
+          </div>
+          <div class="col-xs-6 text-center">
+            <span class="body-2 xen-color-primary">Duration</span>
+            <span class="body-1">{{ selectedSpell.duration }}</span>
+          </div>
+          <div class="col-xs-12">
+          </div>
+          <div class="col-xs-12 spell-description">
+            <div v-html="selectedSpell.desc"></div>
+          </div>
+        </div>
+        <div slot="actions">
+          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+        </div>
+      </xen-dialog>
+    </div>
+    <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
 
 <style lang="scss">
-@import '../xen/styles/data-tables';
-@import '../xen/styles/variables';
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
-  import XenButton from '../xen/Button'
-  import XenIconButton from '../xen/IconButton'
-  import XenDivider from '../xen/Divider'
-  import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
-  import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
-  import XenList from '../xen/List'
-  import XenListItem from '../xen/ListItemCustom'
-  import XenCheckbox from '../xen/Checkbox'
-  import XenTabs from '../xen/Tabs'
-  import XenChips from '../xen/Chips'
-  import XenToast from '../xen/Toast'
   import _ from 'lodash'
+  import XenButton from '../xen/Button'
+  import XenCard from '../xen/Card'
+  import XenCardContent from '../xen/CardContent'
+  import XenCheckbox from '../xen/Checkbox'
+  import XenChips from '../xen/Chips'
+  import XenDialog from '../xen/Dialog'
+  import XenIconButton from '../xen/IconButton'
+  import XenInput from '../xen/Input'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenSelect from '../xen/Select'
+  import XenTabs from '../xen/Tabs'
+  import XenTextarea from '../xen/Textarea'
+  import XenToast from '../xen/Toast'
 
   export default {
-    name: 'profile',
+    // Name
+    name: 'spells',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenIconButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
       XenCheckbox,
-      XenDialog,
-      XenLoadingSpinner,
-      XenSelect,
-      XenList,
-      XenListItem,
-      XenTabs,
       XenChips,
+      XenDialog,
+      XenIconButton,
+      XenInput,
+      XenLoadingSpinner,
+      XenPageToolbar,
+      XenSelect,
+      XenTabs,
+      XenTextarea,
       XenToast
     },
 
+    // Data
     data () {
       return {
-        user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
-        loaded: false,
-        showDialog: false,
-        selectedSpell: undefined,
-        disableInput: false,
-        toastMsg: '',
-        showToast: false,
-        filter: '',
         classFilter: 'All',
-        schoolFilter: 'All',
+        disableInput: false,
+        filter: '',
         levelFilter: 'All',
-        perPage: '10',
+        loaded: false,
         numSpells: 0,
         page: 1,
+        perPage: '10',
+        schoolFilter: 'All',
+        selectedSpell: undefined,
+        showDialog: false,
+        showToast: false,
+        toastMsg: '',
+        user: this.$root.user || undefined,
         classOptions: [
           'All',
           'Bard',
@@ -233,6 +226,7 @@
       }
     },
 
+    // Mounted
     mounted () {
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
@@ -254,7 +248,9 @@
       }
     },
 
+    // Methods
     methods: {
+      // Remove a spell
       removeSpell (spell, index) {
         let array = _.orderBy(this.character.spells, 'name')
         array.splice(index, 1)
@@ -264,6 +260,7 @@
         this.$root.updateCharacter('', 'spells', this.character.spells)
       },
 
+      // Select a spell to show in the dialog
       selectSpell (spell, disabled) {
         this.disableInput = disabled
         this.selectedSpell = spell
@@ -272,6 +269,7 @@
         })
       },
 
+      // Add a spell
       addSpell (spell) {
         if (!this.character.spells) {
           this.$set(this.character, 'spells', [])
@@ -282,19 +280,7 @@
         this.$root.updateCharacter('', 'spells', this.character.spells)
       },
 
-      toggleSpell (event, spell) {
-        if (event) {
-          this.character.spells.push(spell)
-        } else {
-          this.character.spells.forEach((charWeap, index) => {
-            if (charWeap.name === spell.name) {
-              this.character.spells.splice(index, 1)
-            }
-          })
-        }
-        this.$root.updateCharacter('', 'spells', this.character.spells)
-      },
-
+      // Check the page, to make sure we can adjust if pagination changes
       checkPage () {
         if (this.page < 1) {
           this.page = 1
@@ -302,7 +288,6 @@
           this.page = Math.ceil(this.numSpells || this.perPage / this.perPage)
         }
       }
-
     },
 
     // Computed
