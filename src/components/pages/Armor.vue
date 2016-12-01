@@ -132,8 +132,6 @@
   import XenDialog from '../xen/Dialog'
   import XenIconButton from '../xen/IconButton'
   import XenInput from '../xen/Input'
-  import XenList from '../xen/List'
-  import XenListItem from '../xen/ListItemCustom'
   import XenLoadingSpinner from '../xen/LoadingSpinner'
   import XenPageToolbar from '../xen/PageToolbar'
   import XenTabs from '../xen/Tabs'
@@ -141,8 +139,10 @@
   import XenToast from '../xen/Toast'
 
   export default {
+    // Name
     name: 'armor',
 
+    // Components
     components: {
       XenButton,
       XenCard,
@@ -152,8 +152,6 @@
       XenDialog,
       XenIconButton,
       XenInput,
-      XenList,
-      XenListItem,
       XenLoadingSpinner,
       XenPageToolbar,
       XenTabs,
@@ -161,6 +159,7 @@
       XenToast
     },
 
+    // Data
     data () {
       return {
         character: this.$root.selectedCharacter || undefined,
@@ -175,6 +174,7 @@
       }
     },
 
+    // Mounted
     mounted () {
       // When a user signs in
       this.$bus.$on('user-signin', user => {
@@ -205,6 +205,7 @@
       }
     },
 
+    // Methods
     methods: {
       // check if character and game data are loaded
       checkLoaded () {

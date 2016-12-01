@@ -23,10 +23,7 @@
                   <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="$set(character, 'subrace', ''); getSubraces($event); $set(character, 'race', $event); $root.updateCharacter('', 'race', character.race);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" v-if="subraces.length > 0">
-                  <xen-select label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event); $root.updateCharacter('', 'subrace', character.subrace);"></xen-select>
-                </div>
-                <div class="col-xs-12 col-md-12 col-lg-6">
-                  <xen-input label="Adventure Group" class="xen-color-primary card-last" type="text" :value="character.adventuringGroup" @input="$set(character, 'adventureGroup', $event); $root.updateCharacter('', 'adventureGroup', character.adventureGroup);"></xen-input>
+                  <xen-select class="card-last" label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event); $root.updateCharacter('', 'subrace', character.subrace);"></xen-select>
                 </div>
               </div>
             </xen-card-content>
@@ -37,7 +34,6 @@
       <!-- Class Tab -->
       <div slot="Class">
         <section class="page-tab-content">
-          <!-- Class Info -->
           <xen-card class="margin-bottom" v-if="character">
             <xen-card-content>
               <div class="row">              
@@ -103,7 +99,6 @@
 
       <!-- Background Tab -->
       <div slot="Background">
-        <!-- Background Info -->
         <section class="page-tab-content">
           <xen-card class="margin-bottom" v-if="character">
             <xen-card-content>
@@ -139,63 +134,67 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
+  import _ from 'lodash'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
   import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCheckbox from '../xen/Checkbox'
   import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
+  import XenDivider from '../xen/Divider'
+  import XenInput from '../xen/Input'
   import XenList from '../xen/List'
   import XenListItem from '../xen/ListItem'
-  import XenCheckbox from '../xen/Checkbox'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenSelect from '../xen/Select'
   import XenTabs from '../xen/Tabs'
-  import _ from 'lodash'
+  import XenTextarea from '../xen/Textarea'
 
   export default {
-    name: 'profile',
+    // Name
+    name: 'general',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
+      XenCardHeader,
       XenCheckbox,
       XenDialog,
-      XenLoadingSpinner,
-      XenSelect,
+      XenDivider,
+      XenInput,
       XenList,
       XenListItem,
-      XenTabs
+      XenLoadingSpinner,
+      XenPageToolbar,
+      XenSelect,
+      XenTabs,
+      XenTextarea
     },
 
+    // Data
     data () {
       return {
-        user: this.$root.user || undefined,
-        character: this.$root.selectedCharacter || undefined,
-        classInfo: undefined,
-        classFeatures: [],
-        subraces: [],
         archetypes: [],
-        filter: undefined,
-        featOrder: 'Level',
+        character: this.$root.selectedCharacter || undefined,
+        classFeatures: [],
+        classInfo: undefined,
         direction: 'Descending',
+        featOrder: 'Level',
+        filter: undefined,
         limit: 5,
+        loaded: false,
         page: 1,
-        showFeat: false,
         selectedFeat: undefined,
-        loaded: false
+        showFeat: false,
+        subraces: [],
+        user: this.$root.user || undefined
       }
     },
 
+    // Mounted
     mounted () {
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
@@ -226,7 +225,9 @@
       }
     },
 
+    // Methods
     methods: {
+      // Get the list of subraces from a race
       getSubraces (raceName) {
         if (this.$root.gameData.races) {
           if (raceName !== this.character.race) {
@@ -241,6 +242,7 @@
         }
       },
 
+      // Get the list of class archetypes
       getArchetypes (className) {
         console.log(className)
         if (this.$root.gameData.classes) {
@@ -257,6 +259,7 @@
         }
       },
 
+      // Get the list of class features
       getClassFeatures () {
         if (this.$root.gameData.classFeatures) {
           this.classFeatures = []
@@ -268,6 +271,7 @@
         }
       },
 
+      // Select a feat to show in the dialog
       selectFeat (feat) {
         this.selectedFeat = feat
         this.$nextTick(() => {
