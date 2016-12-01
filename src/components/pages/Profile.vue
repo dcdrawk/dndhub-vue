@@ -71,37 +71,40 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenCardMedia from '../xen/CardMedia'
   import XenCardActions from '../xen/CardActions'
-  import XenInput from '../xen/Input'
-  import XenToast from '../xen/Toast'
+  import XenCardContent from '../xen/CardContent'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCardMedia from '../xen/CardMedia'
   import XenDialog from '../xen/Dialog'
+  import XenDivider from '../xen/Divider'
+  import XenInput from '../xen/Input'
   import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenToast from '../xen/Toast'
 
   export default {
+    // Name
     name: 'profile',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
-      XenCardContent,
-      XenCardMedia,
       XenCardActions,
-      XenInput,
-      XenToast,
+      XenCardContent,
+      XenCardHeader,
+      XenCardMedia,
       XenDialog,
-      XenLoadingSpinner
+      XenDivider,
+      XenInput,
+      XenLoadingSpinner,
+      XenPageToolbar,
+      XenToast
     },
 
+    // Data
     data () {
       return {
         editing: false,
@@ -118,19 +121,24 @@
       }
     },
 
+    // Mounted
     mounted () {
+      // When a user signs in
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
     },
 
+    // Methods
     methods: {
+      // Edit the user info
       editProfile () {
         this.editing = true
         this.tempUser.displayName = this.user.displayName
         this.tempUser.email = this.user.email
       },
 
+      // Cancel the edit, reset to old values
       cancelEdit () {
         this.editing = false
         this.$nextTick(() => {
@@ -140,6 +148,7 @@
         })
       },
 
+      // Save the profile info
       saveEdit () {
         this.editing = false
         let user = Object.assign({}, this.user)
@@ -151,6 +160,7 @@
         })
       },
 
+      // Upload a profile photo
       /* eslint-disable no-undef, no-unused-vars */
       uploadPhoto (photo) {
         let reader = new FileReader()
@@ -186,6 +196,5 @@
         })
       }
     }
-
   }
 </script>
