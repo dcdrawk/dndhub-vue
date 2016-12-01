@@ -3,11 +3,9 @@
     <xen-page-toolbar class="xen-theme-indigo" title="Armor"></xen-page-toolbar>
     <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Equipped">
 
-      <!-- Combat Tab -->
+      <!-- Equipped Armor Tab -->
       <div slot="Equipped">
-        <!-- Combat Info -->
         <section class="page-tab-content">
-
             <xen-card class="margin-bottom" v-if="!loaded">
               <xen-card-content>
                 <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
@@ -23,7 +21,7 @@
                     <th class="text-center">
                       Armor Class
                     </th>
-                    <th class="delete-col xen-last-col"></th>
+                    <th class="checkbox-col xen-last-col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,13 +36,16 @@
                       <xen-icon-button class="table-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
                     </td>
                   </tr>
+                  <tr v-if="filteredArmor.length === 0">
+                    <td colspan="3" class="xen-first-col text-left">You haven't added any armor yet</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
         </section>
       </div>
 
-      <!-- Ability Scores Tab -->
+      <!-- Browse Armor Tab -->
       <div slot="Browse All">
         <section class="page-tab-content">
           <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Armor" @input="filter = $event"></xen-input>
@@ -52,14 +53,12 @@
             <table>
               <thead>
                 <tr>
-                  <th class="icon-col">
-                    <!-- Equipped -->
-                  </th>
+                  <th class="icon-col"></th>
                   <th class="text-left">
                     Name
                   </th>
                   <th class="text-center">
-                    Damage
+                    Armor Class
                   </th>
                 </tr>
               </thead>
@@ -67,20 +66,19 @@
                 <tr v-for="armor in gameArmor">
                   <td class="xen-first-col icon-col">
                   <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addArmor(armor)"></xen-icon-button>
-                  <!-- <xen-checkbox class="table-checkbox xen-color-primary" :value="armor.equipped" @input="toggleArmor($event, armor)"></xen-checkbox> -->
                   </td>
                   <td class="text-left" @click="selectArmor(armor, true);">
                     {{ armor.name }}
                   </td>
                   <td class="text-center" @click="selectArmor(armor, true);">
-                    {{ armor.damage || '-' }}
+                    {{ armor.ac || '-' }}
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
-      </div>      
+      </div>
     </xen-tabs>
       <!-- Feat Dialog -->
       <div v-if="selectedArmor">
@@ -120,119 +118,58 @@
 </template>
 
 <style lang="scss">
-@import '../xen/styles/data-tables';
-@import '../xen/styles/variables';
-.checkbox-col {
-  width: 96px;
-}
-
-.icon-col {
-  width: 80px;
-}
-.table-icon-button {
-  margin: 4px 0 0 0;
-}
-.xen-data-table td.xen-first-col .table-checkbox i {
-  margin-left: 12px;
-}
-
-.delete-col {
-  width: 48px;
-}
-.combat-divider {
-  margin-bottom: 16px;
-}
-.small-table-input {
-  margin: auto;
-  padding-top: 16px;
-}
-.small-table-input,
-.small-table-input input {
-  text-align: center;
-  width: 40px;  
-}
-@media screen and (max-width: $small-breakpoint) {
-  .xen-data-table th,
-  .xen-data-table td {
-    padding-right: 0;
-  }
-}
-.dialog-description {
-  width: 100%;
-  ul {
-    margin-bottom: 0;
-    background-color: #fafafa;
-    border: 1px solid #BDBDBD;
-    li {
-      padding: 8px;
-      border-bottom: 1px solid #BDBDBD;
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
-.search-input {
-  margin-bottom: 0;
-}
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
+  import _ from 'lodash'
   import XenButton from '../xen/Button'
-  import XenIconButton from '../xen/IconButton'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
   import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
+  import XenCheckbox from '../xen/Checkbox'
+  import XenChips from '../xen/Chips'
   import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
+  import XenIconButton from '../xen/IconButton'
+  import XenInput from '../xen/Input'
   import XenList from '../xen/List'
   import XenListItem from '../xen/ListItemCustom'
-  import XenCheckbox from '../xen/Checkbox'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
   import XenTabs from '../xen/Tabs'
-  import XenChips from '../xen/Chips'
+  import XenTextarea from '../xen/Textarea'
   import XenToast from '../xen/Toast'
-  import _ from 'lodash'
 
   export default {
-    name: 'profile',
+    name: 'armor',
 
     components: {
-      XenPageToolbar,
       XenButton,
-      XenIconButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
       XenCheckbox,
+      XenChips,
       XenDialog,
-      XenLoadingSpinner,
-      XenSelect,
+      XenIconButton,
+      XenInput,
       XenList,
       XenListItem,
+      XenLoadingSpinner,
+      XenPageToolbar,
       XenTabs,
-      XenChips,
+      XenTextarea,
       XenToast
     },
 
     data () {
       return {
-        user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
-        loaded: false,
-        showDialog: false,
-        selectedArmor: undefined,
         disableInput: false,
-        toastMsg: '',
+        filter: '',
+        loaded: false,
+        selectedArmor: undefined,
+        showDialog: false,
         showToast: false,
-        filter: ''
+        toastMsg: '',
+        user: this.$root.user || undefined
       }
     },
 
@@ -242,19 +179,37 @@
       })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
+        this.loaded = this.checkLoaded()
+        if (this.loaded) {
+          this.checkArmor()
+        }
       })
       this.$bus.$on('data-loaded', () => {
-        if (this.character) {
-          this.loaded = true
+        this.loaded = this.checkLoaded()
+        if (this.loaded) {
+          this.checkArmor()
         }
       })
 
       if (this.character && this.$root.gameData) {
-        this.loaded = true
+        this.loaded = this.checkLoaded()
+        if (this.loaded) {
+          this.checkArmor()
+        }
       }
     },
 
     methods: {
+      checkLoaded () {
+        if (this.character && this.$root.gameData) {
+          return true
+        }
+      },
+      checkArmor () {
+        if (!this.character.armor) {
+          this.$set(this.character, 'armor', [])
+        }
+      },
       removeArmor (armor, index) {
         let array = _.orderBy(this.character.armor, 'name')
         array.splice(index, 1)

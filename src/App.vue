@@ -122,30 +122,6 @@
     },
 
     mounted () {
-      // var path = window.location.hash
-      // var pathArray = path.replace(/-+/, '').replace(/#+/, '').replace(/\/+/, '').split('/')
-
-      // this.$nextTick(() => {
-      //   if (pathArray.length === 1 && pathArray[0] === '') {
-      //     // this.setActive('home')
-      //   } else {
-      //     // this.expand(pathArray[0])
-      //     // this.setActive(pathArray[1])
-      //   }
-      // })
-
-      // window.onpopstate = (event) => {
-      //   setTimeout(() => {
-      //     var path = this.$route.path
-      //     var pathArray = path.replace(/-+/, '').replace(/\/+/, '').split('/')
-      //     if (pathArray.length === 1 && pathArray[0] === '') {
-      //       this.setActive('home')
-      //     } else {
-      //       // this.setActive(pathArray[1])
-      //     }
-      //   }, 0)
-      // }
-
       this.$bus.$on('name-updated', (name) => {
         this.characterName = name
         window.localStorage.setItem('selected-character', name)
@@ -155,7 +131,6 @@
         if (this.selectedCharacter.groups) {
           this.selectedCharacter.groups.push(group)
         } else {
-          // this.character.groups = []
           this.$set(this.selectedCharacter, 'groups', [])
           this.selectedCharacter.groups.push(group)
         }
@@ -172,12 +147,9 @@
           this.getCharacters()
 
           if (window.localStorage.getItem('game-data')) {
-            // this.gameData = window.JSON.parse(window.localStorage.getItem('game-data'))
             let test = window.JSON.parse(window.localStorage.getItem('game-data'))
             this.gameData = test
             this.$set(this.gameData, this.gameData)
-            // console.log('there is already game data!')
-            // console.log(this.gameData)
             this.$bus.$emit('data-loaded')
           } else {
             this.getGameData().then(() => {
@@ -224,15 +196,11 @@
       },
 
       getGameData () {
-        console.log('get the game data!')
         var promises = this.endpoints.map((endpoint) => {
           return new Promise((resolve, reject) => {
             this.$firebase.database().ref('/' + endpoint).once('value').then((snapshot) => {
-              // console.log('game data!')
-              // console.log(snapshot.val())
               this.gameData[endpoint] = snapshot.val()
               this.$set(this.gameData, this.gameData)
-              // this.$bus.$emit('data-loaded')
               resolve()
             })
           })
@@ -243,12 +211,19 @@
       selectCharacter (characterName) {
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
-            this.selectedCharacter = this.characters[i]
-            this.$bus.$emit('character-selected', this.selectedCharacter)
-            window.localStorage.setItem('selected-character', this.selectedCharacter.name)
-            this.characterName = this.selectedCharacter.name
-            this.characterId = i
-            this.$bus.$emit('character-selected', this.selectedCharacter)
+            // this.selectedCharacter = this.characters[i]
+
+            let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
+            charRef.on('value', (snapshot) => {
+              // updateStarCount(postElement, snapshot.val());
+              this.selectedCharacter = snapshot.val()
+              // console.log(this.selectedCharacter)
+              // this.$bus.$emit('character-selected', this.selectedCharacter)
+              window.localStorage.setItem('selected-character', this.selectedCharacter.name)
+              this.characterName = this.selectedCharacter.name
+              this.characterId = i
+              this.$bus.$emit('character-selected', this.selectedCharacter)
+            })
           }
         }
       },

@@ -26,7 +26,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="(spell, index) in filteredSpells">
-                    <td class="xen-first-col text-left " @click="selectSpell(spell, true);">
+                    <td class="xen-first-col text-left" @click="selectSpell(spell, true);">
                       <div>{{ spell.name }}</div>
                       <div class="caption">{{ spell.level }} {{ spell.school }}</div>
                       <div class="caption secondary-text">{{ spell.class }}</div>
@@ -34,6 +34,9 @@
                     <td class="text-right icon-col xen-last-col">
                       <xen-icon-button class="table-button" icon="delete" @click.native="removeSpell(spell, index)"></xen-icon-button>
                     </td>
+                  </tr>
+                  <tr v-if="filteredSpells.length === 0">
+                    <td class="xen-first-col text-left">You haven't added any spells yet</td>
                   </tr>
                 </tbody>
               </table>
@@ -47,7 +50,7 @@
           <div class="filters">
             <div class="row">
               <div class="col-xs-12">
-                <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Spells" @input="filter = $event; checkPage();" :debounce="250"></xen-input>
+                <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Spells" @input="filter = $event; checkPage();" :debounce="250"></xen-input> {{ filter }}
               </div>
               <div class="col-xs-6 xen-no-margin">
                 <xen-select class="xen-color-primary" label="Level" :options="['All', 'Cantrip', '1', '2', '3', '4', '5', '6', '7', '8', '9']" :value="levelFilter" @input="levelFilter = $event; checkPage();"></xen-select>
@@ -62,13 +65,6 @@
                 <xen-select class="xen-color-primary" label="Per Page" :options="['10', '20', '50']" :value="perPage" @input="perPage = $event; checkPage();"></xen-select>
               </div>
             </div>
-          </div>
-          <!-- Bottom Pagination -->
-          <div class="bottom-pagination">
-            <span class="float-left"></span>
-            <span>{{ page }} / {{ Math.ceil(numSpells / perPage) }}</span>
-            <xen-button @click.native="page--" :disabled="page === 1"><i class="material-icons">navigate_before</i></xen-button>
-            <xen-button @click.native="page++" :disabled="page === Math.ceil(numSpells / perPage)"><i class="material-icons">navigate_next</i></xen-button>
           </div>
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table class="dndhub-table">
@@ -94,6 +90,13 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+          <!-- Bottom Pagination -->
+          <div class="bottom-pagination">
+            <span class="float-left"></span>
+            <span>{{ page }} / {{ Math.ceil(numSpells / perPage) }}</span>
+            <xen-button @click.native="page--" :disabled="page === 1"><i class="material-icons">navigate_before</i></xen-button>
+            <xen-button @click.native="page++" :disabled="page === Math.ceil(numSpells / perPage)"><i class="material-icons">navigate_next</i></xen-button>
           </div>
         </section>
       </div>
@@ -296,7 +299,7 @@
         if (this.page < 1) {
           this.page = 1
         } else if (this.page > Math.ceil(this.numSpells / this.perPage)) {
-          this.page = Math.ceil(this.numSpells / this.perPage)
+          this.page = Math.ceil(this.numSpells || this.perPage / this.perPage)
         }
       }
 
@@ -309,7 +312,7 @@
       },
       gameSpells: function () {
         let array = this.$root.gameData.spells.filter((row) => {
-          return this.filter ? row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0 : row
+          return this.filter !== '' ? row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0 : row
         }).filter((row) => {
           return this.levelFilter !== 'All' ? row.level.toLowerCase().indexOf(this.levelFilter.toLowerCase()) >= 0 : row
         }).filter((row) => {
@@ -318,7 +321,7 @@
           return this.schoolFilter !== 'All' ? row.school.toLowerCase().indexOf(this.schoolFilter.toLowerCase()) >= 0 : row
         })
         this.numSpells = array.length
-        return array.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+        return array.slice((this.page - 1) * +this.perPage, this.page * +this.perPage)
       }
     }
   }

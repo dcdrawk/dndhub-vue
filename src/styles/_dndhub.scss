@@ -20,19 +20,22 @@
 	position: fixed;
 	bottom: 0;
 	width: 100vw;
-	// padding: 8px;
 	background-color: #fff;
 	z-index: 5;
-	// border-top: 1px solid rgba(0,0,0,.24);
-	// opacity: .75;
 	text-align: right;
-	@extend .whiteframe-z5;
+	border-top: 1px solid rgba(0,0,0,.12);
+	@extend .whiteframe-z1;
 	.xen-button-container {
 		vertical-align: middle;
 	}
 	.xen-button {
 		padding: 8px;
 	}
+	@media only screen and (min-width: $small-breakpoint) {
+		position: relative;
+		border-top: none;
+    width: 100%;
+  }
 }
 
 .dndhub-table {
@@ -43,10 +46,10 @@
 			text-overflow: ellipsis;
 		}
 	}
-	// thead {
-	// 	display: none;
-	// }
-	margin-bottom: 48px;
+
+	@media only screen and (max-width: $small-breakpoint) {
+		margin-bottom: 48px;
+  }
 }
 .hidden {
 	display: none;
@@ -75,9 +78,11 @@
 .icon-col {
   width: 80px;
 }
-.table-icon-button {
-  margin: 4px 0 0 0;
+
+.table-icon-button.xen-icon-button-container {
+  margin: 0;
 }
+
 .xen-data-table td.xen-first-col .table-checkbox i {
   margin-left: 12px;
 }
@@ -85,18 +90,22 @@
 .delete-col {
   width: 48px;
 }
+
 .combat-divider {
   margin-bottom: 16px;
 }
+
 .small-table-input {
   margin: auto;
   padding-top: 16px;
 }
+
 .small-table-input,
 .small-table-input input {
   text-align: center;
-  width: 40px;  
+  width: 40px;
 }
+
 @media screen and (max-width: $small-breakpoint) {
   .xen-data-table th,
   .xen-data-table td {
@@ -106,6 +115,7 @@
     width: 72px;
   }
 }
+
 .dialog-description {
   width: 100%;
   ul {
@@ -121,6 +131,7 @@
     }
   }
 }
+
 .search-input {
   margin-bottom: 0;
 }

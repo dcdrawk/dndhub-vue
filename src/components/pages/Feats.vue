@@ -33,6 +33,9 @@
                       <xen-icon-button class="table-button" icon="delete" @click.native="removeFeat(feat)"></xen-icon-button>
                     </td>
                   </tr>
+                  <tr v-if="filteredFeats.length === 0">
+                    <td colspan="2" class="xen-first-col">You haven't added any feats yet</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -56,7 +59,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="feat in $root.gameData.feats">
+                <tr v-for="feat in feats">
                   <td class="xen-first-col">
                   <xen-checkbox class="table-checkbox xen-color-primary" :value="feat.known" @input="toggleFeat($event, feat)"></xen-checkbox>
                   </td>
@@ -68,7 +71,7 @@
             </table>
           </div>
         </section>
-      </div>      
+      </div>
     </xen-tabs>
       <!-- Feat Dialog -->
       <div v-if="selectedFeat">
@@ -111,7 +114,7 @@
 .small-table-input,
 .small-table-input input {
   text-align: center;
-  width: 40px;  
+  width: 40px;
 }
 @media screen and (max-width: $small-breakpoint) {
   th.xen-first-col {
@@ -185,7 +188,7 @@
         user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
         loaded: false,
-        feats: [],
+        feats: this.$root.gameData.feats || undefined,
         showFeat: false,
         selectedFeat: undefined
       }
@@ -197,22 +200,36 @@
       })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
-        // this.getKnownFeats()
+        this.checkFeats()
+        this.getKnownFeats()
+        this.loaded = true
       })
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
+          this.checkFeats()
           this.getKnownFeats()
           this.loaded = true
         }
       })
 
       if (this.character && this.$root.gameData) {
+        this.checkFeats()
         this.getKnownFeats()
         this.loaded = true
       }
     },
 
     methods: {
+
+      checkFeats () {
+        if (!this.character.feats) {
+          this.$set(this.character, 'feats', [])
+        }
+        if (!this.feats && this.$root.gameData.feats) {
+          this.$set(this, 'feats', this.$root.gameData.feats)
+        }
+      },
+
       removeFeat (feat) {
         this.character.feats.forEach((charFeat, index) => {
           if (charFeat.name === feat.name) {
@@ -224,11 +241,13 @@
       },
 
       getKnownFeats () {
+        this.feats.forEach(gameFeat => {
+          gameFeat.known = false
+        })
         this.character.feats.forEach((charFeat, index) => {
-          this.$root.gameData.feats.forEach((gameFeat, index) => {
+          this.feats.forEach((gameFeat, index) => {
             if (charFeat.name === gameFeat.name) {
               gameFeat.known = true
-              return
             }
           })
         })
@@ -242,6 +261,8 @@
       },
 
       toggleFeat (event, feat) {
+        console.log(event)
+        console.log('toggle feat!')
         if (event) {
           this.character.feats.push(feat)
         } else {

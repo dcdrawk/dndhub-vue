@@ -69,6 +69,9 @@ body {
   overflow-y: auto;
   @media only screen and (max-width: $small-breakpoint) {
     padding: 0px;
+    .xen-data-table, .xen-card {
+      box-shadow: none;
+    }
   }
 }
 
@@ -185,9 +188,9 @@ pre[class*=language-] {
 //     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2); 
 // } 
 
-@media screen and (max-width: 1024px) {
-  body {
-    z-index: 0 !important;
-    overflow: scroll !important;
-  }
-}
+// @media screen and (max-width: 1024px) {
+//   body {
+//     z-index: 0 !important;
+//     overflow: scroll !important;
+//   }
+// }

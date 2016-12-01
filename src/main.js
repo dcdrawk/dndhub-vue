@@ -140,12 +140,18 @@ var router = new VueRouter({
 })
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/worker.js', {
-    scope: './'
-  }).then(function (reg) {
-    console.log('◕‿◕', reg)
-  }, function (err) {
-    console.log('ಠ_ಠ', err)
+  // navigator.serviceWorker.register('/worker.js', {
+  //   scope: './'
+  // }).then(function (reg) {
+  //   console.log('◕‿◕', reg)
+  // }, function (err) {
+  //   console.log('ಠ_ಠ', err)
+  // })
+  // Unregister the service worker (useful in development)
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister()
+    }
   })
 }
 

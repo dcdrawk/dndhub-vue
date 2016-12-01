@@ -23,7 +23,7 @@
                     <th class="text-center">
                       Damage
                     </th>
-                    <th class="delete-col xen-last-col"></th>
+                    <th class="checkbox-col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                     <td class="text-center" @click="selectWeapon(weapon, false);">
                       {{ weapon.damage || '-' }}
                     </td>
-                    <td class="text-right xen-last-col">
+                    <td class="text-right xen-last-col icon-col">
                       <xen-icon-button class="table-button" icon="delete" @click.native="removeWeapon(weapon, index)"></xen-icon-button>
                     </td>
                   </tr>
@@ -80,7 +80,7 @@
             </table>
           </div>
         </section>
-      </div>      
+      </div>
     </xen-tabs>
       <!-- Feat Dialog -->
       <div v-if="selectedWeapon">
@@ -123,61 +123,6 @@
 </template>
 
 <style lang="scss">
-@import '../xen/styles/data-tables';
-@import '../xen/styles/variables';
-.checkbox-col {
-  width: 96px;
-}
-
-.icon-col {
-  width: 80px;
-}
-.table-icon-button {
-  margin: 4px 0 0 0;
-}
-.xen-data-table td.xen-first-col .table-checkbox i {
-  margin-left: 12px;
-}
-
-.delete-col {
-  width: 48px;
-}
-.combat-divider {
-  margin-bottom: 16px;
-}
-.small-table-input {
-  margin: auto;
-  padding-top: 16px;
-}
-.small-table-input,
-.small-table-input input {
-  text-align: center;
-  width: 40px;  
-}
-@media screen and (max-width: $small-breakpoint) {
-  .xen-data-table th,
-  .xen-data-table td {
-    padding-right: 0;
-  }
-}
-.dialog-description {
-  width: 100%;
-  ul {
-    margin-bottom: 0;
-    background-color: #fafafa;
-    border: 1px solid #BDBDBD;
-    li {
-      padding: 8px;
-      border-bottom: 1px solid #BDBDBD;
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
-.search-input {
-  margin-bottom: 0;
-}
 </style>
 
 <script>
@@ -245,19 +190,39 @@
       })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
+        this.loaded = this.checkLoaded()
+        if (this.loaded) {
+          this.checkWeapons()
+        }
       })
       this.$bus.$on('data-loaded', () => {
-        if (this.character) {
-          this.loaded = true
+        this.loaded = this.checkLoaded()
+        if (this.loaded) {
+          this.checkWeapons()
         }
       })
 
-      if (this.character && this.$root.gameData) {
-        this.loaded = true
+      this.loaded = this.checkLoaded()
+      if (this.loaded) {
+        if (this.loaded) {
+          this.checkWeapons()
+        }
       }
     },
 
     methods: {
+      checkLoaded () {
+        if (this.character && this.$root.gameData) {
+          return true
+        }
+      },
+
+      checkWeapons () {
+        if (!this.character.weapons) {
+          this.$set(this.character, 'weapons', [])
+        }
+      },
+
       removeWeapon (weapon, index) {
         let array = _.orderBy(this.character.weapons, 'name')
         array.splice(index, 1)
