@@ -3,48 +3,47 @@
     <xen-page-toolbar class="xen-theme-indigo" title="Weapons"></xen-page-toolbar>
     <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Equipped">
 
-      <!-- Combat Tab -->
+      <!-- Equipped Weapons Tab -->
       <div slot="Equipped">
-        <!-- Combat Info -->
         <section class="page-tab-content">
-
-            <xen-card class="margin-bottom" v-if="!loaded">
-              <xen-card-content>
-                <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
-              </xen-card-content>
-            </xen-card>
-            <div class="xen-data-table bordered hover" v-if="loaded">
-              <table>
-                <thead>
-                  <tr>
-                    <th class="text-left xen-first-col">
-                      Name
-                    </th>
-                    <th class="text-center">
-                      Damage
-                    </th>
-                    <th class="checkbox-col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(weapon, index) in filteredWeapons">
-                    <td class="text-left xen-first-col" @click="selectWeapon(weapon, false);">
-                      {{ weapon.name }}
-                    </td>
-                    <td class="text-center" @click="selectWeapon(weapon, false);">
-                      {{ weapon.damage || '-' }}
-                    </td>
-                    <td class="text-right xen-last-col icon-col">
-                      <xen-icon-button class="table-button" icon="delete" @click.native="removeWeapon(weapon, index)"></xen-icon-button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <!-- Loading Spinner -->
+          <xen-card class="margin-bottom" v-if="!loaded">
+            <xen-card-content>
+              <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
+            </xen-card-content>
+          </xen-card>
+          <div class="xen-data-table bordered hover" v-if="loaded">
+            <table>
+              <thead>
+                <tr>
+                  <th class="text-left xen-first-col">
+                    Name
+                  </th>
+                  <th class="text-center">
+                    Damage
+                  </th>
+                  <th class="checkbox-col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(weapon, index) in filteredWeapons">
+                  <td class="text-left xen-first-col" @click="selectWeapon(weapon, false);">
+                    {{ weapon.name }}
+                  </td>
+                  <td class="text-center" @click="selectWeapon(weapon, false);">
+                    {{ weapon.damage || '-' }}
+                  </td>
+                  <td class="text-right xen-last-col icon-col delete-col">
+                    <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeWeapon(weapon, index)"></xen-icon-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
 
-      <!-- Ability Scores Tab -->
+      <!-- Browse Weapons Tab -->
       <div slot="Browse All">
         <section class="page-tab-content">
           <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Weapons" @input="filter = $event"></xen-input>
@@ -66,8 +65,7 @@
               <tbody>
                 <tr v-for="weapon in gameWeapons">
                   <td class="xen-first-col icon-col">
-                  <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addWeapon(weapon)"></xen-icon-button>
-                  <!-- <xen-checkbox class="table-checkbox xen-color-primary" :value="weapon.equipped" @input="toggleWeapon($event, weapon)"></xen-checkbox> -->
+                    <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addWeapon(weapon)"></xen-icon-button>
                   </td>
                   <td class="text-left" @click="selectWeapon(weapon, true);">
                     {{ weapon.name }}
@@ -82,43 +80,44 @@
         </section>
       </div>
     </xen-tabs>
-      <!-- Feat Dialog -->
-      <div v-if="selectedWeapon">
-        <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedWeapon.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
-          <div class="row">            <ul class="property-list">
-              <li>
-                <xen-input label="Name" class="xen-color-primary" :value="selectedWeapon.name" :disabled="disableInput" @input="selectedWeapon.name = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Damage" class="xen-color-primary" :value="selectedWeapon.damage" :disabled="disableInput" @input="selectedWeapon.damage = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Damage Type" class="xen-color-primary" :value="selectedWeapon.damageType" :disabled="disableInput" @input="selectedWeapon.damageType = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Weapon Type" class="xen-color-primary" :value="selectedWeapon.weaponType" :disabled="disableInput" @input="selectedWeapon.weaponType = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Weight" class="xen-color-primary" :value="selectedWeapon.weight" :disabled="disableInput" @input="selectedWeapon.weight = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Cost" class="xen-color-primary" :value="selectedWeapon.cost" :disabled="disableInput" @input="selectedWeapon.cost = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li v-if="!disableInput">
-                <xen-textarea label="Notes" class="xen-color-primary" :value="selectedWeapon.notes" :disabled="disableInput" @input="selectedWeapon.notes = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
-              </li>
-              <li>
-                <h2 class="caption secondary-text">Properties</h2>
-                <xen-chips :chips="selectedWeapon.properties" :read-only="disableInput"></xen-chips>
-              </li>
-            </ul>
-          </div>
-          <div slot="actions">
-            <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
-          </div>
-        </xen-dialog>
-      </div>
-      <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
+
+    <!-- Weapon Dialog -->
+    <div v-if="selectedWeapon">
+      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedWeapon.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
+        <div class="row">            <ul class="property-list">
+            <li>
+              <xen-input label="Name" class="xen-color-primary" :value="selectedWeapon.name" :disabled="disableInput" @input="selectedWeapon.name = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Damage" class="xen-color-primary" :value="selectedWeapon.damage" :disabled="disableInput" @input="selectedWeapon.damage = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Damage Type" class="xen-color-primary" :value="selectedWeapon.damageType" :disabled="disableInput" @input="selectedWeapon.damageType = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Weapon Type" class="xen-color-primary" :value="selectedWeapon.weaponType" :disabled="disableInput" @input="selectedWeapon.weaponType = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Weight" class="xen-color-primary" :value="selectedWeapon.weight" :disabled="disableInput" @input="selectedWeapon.weight = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Cost" class="xen-color-primary" :value="selectedWeapon.cost" :disabled="disableInput" @input="selectedWeapon.cost = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li v-if="!disableInput">
+              <xen-textarea label="Notes" class="xen-color-primary" :value="selectedWeapon.notes" :disabled="disableInput" @input="selectedWeapon.notes = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
+            </li>
+            <li>
+              <h2 class="caption secondary-text">Properties</h2>
+              <xen-chips :chips="selectedWeapon.properties" :read-only="disableInput"></xen-chips>
+            </li>
+          </ul>
+        </div>
+        <div slot="actions">
+          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+        </div>
+      </xen-dialog>
+    </div>
+    <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
 
@@ -126,68 +125,75 @@
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
+  import _ from 'lodash'
   import XenButton from '../xen/Button'
-  import XenIconButton from '../xen/IconButton'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
   import XenCardContent from '../xen/CardContent'
-  import XenInput from '../xen/Input'
-  import XenTextarea from '../xen/Textarea'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCheckbox from '../xen/Checkbox'
+  import XenChips from '../xen/Chips'
   import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenSelect from '../xen/Select'
+  import XenDivider from '../xen/Divider'
+  import XenIconButton from '../xen/IconButton'
+  import XenInput from '../xen/Input'
   import XenList from '../xen/List'
   import XenListItem from '../xen/ListItemCustom'
-  import XenCheckbox from '../xen/Checkbox'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
+  import XenSelect from '../xen/Select'
   import XenTabs from '../xen/Tabs'
-  import XenChips from '../xen/Chips'
+  import XenTextarea from '../xen/Textarea'
   import XenToast from '../xen/Toast'
-  import _ from 'lodash'
 
   export default {
-    name: 'profile',
+    // Name
+    name: 'weapons',
 
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenIconButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
       XenCardContent,
-      XenInput,
-      XenTextarea,
+      XenCardHeader,
       XenCheckbox,
+      XenChips,
       XenDialog,
-      XenLoadingSpinner,
-      XenSelect,
+      XenDivider,
+      XenIconButton,
+      XenInput,
       XenList,
       XenListItem,
+      XenLoadingSpinner,
+      XenPageToolbar,
+      XenSelect,
       XenTabs,
-      XenChips,
+      XenTextarea,
       XenToast
     },
 
+    // Data
     data () {
       return {
-        user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
-        loaded: false,
-        showDialog: false,
-        selectedWeapon: undefined,
         disableInput: false,
-        toastMsg: '',
+        filter: '',
+        loaded: false,
+        selectedWeapon: undefined,
+        showDialog: false,
         showToast: false,
-        filter: ''
+        toastMsg: '',
+        user: this.$root.user || undefined
       }
     },
 
+    // Mounted
     mounted () {
+      // When a user signs in (page-load)
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
+
+      // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
         this.loaded = this.checkLoaded()
@@ -195,6 +201,8 @@
           this.checkWeapons()
         }
       })
+
+      // When the game data has loaded
       this.$bus.$on('data-loaded', () => {
         this.loaded = this.checkLoaded()
         if (this.loaded) {
@@ -202,6 +210,7 @@
         }
       })
 
+      // Run this when mounted
       this.loaded = this.checkLoaded()
       if (this.loaded) {
         if (this.loaded) {
@@ -210,19 +219,23 @@
       }
     },
 
+    // Methods
     methods: {
+      // Check if character and gme data have loaded
       checkLoaded () {
         if (this.character && this.$root.gameData) {
           return true
         }
       },
 
+      // Check to see if character has a weapons attribute
       checkWeapons () {
         if (!this.character.weapons) {
           this.$set(this.character, 'weapons', [])
         }
       },
 
+      // Remove a weapon
       removeWeapon (weapon, index) {
         let array = _.orderBy(this.character.weapons, 'name')
         array.splice(index, 1)
@@ -232,6 +245,7 @@
         this.$root.updateCharacter('', 'weapons', this.character.weapons)
       },
 
+      // Select a weapon to show in the dialog
       selectWeapon (weapon, disabled) {
         this.disableInput = disabled
         this.selectedWeapon = weapon
@@ -240,23 +254,11 @@
         })
       },
 
+      // Add a weapon to character
       addWeapon (weapon) {
         this.character.weapons.push(weapon)
         this.showToast = true
         this.toastMsg = weapon.name + ' equipped'
-        this.$root.updateCharacter('', 'weapons', this.character.weapons)
-      },
-
-      toggleWeapon (event, weapon) {
-        if (event) {
-          this.character.weapons.push(weapon)
-        } else {
-          this.character.weapons.forEach((charWeap, index) => {
-            if (charWeap.name === weapon.name) {
-              this.character.weapons.splice(index, 1)
-            }
-          })
-        }
         this.$root.updateCharacter('', 'weapons', this.character.weapons)
       }
     },

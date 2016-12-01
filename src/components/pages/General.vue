@@ -25,12 +25,6 @@
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" v-if="subraces.length > 0">
                   <xen-select label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event); $root.updateCharacter('', 'subrace', character.subrace);"></xen-select>
                 </div>
-                <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 xen-no-margin">
-                  <xen-select label="Alignment" :options="$root.gameData.alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event); $root.updateCharacter('', 'alignment', character.alignment);"></xen-select>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                  <xen-select label="Background" :options="$root.gameData.backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event); $root.updateCharacter('', 'background', character.background);"></xen-select>
-                </div> -->
                 <div class="col-xs-12 col-md-12 col-lg-6">
                   <xen-input label="Adventure Group" class="xen-color-primary card-last" type="text" :value="character.adventuringGroup" @input="$set(character, 'adventureGroup', $event); $root.updateCharacter('', 'adventureGroup', character.adventureGroup);"></xen-input>
                 </div>

@@ -28,7 +28,7 @@
                   <td class="text-left xen-first-col" @click="selectFeat(feat);">
                     {{ feat.name }}
                   </td>
-                  <td class="text-right xen-last-col">
+                  <td class="text-right xen-last-col delete-col">
                     <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeFeat(feat)"></xen-icon-button>
                   </td>
                 </tr>
@@ -59,7 +59,7 @@
               <tbody>
                 <tr v-for="feat in feats">
                   <td class="xen-first-col">
-                  <xen-checkbox class="table-checkbox xen-color-primary" :value="feat.known" @input="toggleFeat($event, feat)"></xen-checkbox>
+                  <xen-checkbox class="table-checkbox xen-color-blue" :value="feat.known" @input="toggleFeat($event, feat)"></xen-checkbox>
                   </td>
                   <td class="text-left" @click="selectFeat(feat);">
                     {{ feat.name }}

@@ -32,7 +32,7 @@
                     <td class="text-center" @click="selectArmor(armor, false);">
                       {{ armor.ac || '-' }}
                     </td>
-                    <td class="text-right xen-last-col">
+                    <td class="text-right xen-last-col delete-col">
                       <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
                     </td>
                   </tr>
