@@ -14,16 +14,7 @@
           <xen-list v-if="menuIndexes && $root.characters">
             <xen-list-item v-for="(character, key, index) in $root.characters" :text="character.name">
               <div slot="dropdown">
-              <xen-icon-button style="position: relative;" slot="target" icon="delete" @click.native="showDeleteDialog(key)"></xen-icon-button>
-                <!-- <xen-dropdown :open="menuIndexes[key]" @toggle="closeMenu(key)" position="right" :offset-y="0">
-                  <xen-icon-button style="position: relative;" slot="target" icon="more_vert" @click.native="openMenu(key)"></xen-icon-button>
-                  <div slot="menu">
-                    <xen-list :dense="true">
-                      <xen-list-item text="Delete" icon="delete" @click.native="showDeleteDialog(key)"></xen-list-item>
-                    </xen-list>
-                  </div>
-                </xen-dropdown> -->
-
+                <xen-icon-button style="position: relative;" slot="target" icon="delete" @click.native="showDeleteDialog(key)"></xen-icon-button>
               </div>
             </xen-list-item>
           </xen-list>
@@ -33,6 +24,7 @@
       </xen-card>
     </div>
 
+    <!-- Delete Character Dialog -->
     <xen-dialog :show="deleteDialog" @hide="deleteDialog = false" title="Delete Character" :small="true">
       <p>Are you sure you want to delete this character?</p>
       <div slot="actions">
@@ -41,6 +33,7 @@
       </div>
     </xen-dialog>
 
+    <!-- New Character Dialog -->
     <xen-dialog :show="newCharacter" @hide="newCharacter = false" title="New Character" :large="true" :fullscreen="true">
       <div class="row xen-color-primary">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
@@ -67,9 +60,6 @@
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <xen-select label="Background" :options="$root.gameData.backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event);"></xen-select>
         </div>
-        <div class="col-xs-12 col-md-6 col-lg-4">
-          <xen-input label="Adventure Group" class="xen-color-primary" type="text" :value="character.adventureGroup" @input="$set(character, 'adventureGroup', $event)"></xen-input>
-        </div>
       </div>
       <div slot="actions">
         <xen-button @click.native="cancel()">Cancel</xen-button>
@@ -81,123 +71,99 @@
 </template>
 
 <style scoped>
-  .profile-pic {
-    width: 100%;
-    border-radius: 50%;
-    padding: 32px;
-    max-width: 250px;
-    margin: auto;
-    display: block;
-  }
   .character-list-page .xen-button-container {
     vertical-align: middle;
   }
 </style>
 
 <script>
-  import XenPageToolbar from '../xen/PageToolbar'
   import XenButton from '../xen/Button'
-  import XenDivider from '../xen/Divider'
   import XenCard from '../xen/Card'
-  import XenCardHeader from '../xen/CardHeader'
-  import XenCardContent from '../xen/CardContent'
-  import XenCardMedia from '../xen/CardMedia'
   import XenCardActions from '../xen/CardActions'
-  import XenInput from '../xen/Input'
-  import XenToast from '../xen/Toast'
+  import XenCardContent from '../xen/CardContent'
+  import XenCardHeader from '../xen/CardHeader'
+  import XenCardMedia from '../xen/CardMedia'
   import XenDialog from '../xen/Dialog'
-  import XenLoadingSpinner from '../xen/LoadingSpinner'
-  import XenList from '../xen/List'
-  import XenListItem from '../xen/ListItem'
+  import XenDivider from '../xen/Divider'
   import XenDropdown from '../xen/Dropdown'
   import XenIconButton from '../xen/IconButton'
+  import XenInput from '../xen/Input'
+  import XenList from '../xen/List'
+  import XenListItem from '../xen/ListItem'
+  import XenLoadingSpinner from '../xen/LoadingSpinner'
+  import XenPageToolbar from '../xen/PageToolbar'
   import XenSelect from '../xen/Select'
-  export default {
-    name: 'profile',
+  import XenToast from '../xen/Toast'
 
+  export default {
+    // Name
+    name: 'character-list',
+
+    // Components
     components: {
-      XenPageToolbar,
       XenButton,
-      XenDivider,
       XenCard,
-      XenCardHeader,
-      XenCardContent,
-      XenCardMedia,
       XenCardActions,
-      XenInput,
-      XenToast,
+      XenCardContent,
+      XenCardHeader,
+      XenCardMedia,
       XenDialog,
-      XenLoadingSpinner,
-      XenList,
-      XenListItem,
+      XenDivider,
       XenDropdown,
       XenIconButton,
-      XenSelect
+      XenInput,
+      XenList,
+      XenListItem,
+      XenLoadingSpinner,
+      XenPageToolbar,
+      XenSelect,
+      XenToast
     },
 
+    // Data
     data () {
       return {
-        editing: false,
-        successToast: false,
-        errorToast: false,
-        updatePhoto: false,
-        uploading: false,
-        uploadErrorMessage: undefined,
-        user: this.$root.user || undefined,
-        newCharacter: false,
-        menuIndexes: {},
         character: {},
-        subraces: [],
-        test: {
-          open: false
-        },
-        tempUser: {
-          displayName: '',
-          email: ''
-        },
         deleteDialog: false,
         deleteKey: undefined,
+        editing: false,
+        errorToast: false,
+        menuIndexes: {},
+        newCharacter: false,
         showToast: false,
-        toastMsg: ''
+        subraces: [],
+        successToast: false,
+        toastMsg: '',
+        updatePhoto: false,
+        uploadErrorMessage: undefined,
+        uploading: false,
+        user: this.$root.user || undefined
       }
     },
 
+    // Mouted
     mounted () {
+      // When a user signs in (page refresh)
       this.$bus.$on('user-signin', user => {
         this.user = Object.assign({}, user)
       })
-
-      this.$bus.$on('characters-loaded', characters => {
-        for (let i in characters) {
-          this.$set(this.menuIndexes, i, false)
-        }
-      })
     },
 
+    // Methods
     methods: {
-      openMenu (key) {
-        // window.alert('test!!')ss
-        this.$nextTick(() => {
-          this.menuIndexes[key] = true
-          // console.log(this.menuIndexes)
-          // this.$set(this.menuIndexes, this.menuIndexes)
-        })
-      },
-
+      // Show the character delete dialog
       showDeleteDialog (key) {
         this.deleteDialog = true
         this.deleteKey = key
       },
 
-      closeMenu (key) {
-        this.menuIndexes[key] = false
-      },
-
+      // Cancel character dialog
       cancel () {
         this.character = {}
         this.newCharacter = false
       },
 
+      // Create a new Character
       createCharacter () {
         this.$firebase.database().ref('characters/' + this.$root.user.uid + '/').push(this.character).then(() => {
           this.newCharacter = false
@@ -207,6 +173,7 @@
         })
       },
 
+      // Delete a character
       deleteCharacter (characterId) {
         console.log(characterId)
         this.$firebase.database().ref('characters/' + this.$root.user.uid + '/' + characterId).remove().then(() => {
@@ -214,6 +181,7 @@
         })
       },
 
+      // Get the subraces of a selected race
       getSubraces (raceName) {
         this.subraces = []
         if (this.character.subrace) {
