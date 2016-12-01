@@ -31,6 +31,8 @@ import Feats from './components/pages/Feats'
 import Weapons from './components/pages/Weapons'
 import Armor from './components/pages/Armor'
 import Spells from './components/pages/Spells'
+import Groups from './components/pages/Groups'
+import Group from './components/pages/Group'
 
 Vue.use(VueFire)
 
@@ -64,40 +66,9 @@ Object.defineProperty(Vue.prototype, '$firebase', {
     return Firebase
   }
 })
-// var eventHub = new Vue()
-// Vue.use(eventHub)
 
-// Characters
-// import CharacterList from './components/pages/CharacterList'
-// import General from './components/pages/General'
-// import Stats from './components/pages/Stats'
-// import Feats from './components/pages/Feats'
-// import Weapons from './components/pages/Weapons'
-// import Armor from './components/pages/Armor'
-// import Spells from './components/pages/Spells'
-
-// Component Pages
-// import CardsPage from './components/pages/CardsPage'
-// import ButtonsPage from './components/pages/ButtonsPage'
-// import ListsPage from './components/pages/ListsPage'
-// import TabsPage from './components/pages/TabsPage'
-// import DividersPage from './components/pages/DividersPage'
-// import ChipsPage from './components/pages/ChipsPage'
-// import DataTablesPage from './components/pages/DataTablesPage'
-// import DialogPage from './components/pages/DialogPage'
-// import DropdownPage from './components/pages/DropdownPage'
-// import ExpansionPanelPage from './components/pages/ExpansionPanelPage'
-// import FormsPage from './components/pages/FormsPage'
-// import SlidersPage from './components/pages/SlidersPage'
-// import ToastsPage from './components/pages/ToastsPage'
-
-// Example Pages
-// import ChatPage from './components/pages/ChatPage'
 // use Vue Router
 Vue.use(VueRouter)
-
-// use Vue Socket.io
-// Vue.use(VueSocketio, '10.5.0.74:3000')
 
 const config = {
   errorBagName: 'errors', // change if property conflicts.
@@ -155,9 +126,28 @@ var router = new VueRouter({
     {
       path: '/spells',
       component: Spells
+    },
+    {
+      path: '/groups',
+      component: Groups
+    },
+    {
+      path: '/group/:groupId',
+      name: 'group',
+      component: Group
     }
   ]
 })
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/worker.js', {
+    scope: './'
+  }).then(function (reg) {
+    console.log('◕‿◕', reg)
+  }, function (err) {
+    console.log('ಠ_ಠ', err)
+  })
+}
 
 /* eslint-disable no-new, no-unused-vars */
 const app = new Vue({

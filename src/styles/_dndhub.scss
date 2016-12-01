@@ -51,3 +51,76 @@
 .hidden {
 	display: none;
 }
+.xen-dialog-container.spell-dialog .xen-dialog .xen-dialog-content {
+	padding: 0;
+}
+.spell-info {
+	.col-xs-6,
+	.spell-school {
+		margin-top: 0;
+		padding: 16px;
+		background-color: #fafafa;
+		border: 1px solid #eee;
+	}
+}
+.spell-description {
+	padding: 0 16px;
+	margin-top: 0;
+}
+
+.checkbox-col {
+  width: 96px;
+}
+
+.icon-col {
+  width: 80px;
+}
+.table-icon-button {
+  margin: 4px 0 0 0;
+}
+.xen-data-table td.xen-first-col .table-checkbox i {
+  margin-left: 12px;
+}
+
+.delete-col {
+  width: 48px;
+}
+.combat-divider {
+  margin-bottom: 16px;
+}
+.small-table-input {
+  margin: auto;
+  padding-top: 16px;
+}
+.small-table-input,
+.small-table-input input {
+  text-align: center;
+  width: 40px;  
+}
+@media screen and (max-width: $small-breakpoint) {
+  .xen-data-table th,
+  .xen-data-table td {
+    padding-right: 0;
+  }
+  .icon-col {
+    width: 72px;
+  }
+}
+.dialog-description {
+  width: 100%;
+  ul {
+    margin-bottom: 0;
+    background-color: #fafafa;
+    border: 1px solid #BDBDBD;
+    li {
+      padding: 8px;
+      border-bottom: 1px solid #BDBDBD;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+.search-input {
+  margin-bottom: 0;
+}

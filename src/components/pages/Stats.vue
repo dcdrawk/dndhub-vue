@@ -18,16 +18,16 @@
             <!-- </div> -->
             <xen-card-content v-if="loaded">
               <div class="row xen-color-primary">
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Proficiency Bonus" class="xen-color-primary" type="number" :value="character.proficiencyBonus" @input="character.proficiencyBonus = $event; $root.updateCharacter('', 'proficiencyBonus', character.proficiencyBonus);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Armor Class" class="xen-color-primary" type="number" :value="character.armorClass" @input="character.armorClass = $event; $root.updateCharacter('', 'armorClass', character.armorClass);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Initiative" class="xen-color-primary card-last" type="number" :value="character.initiative" @input="character.initiative = $event; $root.updateCharacter('', 'initiative', character.initiative);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Speed" class="xen-color-primary card-last" type="number" :value="character.speed" @input="character.speed = $event; $root.updateCharacter('', 'speed', character.speed);"></xen-input>
                 </div>
               </div>
@@ -41,16 +41,16 @@
             </xen-card-header>
             <xen-card-content>
               <div class="row xen-color-primary">
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Current Hit Points" class="xen-color-primary" type="number" :value="character.currentHP" @input="character.currentHP = $event; $root.updateCharacter('', 'currentHP', character.currentHP);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input :disabled="true" label="Total Hit Points" class="xen-color-primary" type="number" :value="character.maxHP + character.tempHP" @input="character.totalHP = $event; $root.updateCharacter('', 'totalHP', character.totalHP);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Max Hit Points" class="xen-color-primary card-last" type="number" :value="character.maxHP" @input="character.maxHP = $event; $root.updateCharacter('', 'maxHP', character.maxHP);"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Temp Hit Points" class="xen-color-primary card-last" type="number" :value="character.tempHP" @input="character.tempHP = $event; $root.updateCharacter('', 'tempHP', character.tempHP);"></xen-input>
                 </div>
               </div>
@@ -62,7 +62,8 @@
       <!-- Ability Scores Tab -->
       <div slot="Ability Scores">
         <section class="page-tab-content">
-          <div class="xen-data-table striped" v-if="loaded">
+          <div class="xen-data-table striped" v-if="loaded && character">
+            <!-- {{ character.abilityScores }} -->
             <table>
               <thead>
                 <tr>
@@ -83,22 +84,21 @@
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="score in abilityScores">
+              <tbody v-if="character.abilityScores">
+                <tr v-for="score in abilityScores" v-if="character.abilityScores[score.name]">
                   <td class="xen-first-col">{{ score.name }}</td>
                   <td class="text-center">
-                    <xen-input class="xen-color-primary small-table-input" type="number" :value="character.abilityScores[score.name].base" 
+                  <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].base || 0"
                     @input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>
                   </td>
-                  <td>
-                    <xen-input class="xen-color-primary small-table-input" type="number" :value="character.abilityScores[score.name].bonus"
-                    @input="character.abilityScores[score.name].bonus = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
-                  </td>
-                  <!-- <td>
+                  <td v-if="character.abilityScores[score.name]">
+                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
+                     @input="character.abilityScores[score.name].bonus = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
+                  <!-- <td v-if="character.abilityScores[score.name]">
                     <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="character.abilityScores[score.name].base + character.abilityScores[score.name].bonus"></xen-input>
                   </td> -->
                   <td>
-                    <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(character.abilityScores[score.name].base + character.abilityScores[score.name].bonus)"></xen-input>
+                    <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(+character.abilityScores[score.name].base, +character.abilityScores[score.name].bonus)"></xen-input>
                   </td>
                 </tr>
               </tbody>
@@ -111,7 +111,8 @@
       <div slot="Skills">
         <!-- Skills Info -->
         <section class="page-tab-content">
-          <div class="xen-data-table striped" v-if="loaded && $root.gameData.skills">
+          <!-- {{ character.skills }} -->
+          <div class="xen-data-table striped" v-if="loaded && $root.gameData.skills && character">
             <table>
               <thead>
                 <tr>
@@ -129,8 +130,8 @@
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="skill in $root.gameData.skills">
+              <tbody v-if="character.skills">
+                <tr v-for="skill in $root.gameData.skills" v-if="character.skills[skill.name]">
                   <td class="xen-first-col">{{ skill.name }}</td>
                   <td class="text-center">
                     <xen-checkbox class="xen-color-primary" :value="character.skills[skill.name].trained"
@@ -141,10 +142,12 @@
                     @input="character.skills[skill.name].bonus = $event; $root.updateCharacter('skills/' + skill.name + '/', 'bonus', character.skills[skill.name].bonus);"></xen-input>
                   </td>
                   <td class="text-center">
-                    <xen-input v-if="character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
-                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base + character.abilityScores[skill.abilityScore].bonus) + character.proficiencyBonus + character.skills[skill.name].bonus"></xen-input>
+                    <!-- <xen-input v-if="character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
+                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + +character.proficiencyBonus + character.skills[skill.name].bonus"></xen-input> -->
+                   <xen-input v-if="character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
+                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + character.proficiencyBonus + character.skills[skill.name].bonus"></xen-input>
                     <xen-input v-if="!character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
-                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base + character.abilityScores[skill.abilityScore].bonus) + character.skills[skill.name].bonus"></xen-input>
+                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + character.skills[skill.name].bonus"></xen-input>
                   </td>
                 </tr>
               </tbody>
@@ -170,7 +173,7 @@
 .small-table-input,
 .small-table-input input {
   text-align: center;
-  width: 40px;  
+  width: 40px;
 }
 @media screen and (max-width: $small-breakpoint) {
   th.xen-first-col {
@@ -238,6 +241,43 @@
           name: 'Wisdom'
         }, {
           name: 'Charisma'
+        }],
+        skills: [{
+          name: 'Acrobatics'
+        }, {
+          name: 'Animal Handling'
+        }, {
+          name: 'Arcana'
+        }, {
+          name: 'Athletics'
+        }, {
+          name: 'Deception'
+        }, {
+          name: 'History'
+        }, {
+          name: 'Insight'
+        }, {
+          name: 'Intimidation'
+        }, {
+          name: 'Investigation'
+        }, {
+          name: 'Medicine'
+        }, {
+          name: 'Nature'
+        }, {
+          name: 'Perception'
+        }, {
+          name: 'Performance'
+        }, {
+          name: 'Persuasion'
+        }, {
+          name: 'Religion'
+        }, {
+          name: 'Sleight of Hand'
+        }, {
+          name: 'Stealth'
+        }, {
+          name: 'Survival'
         }]
       }
     },
@@ -248,32 +288,60 @@
       })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
-        // this.getSubraces(this.character.race)
-        // this.getArchetypes(this.character.class)
-        // if (this.$root.gameData) {
-        //   this.getClassFeatures()
-        // }
+        if (this.$root.gameData) {
+          this.checkAbilityScores()
+          this.checkSkills()
+          this.loaded = true
+        }
       })
+
       this.$bus.$on('data-loaded', () => {
+        console.log('stats character loaded...')
+        console.log(this.character)
         if (this.character) {
-          // this.getSubraces(this.character.race)
-          // this.getArchetypes(this.character.class)
-          // this.getClassFeatures()
+          this.checkAbilityScores()
+          this.checkSkills()
           this.loaded = true
         }
       })
 
       if (this.character && this.$root.gameData) {
-        // this.getSubraces(this.character.race)
-        // this.getArchetypes(this.character.class)
-        // this.getClassFeatures()
+        this.checkAbilityScores()
+        this.checkSkills()
         this.loaded = true
       }
     },
 
     methods: {
-      getAbilityScoreModifier (score) {
-        return Math.floor((parseInt(score, 0) / 2 - 5))
+      getAbilityScoreModifier (score, bonus) {
+        score = !isNaN(score) ? score : 0
+        bonus = !isNaN(bonus) ? bonus : 0
+        let total = score + bonus
+        return Math.floor((parseInt(total, 0) / 2 - 5))
+      },
+
+      checkAbilityScores () {
+        this.abilityScores.forEach(score => {
+          if (!this.character.abilityScores.hasOwnProperty(score.name)) {
+            this.character.abilityScores[score.name] = {}
+          }
+        })
+      },
+
+      checkSkills () {
+        if (!this.character.skills) {
+          // this.character.skills = {}
+          this.$set(this.character, 'skills', {})
+        }
+        this.skills.forEach(skill => {
+          // console.log(skill)
+          if (!this.character.skills.hasOwnProperty(skill.name)) {
+            this.$set(this.character.skills, skill.name, { trained: false, bonus: 0 })
+            this.$set(this.character.skills, this.character.skills)
+          }
+        })
+        this.$set(this.character.skills, this.character.skills)
+        console.log(this.character.skills)
       }
     }
   }

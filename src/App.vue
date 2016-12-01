@@ -8,7 +8,7 @@
         </div>
         <p class="dndhub-email"><strong>{{ user.email }}</strong></p>
         <!-- {{ characters }} -->
-        <xen-select class="character-select xen-color-primary" placeholder="Select a Character" :options="characters" :value="characterName" optionKey="name" @input="selectCharacter($event)"></xen-select>
+        <xen-select v-if="characters" class="character-select xen-color-primary" placeholder="Select a Character" :options="characters" :value="characterName" optionKey="name" @input="selectCharacter($event)"></xen-select>
       </section>
       <section class="xen-nav">
         <xen-list :dense="true">
@@ -49,16 +49,27 @@
           </router-link>
         </xen-list>
 
+        <xen-divider></xen-divider>
+
+        <xen-list :dense="true">
+          <router-link to="/groups">
+            <xen-list-item text="Groups" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
+          </router-link>
+          <div v-if="selectedCharacter">
+          <p v-if="selectedCharacter.groups" v-for="group in selectedCharacter.groups">TEST</p>
+          </div>
+        </xen-list>
+
       </section>
     </xen-sidebar>
-    <transition name="fade">      
+    <transition name="fade">
       <div class="xen-sidebar-backdrop" v-if="sidebarOpen" @click="toggleSidebar()"></div>
-    </transition>    
+    </transition>
     <div class="page-container">
       <!-- <transition name="router-fade"> -->
-        <keep-alive>
+        <!-- <keep-alive> -->
           <router-view></router-view>
-        </keep-alive> 
+        <!-- </keep-alive> -->
       <!-- </transition> -->
     </div>
   </div>
@@ -92,38 +103,63 @@
         characters: [],
         gameData: {},
         characterName: undefined,
-        characterId: undefined
+        characterId: undefined,
+        selectedCharacter: undefined,
+        endpoints: [
+          'alignments',
+          'armor',
+          'backgrounds',
+          'classes',
+          'skills',
+          'classFeatures',
+          'feats',
+          'languages',
+          'races',
+          'weapons',
+          'spells'
+        ]
       }
     },
 
     mounted () {
-      var path = window.location.hash
-      var pathArray = path.replace(/-+/, '').replace(/#+/, '').replace(/\/+/, '').split('/')
+      // var path = window.location.hash
+      // var pathArray = path.replace(/-+/, '').replace(/#+/, '').replace(/\/+/, '').split('/')
 
-      this.$nextTick(() => {
-        if (pathArray.length === 1 && pathArray[0] === '') {
-          this.setActive('home')
-        } else {
-          // this.expand(pathArray[0])
-          // this.setActive(pathArray[1])
-        }
-      })
+      // this.$nextTick(() => {
+      //   if (pathArray.length === 1 && pathArray[0] === '') {
+      //     // this.setActive('home')
+      //   } else {
+      //     // this.expand(pathArray[0])
+      //     // this.setActive(pathArray[1])
+      //   }
+      // })
 
-      window.onpopstate = (event) => {
-        setTimeout(() => {
-          var path = this.$route.path
-          var pathArray = path.replace(/-+/, '').replace(/\/+/, '').split('/')
-          if (pathArray.length === 1 && pathArray[0] === '') {
-            this.setActive('home')
-          } else {
-            this.setActive(pathArray[1])
-          }
-        }, 0)
-      }
+      // window.onpopstate = (event) => {
+      //   setTimeout(() => {
+      //     var path = this.$route.path
+      //     var pathArray = path.replace(/-+/, '').replace(/\/+/, '').split('/')
+      //     if (pathArray.length === 1 && pathArray[0] === '') {
+      //       this.setActive('home')
+      //     } else {
+      //       // this.setActive(pathArray[1])
+      //     }
+      //   }, 0)
+      // }
 
       this.$bus.$on('name-updated', (name) => {
         this.characterName = name
         window.localStorage.setItem('selected-character', name)
+      })
+
+      this.$bus.$on('group-added', (group) => {
+        if (this.selectedCharacter.groups) {
+          this.selectedCharacter.groups.push(group)
+        } else {
+          // this.character.groups = []
+          this.$set(this.selectedCharacter, 'groups', [])
+          this.selectedCharacter.groups.push(group)
+        }
+        this.updateCharacter('', 'groups', this.selectedCharacter.groups)
       })
 
       // Firebase
@@ -134,9 +170,22 @@
           this.$bus.$emit('user-signin', user)
           // User is signed in.
           this.getCharacters()
-          this.getGameData().then(() => {
+
+          if (window.localStorage.getItem('game-data')) {
+            // this.gameData = window.JSON.parse(window.localStorage.getItem('game-data'))
+            let test = window.JSON.parse(window.localStorage.getItem('game-data'))
+            this.gameData = test
+            this.$set(this.gameData, this.gameData)
+            // console.log('there is already game data!')
+            // console.log(this.gameData)
             this.$bus.$emit('data-loaded')
-          })
+          } else {
+            this.getGameData().then(() => {
+              console.log('game data loaded...')
+              this.$bus.$emit('data-loaded')
+              window.localStorage.setItem('game-data', window.JSON.stringify(this.gameData))
+            })
+          }
         } else {
           console.log('there is no user signed in')
           // No user is signed in.
@@ -163,24 +212,24 @@
         })
       },
 
-      getGameData () {
-        const endpoints = [
-          'alignments',
-          'armor',
-          'backgrounds',
-          'classes',
-          'skills',
-          'classFeatures',
-          'feats',
-          'languages',
-          'races',
-          'weapons',
-          'spells'
-        ]
+      checkData () {
+        this.getDbVersion().then((version) => {
+          if (window.localStorage.getItem('db-version') !== version) {
+            window.localStorage.setItem('db-version', version)
+            this.getGameData()
+          } else {
+            this.gameData = window.JSON.parse(window.localStorage.getItem('game-data'))
+          }
+        })
+      },
 
-        var promises = endpoints.map((endpoint) => {
+      getGameData () {
+        console.log('get the game data!')
+        var promises = this.endpoints.map((endpoint) => {
           return new Promise((resolve, reject) => {
             this.$firebase.database().ref('/' + endpoint).once('value').then((snapshot) => {
+              // console.log('game data!')
+              // console.log(snapshot.val())
               this.gameData[endpoint] = snapshot.val()
               this.$set(this.gameData, this.gameData)
               // this.$bus.$emit('data-loaded')
@@ -199,8 +248,17 @@
             window.localStorage.setItem('selected-character', this.selectedCharacter.name)
             this.characterName = this.selectedCharacter.name
             this.characterId = i
+            this.$bus.$emit('character-selected', this.selectedCharacter)
           }
         }
+      },
+
+      getDbVersion () {
+        return new Promise((resolve, reject) => {
+          this.$firebase.database().ref('/dbVersion').once('value').then((snapshot) => {
+            resolve(snapshot.val())
+          })
+        })
       },
 
       // Save a character, requires a path to the property and value being assigned

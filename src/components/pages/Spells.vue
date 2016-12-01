@@ -1,10 +1,10 @@
 <template>
   <div>
     <xen-page-toolbar class="xen-theme-indigo" title="Spells"></xen-page-toolbar>
-    <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Equipped">
+    <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Known">
 
       <!-- Combat Tab -->
-      <div slot="Equipped">
+      <div slot="Known">
         <!-- Combat Info -->
         <section class="dndhub-tab-content">
 
@@ -14,27 +14,24 @@
               </xen-card-content>
             </xen-card>
             <div class="xen-data-table bordered hover" v-if="loaded">
-              <table>
-                <thead>
+              <table class="dndhub-table">
+                <thead class="hidden">
                   <tr>
-                    <th class="text-left xen-first-col">
+                    <th class="text-left">
                       Name
                     </th>
-                    <th class="text-center">
-                      Damage
+                    <th class="icon-col xen-last-col">
                     </th>
-                    <th class="delete-col xen-last-col"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(spell, index) in filteredSpells">
-                    <td class="text-left xen-first-col" @click="selectSpell(spell, false);">
-                      {{ spell.name }}
+                    <td class="xen-first-col text-left " @click="selectSpell(spell, true);">
+                      <div>{{ spell.name }}</div>
+                      <div class="caption">{{ spell.level }} {{ spell.school }}</div>
+                      <div class="caption secondary-text">{{ spell.class }}</div>
                     </td>
-                    <td class="text-center" @click="selectSpell(spell, false);">
-                      {{ spell.damage || '-' }}
-                    </td>
-                    <td class="text-right xen-last-col">
+                    <td class="text-right icon-col xen-last-col">
                       <xen-icon-button class="table-button" icon="delete" @click.native="removeSpell(spell, index)"></xen-icon-button>
                     </td>
                   </tr>
@@ -50,11 +47,11 @@
           <div class="filters">
             <div class="row">
               <div class="col-xs-12">
-                <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Spells" @input="filter = $event; checkPage();" :debounce="500"></xen-input>
-              </div>         
+                <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Spells" @input="filter = $event; checkPage();" :debounce="250"></xen-input>
+              </div>
               <div class="col-xs-6 xen-no-margin">
-                <xen-select class="xen-color-primary" label="Level" :options="['Cantrip', '1', '2', '3', '4', '5', '6', '7', '8', '9']" :value="levelFilter" @input="levelFilter = $event; checkPage();"></xen-select>
-              </div>   
+                <xen-select class="xen-color-primary" label="Level" :options="['All', 'Cantrip', '1', '2', '3', '4', '5', '6', '7', '8', '9']" :value="levelFilter" @input="levelFilter = $event; checkPage();"></xen-select>
+              </div>
               <div class="col-xs-6 xen-no-margin">
                 <xen-select class="xen-color-primary" label="Class" :options="classOptions" :value="classFilter" @input="classFilter = $event; checkPage();"></xen-select>
               </div>
@@ -87,7 +84,7 @@
               <tbody>
                 <tr v-for="spell in gameSpells">
                   <td class="xen-first-col icon-col">
-                    <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addSpell(spell)"></xen-icon-button>
+                    <xen-icon-button :raised="true" icon="add" class="xen-theme-blue xen-color-white table-icon-button" @click.native="addSpell(spell)"></xen-icon-button>
                   </td>
                   <td class="text-left " @click="selectSpell(spell, true);">
                     <div>{{ spell.name }}</div>
@@ -99,40 +96,37 @@
             </table>
           </div>
         </section>
-      </div>      
+      </div>
     </xen-tabs>
       <!-- Feat Dialog -->
       <div v-if="selectedSpell">
-        <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
-          <div class="row">            
-          {{ selectedSpell }}
-            <!-- <ul class="property-list">
-              <li>
-                <xen-input label="Name" class="xen-color-primary" :value="selectedSpell.name" :disabled="disableInput" @input="selectedSpell.name = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Damage" class="xen-color-primary" :value="selectedSpell.damage" :disabled="disableInput" @input="selectedSpell.damage = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Damage Type" class="xen-color-primary" :value="selectedSpell.damageType" :disabled="disableInput" @input="selectedSpell.damageType = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Spell Type" class="xen-color-primary" :value="selectedSpell.spellType" :disabled="disableInput" @input="selectedSpell.spellType = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Weight" class="xen-color-primary" :value="selectedSpell.weight" :disabled="disableInput" @input="selectedSpell.weight = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <xen-input label="Cost" class="xen-color-primary" :value="selectedSpell.cost" :disabled="disableInput" @input="selectedSpell.cost = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li v-if="!disableInput">
-                <xen-textarea label="Notes" class="xen-color-primary" :value="selectedSpell.notes" :disabled="disableInput" @input="selectedSpell.notes = $event; $root.updateCharacter('', 'spells', character.spells);"></xen-input>
-              </li>
-              <li>
-                <h2 class="caption secondary-text">Properties</h2>
-                <xen-chips :chips="selectedSpell.properties" :read-only="disableInput"></xen-chips>
-              </li>
-            </ul> -->
+        <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true" class="spell-dialog">
+          <div class="row spell-info">
+            <div class="col-xs-12 spell-school">
+              <span class="text-center body-2 xen-color-primary">{{ selectedSpell.level }} {{ selectedSpell.school }}</span>
+              <span class="text-center">{{ selectedSpell.class }}</span>
+            </div>
+            <div class="col-xs-6 text-center">
+              <span class="body-2 xen-color-primary">Casting Time</span>
+              <span class="body-1">{{ selectedSpell.casting_time }}</span>
+            </div>
+            <div class="col-xs-6 text-center">
+              <span class="body-2 xen-color-primary">Range</span>
+              <span class="body-1">{{ selectedSpell.range }}</span>
+            </div>
+            <div class="col-xs-6 text-center">
+              <span class="body-2 xen-color-primary">Components</span>
+              <span class="body-1">{{ selectedSpell.components }}</span>
+            </div>
+            <div class="col-xs-6 text-center">
+              <span class="body-2 xen-color-primary">Duration</span>
+              <span class="body-1">{{ selectedSpell.duration }}</span>
+            </div>
+            <div class="col-xs-12">
+            </div>
+            <div class="col-xs-12 spell-description">
+              <div v-html="selectedSpell.desc"></div>
+            </div>
           </div>
           <div slot="actions">
             <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
@@ -146,66 +140,6 @@
 <style lang="scss">
 @import '../xen/styles/data-tables';
 @import '../xen/styles/variables';
-.checkbox-col {
-  width: 96px;
-}
-
-.icon-col {
-  width: 56px;
-}
-.table-icon-button {
-  margin: 4px 0 0 0;
-}
-.xen-data-table td.xen-first-col .table-checkbox i {
-  margin-left: 12px;
-}
-
-.delete-col {
-  width: 48px;
-}
-.combat-divider {
-  margin-bottom: 16px;
-}
-.small-table-input {
-  margin: auto;
-  padding-top: 16px;
-}
-.small-table-input,
-.small-table-input input {
-  text-align: center;
-  width: 40px;  
-}
-@media screen and (max-width: $small-breakpoint) {
-  .xen-data-table th,
-  .xen-data-table td {
-    padding-right: 0;
-  }
-  .icon-col {
-    width: 72px;
-  }
-}
-.dialog-description {
-  width: 100%;
-  ul {
-    margin-bottom: 0;
-    background-color: #fafafa;
-    border: 1px solid #BDBDBD;
-    li {
-      padding: 8px;
-      border-bottom: 1px solid #BDBDBD;
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
-.search-input {
-  margin-bottom: 0;
-}
-table {
-  // table-layout: auto;
-  // padding-bottom: 48px;
-}
 </style>
 
 <script>
@@ -302,6 +236,9 @@ table {
       })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
+        if (this.$root.gameData) {
+          this.loaded = true
+        }
       })
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
@@ -333,9 +270,12 @@ table {
       },
 
       addSpell (spell) {
+        if (!this.character.spells) {
+          this.$set(this.character, 'spells', [])
+        }
         this.character.spells.push(spell)
         this.showToast = true
-        this.toastMsg = spell.name + ' equipped'
+        this.toastMsg = spell.name + ' added'
         this.$root.updateCharacter('', 'spells', this.character.spells)
       },
 

@@ -212,6 +212,7 @@
         this.getArchetypes(this.character.class)
         if (this.$root.gameData) {
           this.getClassFeatures()
+          this.loaded = true
         }
       })
       this.$bus.$on('data-loaded', () => {
