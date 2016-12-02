@@ -8,6 +8,7 @@
         <!-- Character Info -->
         <section class="page-tab-content">
           <xen-card class="margin-bottom" v-if="loaded">
+            <!-- {{ character }} -->
             <xen-card-content>
               <div class="row xen-color-primary">
                 <div class="col-lg-6 col-md-6 col-xs-12">
@@ -20,7 +21,7 @@
                   <xen-input label="Experience" name="display" class="xen-no-margin xen-color-primary" type="number" :value="character.experience" @input="character.experience = $event; $root.updateCharacter('', 'experience', character.experience);"></xen-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                  <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="$set(character, 'subrace', ''); getSubraces($event); $set(character, 'race', $event); $root.updateCharacter('', 'race', character.race);"></xen-select>
+                  <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="getSubraces($event); $set(character, 'race', $event); $root.updateCharacter('', 'race', character.race);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" v-if="subraces.length > 0">
                   <xen-select class="card-last" label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event); $root.updateCharacter('', 'subrace', character.subrace);"></xen-select>
@@ -36,7 +37,7 @@
         <section class="page-tab-content">
           <xen-card class="margin-bottom" v-if="character">
             <xen-card-content>
-              <div class="row">              
+              <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                   <xen-select class="xen-color-primary" label="Class" :options="$root.gameData.classes" optionKey="name" :value="character.class" @input="$set(character, 'class', $event); getArchetypes(character.class); getClassFeatures(); $root.updateCharacter('', 'class', character.class);"></xen-select>
                 </div>
@@ -200,7 +201,11 @@
         this.user = Object.assign({}, user)
       })
       this.$bus.$on('character-selected', character => {
-        this.character = Object.assign({}, character)
+        this.loaded = false
+        // console.log('character selected!')
+        // this.character = Object.assign({}, character)
+        this.$set(this, 'character', character)
+        // console.log(this.character)
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         if (this.$root.gameData) {
@@ -229,8 +234,9 @@
     methods: {
       // Get the list of subraces from a race
       getSubraces (raceName) {
+        console.log('get subraces')
         if (this.$root.gameData.races) {
-          if (raceName !== this.character.race) {
+          if (raceName !== this.character.race && this.loaded) {
             this.$set(this.character, 'subrace', undefined)
           }
           this.$root.gameData.races.forEach((race, index) => {

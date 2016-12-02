@@ -215,6 +215,7 @@
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
             this.selectedCharacter = this.characters[i]
+            this.characterId = i
             this.$bus.$emit('character-selected', this.selectedCharacter)
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
@@ -224,7 +225,6 @@
               // this.$bus.$emit('character-selected', this.selectedCharacter)
               window.localStorage.setItem('selected-character', this.selectedCharacter.name)
               this.characterName = this.selectedCharacter.name
-              this.characterId = i
             })
           }
         }
@@ -256,6 +256,7 @@
         console.log('updating ' + prop + '...')
         let userId = this.$firebase.auth().currentUser.uid
         let update = {}
+        value = value || ''
         update[prop] = value
         this.$firebase.database().ref('/characters/' + userId + '/' + this.characterId + '/' + path).update(update)
       }

@@ -65,7 +65,7 @@
               <tbody>
                 <tr v-for="weapon in gameWeapons">
                   <td class="xen-first-col icon-col">
-                    <xen-icon-button :raised="true" icon="add" class="xen-theme-primary table-icon-button" @click.native="addWeapon(weapon)"></xen-icon-button>
+                    <xen-icon-button :raised="true" icon="add" class="xen-theme-blue table-icon-button" @click.native="addWeapon(weapon)"></xen-icon-button>
                   </td>
                   <td class="text-left" @click="selectWeapon(weapon, true);">
                     {{ weapon.name }}
@@ -84,7 +84,8 @@
     <!-- Weapon Dialog -->
     <div v-if="selectedWeapon">
       <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedWeapon.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
-        <div class="row">            <ul class="property-list">
+        <div class="row">
+          <ul class="property-list">
             <li>
               <xen-input label="Name" class="xen-color-primary" :value="selectedWeapon.name" :disabled="disableInput" @input="selectedWeapon.name = $event; $root.updateCharacter('', 'weapons', character.weapons);"></xen-input>
             </li>
