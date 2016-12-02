@@ -13,6 +13,23 @@ import VueRouter from 'vue-router'
 // https://github.com/logaretm/vee-validate
 import VeeValidate from 'vee-validate'
 
+// const dictionary = {
+//   en: {
+//     messages: {
+//       alpha: () => 'Some English Message'
+//     }
+//   },
+//   ar: {
+//     messages: {
+//       alpha: () => 'Some Arabic Message'
+//     }
+//   }
+// }
+
+// VeeValidate.updateDictionary(dictionary)
+
+// const validator = new VeeValidate({ first_name: 'alpha' })
+
 import VueFire from 'vuefire'
 import Firebase from 'firebase'
 

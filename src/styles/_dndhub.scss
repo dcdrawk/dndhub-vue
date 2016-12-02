@@ -143,3 +143,15 @@
 .search-input {
   margin-bottom: 0;
 }
+
+.xen-data-table .button-thead {
+	background-color: #fafafa;
+	th {
+		padding: 0 8px;
+		// padding-bottom: 0;
+		// padding-top: 0;
+	}
+	.xen-button-container {
+		margin: 0;
+	}
+}

@@ -131,11 +131,15 @@
       })
 
       this.$bus.$on('group-added', (group) => {
+        let newGroup = {
+          id: group.id,
+          name: group.name
+        }
         if (this.selectedCharacter.groups) {
-          this.selectedCharacter.groups.push(group)
+          this.selectedCharacter.groups.push(newGroup)
         } else {
           this.$set(this.selectedCharacter, 'groups', [])
-          this.selectedCharacter.groups.push(group)
+          this.selectedCharacter.groups.push(newGroup)
         }
         this.updateCharacter('', 'groups', this.selectedCharacter.groups)
       })
