@@ -37,6 +37,9 @@
                     <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeWeapon(weapon, index)"></xen-icon-button>
                   </td>
                 </tr>
+                <tr v-if="filteredWeapons.length === 0">
+                  <td colspan="3" class="xen-first-col text-left">You haven't equipped any weapons</td>
+                </tr>
               </tbody>
             </table>
           </div>

@@ -145,6 +145,7 @@
 
       // When a character is selected
       this.$bus.$on('character-selected', character => {
+        this.loaded = false
         this.character = Object.assign({}, character)
         this.checkFeats()
         this.getKnownFeats()
@@ -213,20 +214,30 @@
         })
       },
 
+      // search feats to see if one already exists
+      searchFeats (feat) {
+        for (var i in this.feats) {
+          if (feat.name === this.feats[i].name) {
+            return true
+          }
+        }
+        return false
+      },
+
       // Toggle a feat on / off
       toggleFeat (event, feat) {
-        console.log(event)
-        console.log('toggle feat!')
-        if (event) {
-          this.character.feats.push(feat)
-        } else {
-          this.character.feats.forEach((charFeat, index) => {
-            if (charFeat.name === feat.name) {
-              this.character.feats.splice(index, 1)
-            }
-          })
+        if (!this.searchFeats(feat)) {
+          if (event) {
+            this.character.feats.push(feat)
+          } else {
+            this.character.feats.forEach((charFeat, index) => {
+              if (charFeat.name === feat.name) {
+                this.character.feats.splice(index, 1)
+              }
+            })
+          }
+          this.$root.updateCharacter('', 'feats', this.character.feats)
         }
-        this.$root.updateCharacter('', 'feats', this.character.feats)
       }
     },
 

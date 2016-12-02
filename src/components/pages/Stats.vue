@@ -128,7 +128,10 @@
               </thead>
               <tbody v-if="character.skills">
                 <tr v-for="skill in $root.gameData.skills" v-if="character.skills[skill.name]">
-                  <td class="xen-first-col">{{ skill.name }}</td>
+                  <td class="xen-first-col">
+                    <div>{{ skill.name }}</div>
+                    <div class="caption secondary-text">{{ skill.abilityScore }}</div>
+                  </td>
                   <td class="text-center">
                     <xen-checkbox class="xen-color-primary" :value="character.skills[skill.name].trained"
                      @input="character.skills[skill.name].trained = $event; $root.updateCharacter('skills/' + skill.name + '/', 'trained', character.skills[skill.name].trained);"></xen-checkbox>
@@ -139,7 +142,7 @@
                   </td>
                   <td class="text-center">
                    <xen-input v-if="character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
-                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + character.proficiencyBonus + character.skills[skill.name].bonus"></xen-input>
+                     :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + +character.proficiencyBonus + character.skills[skill.name].bonus"></xen-input>
                     <xen-input v-if="!character.skills[skill.name].trained" :disabled="true" class="xen-color-primary small-table-input" type="number"
                      :value="getAbilityScoreModifier(character.abilityScores[skill.abilityScore].base, character.abilityScores[skill.abilityScore].bonus) + character.skills[skill.name].bonus"></xen-input>
                   </td>
@@ -363,13 +366,21 @@
 
       // Check the character for the skills attribute
       checkSkills () {
+        console.log(this.character.skills)
         if (!this.character.skills) {
           this.$set(this.character, 'skills', {})
         }
         this.skills.forEach(skill => {
           if (!this.character.skills.hasOwnProperty(skill.name)) {
             this.$set(this.character.skills, skill.name, { trained: false, bonus: 0 })
-            this.$set(this.character.skills, this.character.skills)
+            // this.$set(this.character.skills, this.character.skills)
+          } else {
+            if (!this.character.skills[skill.name].trained) {
+              this.$set(this.character.skills[skill.name], 'trained', false)
+            }
+            if (!this.character.skills[skill.name].bonus) {
+              this.$set(this.character.skills[skill.name], 'bonus', 0)
+            }
           }
         })
         this.$set(this.character.skills, this.character.skills)
