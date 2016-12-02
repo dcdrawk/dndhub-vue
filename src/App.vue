@@ -59,7 +59,7 @@
             <xen-list-item text="Groups" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
           <div v-if="selectedCharacter">
-          <p v-if="selectedCharacter.groups" v-for="group in selectedCharacter.groups">TEST</p>
+          <!-- <p v-if="selectedCharacter.groups" v-for="group in selectedCharacter.groups">TEST</p> -->
           </div>
         </xen-list>
 
@@ -131,6 +131,7 @@
       })
 
       this.$bus.$on('group-added', (group) => {
+        console.log('group added')
         let newGroup = {
           id: group.id,
           name: group.name
@@ -141,6 +142,7 @@
           this.$set(this.selectedCharacter, 'groups', [])
           this.selectedCharacter.groups.push(newGroup)
         }
+        console.log(this.selectedCharacter)
         this.updateCharacter('', 'groups', this.selectedCharacter.groups)
       })
 
@@ -237,8 +239,9 @@
       signOut () {
         this.$firebase.auth().signOut().then(() => {
           // Sign-out successful.
-          window.localStorage.removeItem('selected-character')
+          this.selectedCharacter = undefined
           this.user = undefined
+          window.localStorage.removeItem('selected-character')
           // this.$bus.$emit('user-signout')
         }, (error) => {
           console.error(error)

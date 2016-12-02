@@ -34,7 +34,7 @@
 	@media only screen and (min-width: $small-breakpoint) {
 		position: relative;
 		border-top: none;
-    width: 100%;
+    	width: 100%;
   }
 }
 
@@ -154,4 +154,45 @@
 	.xen-button-container {
 		margin: 0;
 	}
+}
+
+// Groups
+
+.health-bar-outer {
+	transform-origin: 0%;
+	width: 100%;
+	border: 1px solid rgba(0,0,0,.24);
+	border-radius: 32px;
+	height: 12px;
+	margin-top: 2px;
+}
+.health-bar-inner {
+	width: 100%;
+	height: 12px;
+	transform-origin: 0%;
+	transition: transform 365ms $material-easing;
+	&.health-full {
+		@extend .xen-theme-green
+	}
+	&.health-high {
+		@extend .xen-theme-light-green
+	}
+	&.health-medium {
+		@extend .xen-theme-yellow
+	}
+	&.health-low {
+		@extend .xen-theme-red
+	}
+}
+.fixed-table {
+	table-layout: fixed;
+}
+.group-table {
+	td {
+		transition: none;
+		width: 50%;
+	}
+}
+.xen-data-table .group-table tr td {
+	transition: none;
 }
