@@ -42,7 +42,7 @@
             <xen-card-content>
               <div class="row xen-color-primary">
                 <div class="col-lg-6 col-md-6 col-xs-6">
-                  <xen-input label="Current Hit Points" class="xen-color-primary" type="number" :value="character.currentHP" @input="character.currentHP = $event; $root.updateCharacter('', 'currentHP', character.currentHP);"></xen-input>
+                  <xen-input :debounce="500" label="Current Hit Points" class="xen-color-primary" type="number" :value="character.currentHP" @input="character.currentHP = $event; $root.updateCharacter('', 'currentHP', character.currentHP);"></xen-input>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input :disabled="true" label="Total Hit Points" class="xen-color-primary" type="number" :value="character.maxHP + character.tempHP" @input="character.totalHP = $event; $root.updateCharacter('', 'totalHP', character.totalHP);"></xen-input>
