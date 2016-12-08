@@ -255,6 +255,8 @@
           }
         })
         this.$firebase.database().ref('groups/' + this.$route.params.groupId + '/members').set(this.group.members)
+        this.leaveGroupDialog = false
+        this.$router.push({path: '/groups'})
       },
 
       deleteGroup () {

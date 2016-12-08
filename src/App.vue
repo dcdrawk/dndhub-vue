@@ -218,17 +218,20 @@
       },
 
       selectCharacter (characterName) {
+        console.log('select a character')
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
             this.selectedCharacter = this.characters[i]
             this.characterId = i
             this.$bus.$emit('character-selected', this.selectedCharacter)
+            console.log('character selected...')
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
               // updateStarCount(postElement, snapshot.val());
               this.selectedCharacter = snapshot.val()
-              // console.log(this.selectedCharacter)
+              console.log(this.selectedCharacter)
               // this.$bus.$emit('character-selected', this.selectedCharacter)
+              // this.$set(this, 'selectedCharacter', undefined)
               window.localStorage.setItem('selected-character', this.selectedCharacter.name)
               this.characterName = this.selectedCharacter.name
             })
@@ -240,9 +243,9 @@
         this.$firebase.auth().signOut().then(() => {
           // Sign-out successful.
           this.selectedCharacter = undefined
+          this.characterName = undefined
           this.user = undefined
           window.localStorage.removeItem('selected-character')
-          // this.$bus.$emit('user-signout')
         }, (error) => {
           console.error(error)
           // An error happened.

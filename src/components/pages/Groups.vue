@@ -81,7 +81,7 @@
       <p v-if="selectedGroup">Join the group <span class="body-2 xen-color-primary">{{ selectedGroup.name }}</span>?</p>
       <form class="row" v-if="selectedGroup">
         <div class="col-xs-12" v-if="selectedGroup.private">
-          <xen-input ref="joinPassword" label="Password" name="join password" type="password" class="xen-color-primary" rules="required" :value="joinPassword" @input="joinPassword = $event"></xen-input>
+          <xen-input ref="joinPassword" label="Password" name="join password" type="password" class="xen-color-primary" :value="joinPassword" @input="joinPassword = $event"></xen-input>
         </div>
       </form>
       <p v-if="errorMsg" class="xen-color-red">{{ errorMsg }}</p>
@@ -91,6 +91,7 @@
       </div>
     </xen-dialog>
 
+    <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
 
@@ -175,7 +176,9 @@
         repassword: '',
         joinGroupDialog: false,
         selectedGroup: undefined,
-        joinPassword: undefined
+        joinPassword: undefined,
+        showToast: false,
+        toastMsg: ''
       }
     },
 
@@ -276,8 +279,14 @@
 
       joinGroup () {
         this.$bus.$emit('xen-validate')
-        // this.$nextTick(() => {
         setTimeout(() => {
+          if (this.selectedGroup.private && !this.joinPassword) {
+            this.errorMsg = 'A password is required'
+            return
+          } else if (this.selectedGroup.password !== this.joinPassword) {
+            this.errorMsg = 'The passsword is incorrect'
+            return
+          }
           console.log(this.errors.errors.length)
           if (this.errors.errors.length > 0) {
             return
@@ -298,15 +307,14 @@
                     userId: this.$firebase.auth().currentUser.uid,
                     characterId: this.$root.characterId
                   })
-                  console.log(group)
                   group.id = this.selectedGroup.groupId
                   this.$firebase.database().ref('groups/' + this.selectedGroup.groupId).update(group)
                   this.$bus.$emit('group-added', group)
+                  this.joinGroupDialog = false
+                  this.joinPassword = ''
+                  this.toastMsg = 'Joined the group ' + group.name
+                  this.showToast = true
                 }
-                // group.members.forEach((member) => {
-                //   if (member.characterId === this.$root.characterId) {
-                //   }
-                // })
               }
             })
           }
