@@ -138,7 +138,6 @@
         loaded: false,
         selectedFeat: undefined,
         showFeat: false,
-        user: this.$root.user || undefined,
         filter: '',
         showToast: false
       }
@@ -146,11 +145,6 @@
 
     // Mounted
     mounted () {
-      // When a user signs in (page-load)
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
-
       // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.loaded = false

@@ -130,17 +130,8 @@
         toastMsg: '',
         updatePhoto: false,
         uploadErrorMessage: undefined,
-        uploading: false,
-        user: this.$root.user || undefined
+        uploading: false
       }
-    },
-
-    // Mouted
-    mounted () {
-      // When a user signs in (page refresh)
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
     },
 
     // Methods

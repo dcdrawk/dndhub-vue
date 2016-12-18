@@ -2,6 +2,9 @@
 // Docs: http://vuejs.org/api/
 import Vue from 'vue'
 
+// Import the data store
+import store from './store'
+
 // Import the App Component
 import App from './App'
 
@@ -154,5 +157,6 @@ if ('serviceWorker' in navigator) {
 /* eslint-disable no-new, no-unused-vars */
 const app = new Vue({
   router,
+  store,
   ...App
 }).$mount('#app')

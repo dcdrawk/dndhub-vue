@@ -221,7 +221,6 @@
     // Data
     data () {
       return {
-        user: this.$root.user || undefined,
         character: this.$root.selectedCharacter || undefined,
         loaded: false,
         abilityScores: [{
@@ -279,11 +278,6 @@
 
     // Mounted
     mounted () {
-      // When a user signs in
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
-
       // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)

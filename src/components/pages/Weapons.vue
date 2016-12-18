@@ -184,18 +184,12 @@
         selectedWeapon: undefined,
         showDialog: false,
         showToast: false,
-        toastMsg: '',
-        user: this.$root.user || undefined
+        toastMsg: ''
       }
     },
 
     // Mounted
     mounted () {
-      // When a user signs in (page-load)
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
-
       // When a character is selected
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)

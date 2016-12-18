@@ -117,14 +117,6 @@
       }
     },
 
-    // Mounted
-    mounted () {
-      // When a user signs in
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
-    },
-
     // Methods
     methods: {
       // Edit the user info
@@ -177,8 +169,7 @@
           // Observe state change events such as progress, pause, and resume
           // See below for more detail
         }, (error) => {
-          console.error(error)
-          // Handle unsuccessful uploads
+          console.error(error) // Handle unsuccessful uploads
         }, () => {
           // Handle successful uploads on complete
           this.$nextTick(() => {

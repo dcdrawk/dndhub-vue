@@ -198,10 +198,6 @@
           })
         }
       })
-      // console.log('dwhjiadjawo')
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
       this.$bus.$on('character-selected', character => {
         this.character = Object.assign({}, character)
         if (this.$root.gameData) {

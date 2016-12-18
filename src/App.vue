@@ -149,9 +149,10 @@
       // Firebase
       Firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          this.user = user
+          this.$store.commit('user_login', user)
+          // this.user = user
           console.log('a user has signed in', user)
-          this.$bus.$emit('user-signin', user)
+          // this.$bus.$emit('user-signin', user)
           // User is signed in.
           this.getCharacters()
 
@@ -218,7 +219,6 @@
       },
 
       selectCharacter (characterName) {
-        console.log('select a character')
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
             this.selectedCharacter = this.characters[i]
@@ -227,11 +227,8 @@
             console.log('character selected...')
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
-              // updateStarCount(postElement, snapshot.val());
               this.selectedCharacter = snapshot.val()
               console.log(this.selectedCharacter)
-              // this.$bus.$emit('character-selected', this.selectedCharacter)
-              // this.$set(this, 'selectedCharacter', undefined)
               window.localStorage.setItem('selected-character', this.selectedCharacter.name)
               this.characterName = this.selectedCharacter.name
             })
@@ -269,6 +266,13 @@
         value = value || ''
         update[prop] = value
         this.$firebase.database().ref('/characters/' + userId + '/' + this.characterId + '/' + path).update(update)
+      }
+    },
+
+    // Computed
+    computed: {
+      user () {
+        return this.$store.state.user
       }
     }
   }

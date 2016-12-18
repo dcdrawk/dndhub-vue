@@ -190,16 +190,12 @@
         page: 1,
         selectedFeat: undefined,
         showFeat: false,
-        subraces: [],
-        user: this.$root.user || undefined
+        subraces: []
       }
     },
 
     // Mounted
     mounted () {
-      this.$bus.$on('user-signin', user => {
-        this.user = Object.assign({}, user)
-      })
       this.$bus.$on('character-selected', character => {
         this.loaded = false
         // console.log('character selected!')
