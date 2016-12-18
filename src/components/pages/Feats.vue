@@ -29,7 +29,7 @@
                     {{ feat.name }}
                   </td>
                   <td class="text-right xen-last-col delete-col">
-                    <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeFeat(feat)"></xen-icon-button>
+                    <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeFeat(feat, index)"></xen-icon-button>
                   </td>
                 </tr>
                 <tr v-if="filteredFeats.length === 0">
@@ -156,7 +156,6 @@
         this.loaded = false
         this.character = Object.assign({}, character)
         this.checkFeats()
-        this.getKnownFeats()
         this.loaded = true
       })
 
@@ -164,7 +163,6 @@
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
           this.checkFeats()
-          this.getKnownFeats()
           this.loaded = true
         }
       })
@@ -172,7 +170,6 @@
       // Run this on mount
       if (this.character && this.$root.gameData) {
         this.checkFeats()
-        this.getKnownFeats()
         this.loaded = true
       }
     },
@@ -190,28 +187,10 @@
       },
 
       // Remove a feat
-      removeFeat (feat) {
-        this.character.feats.forEach((charFeat, index) => {
-          if (charFeat.name === feat.name) {
-            this.character.feats.splice(index, 1)
-          }
-        })
+      removeFeat (feat, index) {
+        this.character.feats = _.orderBy(this.character.feats, 'name').splice(index, 1)
+        this.character.feats.splice(index, 1)
         this.$root.updateCharacter('', 'feats', this.character.feats)
-        this.getKnownFeats()
-      },
-
-      // Get the list of known feats
-      getKnownFeats () {
-        this.feats.forEach(gameFeat => {
-          gameFeat.known = false
-        })
-        this.character.feats.forEach((charFeat, index) => {
-          this.feats.forEach((gameFeat, index) => {
-            if (charFeat.name === gameFeat.name) {
-              gameFeat.known = true
-            }
-          })
-        })
       },
 
       // Select a feat
