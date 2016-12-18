@@ -55,7 +55,6 @@
               <thead>
                 <tr>
                   <th class="icon-col">
-                    <!-- Equipped -->
                   </th>
                   <th class="text-left">
                     Name

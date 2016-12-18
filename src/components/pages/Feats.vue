@@ -46,7 +46,7 @@
         <section class="page-tab-content">
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table>
-              <thead>
+              <thead class="hidden">
                 <tr>
                   <th class="xen-first-col checkbox-col">
                     Known
@@ -57,9 +57,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="feat in feats">
-                  <td class="xen-first-col">
+                <tr v-for="feat in gameFeats">
+                  <!--<td class="xen-first-col">
                   <xen-checkbox class="table-checkbox xen-color-blue" :value="feat.known" @input="toggleFeat($event, feat)"></xen-checkbox>
+                  </td>-->
+                  <td class="xen-first-col icon-col">
+                    <xen-icon-button :raised="true" icon="add" class="xen-theme-blue table-icon-button" @click.native="addFeat(feat)"></xen-icon-button>
                   </td>
                   <td class="text-left" @click="selectFeat(feat);">
                     {{ feat.name }}
@@ -83,6 +86,7 @@
         </div>
       </xen-dialog>
     </div>
+    <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
 
@@ -103,6 +107,7 @@
   import XenSelect from '../xen/Select'
   import XenTabs from '../xen/Tabs'
   import XenTextarea from '../xen/Textarea'
+  import XenToast from '../xen/Toast'
 
   export default {
     // Name
@@ -121,7 +126,8 @@
       XenPageToolbar,
       XenSelect,
       XenTabs,
-      XenTextarea
+      XenTextarea,
+      XenToast
     },
 
     // Data
@@ -132,7 +138,9 @@
         loaded: false,
         selectedFeat: undefined,
         showFeat: false,
-        user: this.$root.user || undefined
+        user: this.$root.user || undefined,
+        filter: '',
+        showToast: false
       }
     },
 
@@ -224,21 +232,29 @@
         return false
       },
 
-      // Toggle a feat on / off
-      toggleFeat (event, feat) {
-        if (!this.searchFeats(feat)) {
-          if (event) {
-            this.character.feats.push(feat)
-          } else {
-            this.character.feats.forEach((charFeat, index) => {
-              if (charFeat.name === feat.name) {
-                this.character.feats.splice(index, 1)
-              }
-            })
-          }
-          this.$root.updateCharacter('', 'feats', this.character.feats)
-        }
+      // Add a feat to character
+      addFeat (feat) {
+        this.character.feats.push(feat)
+        this.showToast = true
+        this.toastMsg = feat.name + ' added'
+        this.$root.updateCharacter('', 'feats', this.character.feats)
       }
+
+      // Toggle a feat on / off
+      // toggleFeat (event, feat) {
+      //   if (!this.searchFeats(feat)) {
+      //     if (event) {
+      //       this.character.feats.push(feat)
+      //     } else {
+      //       this.character.feats.forEach((charFeat, index) => {
+      //         if (charFeat.name === feat.name) {
+      //           this.character.feats.splice(index, 1)
+      //         }
+      //       })
+      //     }
+      //     this.$root.updateCharacter('', 'feats', this.character.feats)
+      //   }
+      // }
     },
 
     // Computed
@@ -246,6 +262,12 @@
       // Filter the character's feats alphabetically
       filteredFeats: function () {
         return _.orderBy(this.character.feats, 'name')
+      },
+
+      gameFeats: function () {
+        return this.$root.gameData.feats.filter((row) => {
+          return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+        })
       }
     }
   }
