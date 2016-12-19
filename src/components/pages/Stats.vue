@@ -108,7 +108,7 @@
         <!-- Skills Info -->
         <section class="page-tab-content">
           <!-- {{ character.skills }} -->
-          <div class="xen-data-table striped" v-if="loaded && $root.gameData.skills && character">
+          <div class="xen-data-table striped" v-if="loaded && skills && character">
             <table>
               <thead>
                 <tr>
@@ -127,7 +127,7 @@
                 </tr>
               </thead>
               <tbody v-if="character.skills">
-                <tr v-for="skill in $root.gameData.skills" v-if="character.skills[skill.name]">
+                <tr v-for="skill in gameSkills" v-if="character.skills[skill.name]">
                   <td class="xen-first-col">
                     <div>{{ skill.name }}</div>
                     <div class="caption secondary-text">{{ skill.abilityScore }}</div>
@@ -183,6 +183,7 @@
 </style>
 
 <script>
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -218,10 +219,16 @@
       XenTextarea
     },
 
+    // Created
+    created () {
+      this.fetchData()
+    },
+
     // Data
     data () {
       return {
         loaded: false,
+        gameSkills: undefined,
         abilityScores: [{
           name: 'Strength'
         }, {
@@ -280,7 +287,7 @@
       // When a character is selected
       this.$bus.$on('character-selected', () => {
         // this.character = Object.assign({}, character)
-        if (this.$root.gameData) {
+        if (this.character) {
           this.checkAbilityScores()
           this.checkSkills()
           this.loaded = true
@@ -296,7 +303,7 @@
         }
       })
 
-      if (this.character && this.$root.gameData) {
+      if (this.character) {
         this.checkAbilityScores()
         this.checkSkills()
         this.loaded = true
@@ -305,6 +312,15 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        // Skills
+        DataService.get('skills').then((skills) => {
+          console.log(skills)
+          this.gameSkills = skills
+        })
+      },
+
       // Set the ability scores
       setAbilityScores () {
         // console.log(this.character)

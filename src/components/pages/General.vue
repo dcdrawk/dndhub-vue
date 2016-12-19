@@ -21,7 +21,7 @@
                   <xen-input label="Experience" name="display" class="xen-no-margin xen-color-primary" type="number" :value="character.experience" @input="character.experience = $event; $root.updateCharacter('', 'experience', character.experience);"></xen-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                  <xen-select class="xen-color-primary" label="Race" :options="$root.gameData.races" optionKey="name" :value="character.race" @input="getSubraces($event); $set(character, 'race', $event); $root.updateCharacter('', 'race', character.race);"></xen-select>
+                  <xen-select class="xen-color-primary" label="Race" :options="races" optionKey="name" :value="character.race" @input="getSubraces($event); $set(character, 'race', $event); $root.updateCharacter('', 'race', character.race);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" v-if="subraces.length > 0">
                   <xen-select class="card-last" label="Subrace" :options="subraces" optionKey="name" :value="character.subrace" @input="$set(character, 'subrace', $event); $root.updateCharacter('', 'subrace', character.subrace);"></xen-select>
@@ -78,6 +78,7 @@
               </div>
             </xen-card-content>
             <xen-divider></xen-divider>
+            <!--{{ classFeatures }}-->
             <xen-list v-if="classFeatures.length > 0" :dense="true">
               <xen-list-item v-for="feature in filteredFeats" :text="feature.title" :secondary-text="'Level ' + feature.level" @click.native="selectFeat(feature)"></xen-list-item>
             </xen-list>
@@ -136,6 +137,7 @@
 
 <script>
   import _ from 'lodash'
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -175,11 +177,18 @@
       XenTextarea
     },
 
+    // Created
+    created () {
+      this.fetchData()
+    },
+
     // Data
     data () {
       return {
         archetypes: [],
-        // character: this.$root.selectedCharacter || undefined,
+        races: undefined,
+        classes: undefined,
+        gameClassFeatures: undefined,
         classFeatures: [],
         classInfo: undefined,
         direction: 'Descending',
@@ -197,22 +206,14 @@
     // Mounted
     mounted () {
       this.$bus.$on('character-selected', character => {
+        console.log(this)
+        console.log('char selected...')
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         this.getClassFeatures()
         this.loaded = true
-      //   this.loaded = false
-      //   // console.log('character selected!')
-      //   // this.character = Object.assign({}, character)
-      //   this.$set(this, 'character', character)
-      //   // console.log(this.character)
-      //   this.getSubraces(this.character.race)
-      //   this.getArchetypes(this.character.class)
-      //   if (this.$root.gameData) {
-      //     this.getClassFeatures()
-      //     this.loaded = true
-      //   }
       })
+
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
           this.getSubraces(this.character.race)
@@ -222,7 +223,7 @@
         }
       })
 
-      if (this.character && this.$root.gameData) {
+      if (this.character) {
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         this.getClassFeatures()
@@ -232,14 +233,35 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        // Races
+        DataService.get('races').then((races) => {
+          console.log(races)
+          this.races = races
+        })
+
+        // Classes
+        DataService.get('classes').then((classes) => {
+          console.log(classes)
+          this.classes = classes
+          this.getClassFeatures()
+        })
+
+        // Class Features
+        DataService.get('classFeatures').then((classFeatures) => {
+          console.log(classFeatures)
+          this.gameClassFeatures = classFeatures
+        })
+      },
+
       // Get the list of subraces from a race
       getSubraces (raceName) {
-        console.log('get subraces')
-        if (this.$root.gameData.races) {
+        if (this.races) {
           if (raceName !== this.character.race && this.loaded) {
             this.$set(this.character, 'subrace', undefined)
           }
-          this.$root.gameData.races.forEach((race, index) => {
+          this.races.forEach((race, index) => {
             if (race.name === raceName) {
               this.subraces = race.subraces
               return
@@ -250,12 +272,11 @@
 
       // Get the list of class archetypes
       getArchetypes (className) {
-        console.log(className)
-        if (this.$root.gameData.classes) {
+        if (this.classes) {
           if (className !== this.character.class) {
             this.$set(this.character, 'archetype', undefined)
           }
-          this.$root.gameData.classes.forEach((classObj, index) => {
+          this.classes.forEach((classObj, index) => {
             if (classObj.name === className) {
               this.classInfo = classObj
               this.archetypes = classObj.specializations
@@ -267,10 +288,16 @@
 
       // Get the list of class features
       getClassFeatures () {
-        if (this.$root.gameData.classFeatures) {
+        if (this.gameClassFeatures) {
+          console.log('class feautes>!@>!"@!@>!')
+          console.log(this.gameClassFeatures)
           this.classFeatures = []
-          this.$root.gameData.classFeatures.forEach((feature) => {
-            if (feature.class === this.character.class && feature.archetype === 'None' || feature.class === this.character.class && feature.archetype === this.character.archetype) {
+          this.gameClassFeatures.forEach((feature) => {
+            if (feature.class === this.character.class &&
+            feature.archetype === 'None' ||
+            feature.class === this.character.class &&
+            feature.archetype === this.character.archetype) {
+              console.log('class feautes>!@>!"@!@>!')
               this.classFeatures = this.classFeatures.concat(feature.abilities)
             }
           })

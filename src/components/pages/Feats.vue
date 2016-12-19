@@ -143,6 +143,7 @@
       }
     },
 
+    // Created
     created () {
       this.fetchData()
     },
