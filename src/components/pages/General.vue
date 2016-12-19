@@ -39,7 +39,7 @@
             <xen-card-content>
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <xen-select class="xen-color-primary" label="Class" :options="$root.gameData.classes" optionKey="name" :value="character.class" @input="$set(character, 'class', $event); getArchetypes(character.class); getClassFeatures(); $root.updateCharacter('', 'class', character.class);"></xen-select>
+                  <xen-select class="xen-color-primary" label="Class" :options="classes" optionKey="name" :value="character.class" @input="$set(character, 'class', $event); getArchetypes(character.class); getClassFeatures(); $root.updateCharacter('', 'class', character.class);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" v-if="archetypes.length > 0">
                   <xen-select class="xen-color-primary" label="Archetype" :options="archetypes" optionKey="title" :value="character.archetype" @input="$set(character, 'archetype', $event); getClassFeatures(); $root.updateCharacter('', 'archetype', character.archetype);"></xen-select>
@@ -106,10 +106,10 @@
             <xen-card-content>
               <div class="row xen-color-primary">
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 xen-no-margin">
-                  <xen-select label="Alignment" :options="$root.gameData.alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event); $root.updateCharacter('', 'alignment', character.alignment);"></xen-select>
+                  <xen-select label="Alignment" :options="alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event); $root.updateCharacter('', 'alignment', character.alignment);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                  <xen-select label="Background" :options="$root.gameData.backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event); $root.updateCharacter('', 'background', character.background);"></xen-select>
+                  <xen-select label="Background" :options="backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event); $root.updateCharacter('', 'background', character.background);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-md-12 col-lg-12">
                   <xen-textarea label="Personality Traits" class="xen-color-primary" type="text" :value="character.personalityTraits" @input="$set(character, 'personalityTraits', $event); $root.updateCharacter('', 'personalityTraits', character.personalityTraits);"></xen-textarea>
@@ -186,8 +186,10 @@
     data () {
       return {
         archetypes: [],
-        races: undefined,
-        classes: undefined,
+        races: [],
+        classes: [],
+        alignments: [],
+        backgrounds: [],
         gameClassFeatures: undefined,
         classFeatures: [],
         classInfo: undefined,
@@ -222,8 +224,10 @@
           this.loaded = true
         }
       })
-
+      console.log('mounted general')
       if (this.character) {
+        console.log('there is a charcter')
+        console.log(this.character)
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         this.getClassFeatures()
@@ -237,21 +241,34 @@
       fetchData () {
         // Races
         DataService.get('races').then((races) => {
-          console.log(races)
           this.races = races
+          if (this.character) {
+            this.getSubraces(this.character.race)
+          }
         })
 
         // Classes
         DataService.get('classes').then((classes) => {
-          console.log(classes)
           this.classes = classes
-          this.getClassFeatures()
+          if (this.character) {
+            this.getArchetypes(this.character.class)
+            this.getClassFeatures()
+          }
         })
 
         // Class Features
         DataService.get('classFeatures').then((classFeatures) => {
-          console.log(classFeatures)
           this.gameClassFeatures = classFeatures
+        })
+
+        // Alignments
+        DataService.get('alignments').then((alignments) => {
+          this.alignments = alignments
+        })
+
+        // Backgrounds
+        DataService.get('backgrounds').then((backgrounds) => {
+          this.backgrounds = backgrounds
         })
       },
 

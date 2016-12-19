@@ -30,11 +30,8 @@
                       <div class="caption">{{ spell.level }} {{ spell.school }}</div>
                       <div class="caption secondary-text">{{ spell.class }}</div>
                     </td>
-                    <!--<td class="text-right xen-last-col delete-col">
+                    <td class="text-right xen-last-col delete-col">
                       <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeSpell(spell, index)"></xen-icon-button>
-                    </td>-->
-                    <td class="text-right xen-last-col delete-col checkbox-col">
-                      <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
                     </td>
                   </tr>
                   <tr v-if="filteredSpells.length === 0">
