@@ -124,6 +124,7 @@
 
 <script>
   import _ from 'lodash'
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -159,9 +160,15 @@
       XenToast
     },
 
+    // Created
+    created () {
+      this.fetchData()
+    },
+
     // Data
     data () {
       return {
+        armor: [],
         disableInput: false,
         filter: '',
         loaded: false,
@@ -200,9 +207,17 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        // Armor
+        DataService.get('armor').then((armor) => {
+          this.armor = armor
+        })
+      },
+
       // check if character and game data are loaded
       checkLoaded () {
-        if (this.character && this.$root.gameData) {
+        if (this.character) {
           return true
         }
       },
@@ -254,7 +269,7 @@
 
       // Filter the list of in-game armor
       gameArmor: function () {
-        return this.$root.gameData.armor.filter((row) => {
+        return this.armor.filter((row) => {
           return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
         })
       }

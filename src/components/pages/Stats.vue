@@ -63,7 +63,6 @@
       <div slot="Ability Scores">
         <section class="page-tab-content">
           <div class="xen-data-table striped" v-if="loaded && character">
-             <!--{{ character.abilityScores }}-->
             <table>
               <thead>
                 <tr>
@@ -89,10 +88,8 @@
                     @input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>
                   </td>
                   <td class="text-center" v-if="character.abilityScores[score.name]">
-                    <!-- <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
-                     @input="character.abilityScores[score.name].bonus = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input> -->
-                     <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
-                     @input="$set(character.abilityScores[score.name], 'bonus', $event); $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
+                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
+                    @input="$set(character.abilityScores[score.name], 'bonus', $event); $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
                   <td class="text-center">
                     <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(+character.abilityScores[score.name].base, +character.abilityScores[score.name].bonus)"></xen-input>
                   </td>
@@ -316,14 +313,12 @@
       fetchData () {
         // Skills
         DataService.get('skills').then((skills) => {
-          console.log(skills)
           this.gameSkills = skills
         })
       },
 
       // Set the ability scores
       setAbilityScores () {
-        // console.log(this.character)
         this.$set(this.character, 'abilityScores', {
           Strength: {
             base: 0,

@@ -134,7 +134,7 @@
     // Data
     data () {
       return {
-        feats: undefined,
+        feats: [],
         loaded: false,
         selectedFeat: undefined,
         showFeat: false,

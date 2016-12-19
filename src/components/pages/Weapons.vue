@@ -129,6 +129,7 @@
 
 <script>
   import _ from 'lodash'
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -174,9 +175,15 @@
       XenToast
     },
 
+    // Created
+    created () {
+      this.fetchData()
+    },
+
     // Data
     data () {
       return {
+        weapons: [],
         disableInput: false,
         filter: '',
         loaded: false,
@@ -217,6 +224,14 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        // Skills
+        DataService.get('weapons').then((weapons) => {
+          this.weapons = weapons
+        })
+      },
+
       // Check if character and gme data have loaded
       checkLoaded () {
         if (this.character && this.$root.gameData) {
@@ -268,7 +283,7 @@
         return _.orderBy(this.character.weapons, 'name')
       },
       gameWeapons: function () {
-        return this.$root.gameData.weapons.filter((row) => {
+        return this.weapons.filter((row) => {
           return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
         })
       }

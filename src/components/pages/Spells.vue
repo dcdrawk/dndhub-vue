@@ -19,7 +19,7 @@
                     <th class="text-left">
                       Name
                     </th>
-                    <th class="icon-col xen-last-col">
+                    <th class="checkbox-col xen-last-col">
                     </th>
                   </tr>
                 </thead>
@@ -30,8 +30,11 @@
                       <div class="caption">{{ spell.level }} {{ spell.school }}</div>
                       <div class="caption secondary-text">{{ spell.class }}</div>
                     </td>
-                    <td class="text-right icon-col xen-last-col">
-                      <xen-icon-button class="table-button" icon="delete" @click.native="removeSpell(spell, index)"></xen-icon-button>
+                    <!--<td class="text-right xen-last-col delete-col">
+                      <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeSpell(spell, index)"></xen-icon-button>
+                    </td>-->
+                    <td class="text-right xen-last-col delete-col checkbox-col">
+                      <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeArmor(armor, index)"></xen-icon-button>
                     </td>
                   </tr>
                   <tr v-if="filteredSpells.length === 0">
@@ -145,6 +148,7 @@
 
 <script>
   import _ from 'lodash'
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -182,9 +186,15 @@
       XenToast
     },
 
+    // Created
+    created () {
+      this.fetchData()
+    },
+
     // Data
     data () {
       return {
+        spells: [],
         classFilter: 'All',
         disableInput: false,
         filter: '',
@@ -228,9 +238,9 @@
     mounted () {
       this.$bus.$on('character-selected', character => {
         // this.character = Object.assign({}, character)
-        if (this.$root.gameData) {
-          this.loaded = true
-        }
+        // if (this.$root.gameData) {
+        this.loaded = true
+        // }
       })
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
@@ -245,6 +255,14 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        // Spells
+        DataService.get('spells').then((spells) => {
+          this.spells = spells
+        })
+      },
+
       // Remove a spell
       removeSpell (spell, index) {
         let array = _.orderBy(this.character.spells, 'name')
@@ -294,7 +312,7 @@
         return _.orderBy(this.character.spells, 'name')
       },
       gameSpells: function () {
-        let array = this.$root.gameData.spells.filter((row) => {
+        let array = this.spells.filter((row) => {
           return this.filter !== '' ? row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0 : row
         }).filter((row) => {
           return this.levelFilter !== 'All' ? row.level.toLowerCase().indexOf(this.levelFilter.toLowerCase()) >= 0 : row
