@@ -7,7 +7,7 @@
       <div slot="Character">
         <!-- Character Info -->
         <section class="page-tab-content">
-          <xen-card class="margin-bottom" v-if="loaded">
+          <xen-card class="margin-bottom" v-if="character">
             <!-- {{ character }} -->
             <xen-card-content>
               <div class="row xen-color-primary">
@@ -179,7 +179,7 @@
     data () {
       return {
         archetypes: [],
-        character: this.$root.selectedCharacter || undefined,
+        // character: this.$root.selectedCharacter || undefined,
         classFeatures: [],
         classInfo: undefined,
         direction: 'Descending',
@@ -197,17 +197,21 @@
     // Mounted
     mounted () {
       this.$bus.$on('character-selected', character => {
-        this.loaded = false
-        // console.log('character selected!')
-        // this.character = Object.assign({}, character)
-        this.$set(this, 'character', character)
-        // console.log(this.character)
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
-        if (this.$root.gameData) {
-          this.getClassFeatures()
-          this.loaded = true
-        }
+        this.getClassFeatures()
+        this.loaded = true
+      //   this.loaded = false
+      //   // console.log('character selected!')
+      //   // this.character = Object.assign({}, character)
+      //   this.$set(this, 'character', character)
+      //   // console.log(this.character)
+      //   this.getSubraces(this.character.race)
+      //   this.getArchetypes(this.character.class)
+      //   if (this.$root.gameData) {
+      //     this.getClassFeatures()
+      //     this.loaded = true
+      //   }
       })
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
@@ -284,6 +288,10 @@
 
     // Computed
     computed: {
+      character: function () {
+        return this.$store.state.character
+      },
+
       featDirection: function () {
         return this.direction === 'Descending' ? 1 : -1
       },
@@ -305,7 +313,9 @@
           })
         }
 
-        let orderedArray = this.direction === 'Descending' ? _.orderBy(this.classFeatures, this.featOrder.toLowerCase()) : _.orderBy(this.classFeatures, this.featOrder.toLowerCase()).reverse()
+        let orderedArray = this.direction === 'Descending'
+        ? _.orderBy(this.classFeatures, this.featOrder.toLowerCase())
+        : _.orderBy(this.classFeatures, this.featOrder.toLowerCase()).reverse()
         return orderedArray.slice((this.page - 1) * this.limit, this.limit * this.page)
       }
     }

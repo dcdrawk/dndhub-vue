@@ -13,6 +13,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "debounce": "^1.0.0",
     "firebase": "^3.6.0",
     "gsap": "^1.19.0",

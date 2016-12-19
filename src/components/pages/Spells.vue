@@ -185,7 +185,6 @@
     // Data
     data () {
       return {
-        character: this.$root.selectedCharacter || undefined,
         classFilter: 'All',
         disableInput: false,
         filter: '',
@@ -228,7 +227,7 @@
     // Mounted
     mounted () {
       this.$bus.$on('character-selected', character => {
-        this.character = Object.assign({}, character)
+        // this.character = Object.assign({}, character)
         if (this.$root.gameData) {
           this.loaded = true
         }
@@ -288,6 +287,9 @@
 
     // Computed
     computed: {
+      character: function () {
+        return this.$store.state.character
+      },
       filteredSpells: function () {
         return _.orderBy(this.character.spells, 'name')
       },

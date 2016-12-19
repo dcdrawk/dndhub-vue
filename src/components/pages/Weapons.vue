@@ -177,7 +177,6 @@
     // Data
     data () {
       return {
-        character: this.$root.selectedCharacter || undefined,
         disableInput: false,
         filter: '',
         loaded: false,
@@ -262,6 +261,9 @@
 
     // Computed
     computed: {
+      character: function () {
+        return this.$store.state.character
+      },
       filteredWeapons: function () {
         return _.orderBy(this.character.weapons, 'name')
       },

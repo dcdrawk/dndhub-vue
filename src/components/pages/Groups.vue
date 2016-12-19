@@ -62,7 +62,7 @@
       <form class="row">
         <div class="col-xs-12">
           <xen-input label="Group Name" name="Group Name" class="xen-color-primary group-name" rules="required" :value="newGroup.name" @input="$set(newGroup, 'name', $event)"></xen-input>
-          <span class="group-privacy"><xen-checkbox class="xen-color-blue" :value="newGroup.private" @input="newGroup.private = $event"></xen-checkbox>Private {{ newGroup.private }}</span>
+          <span class="group-privacy"><xen-checkbox class="xen-color-blue" :value="newGroup.private" @input="newGroup.private = $event"></xen-checkbox>Private</span>
         </div>
         <div class="col-xs-12" v-if="newGroup.private">
           <xen-input ref="password" label="Password" name="password" type="password" class="xen-color-primary" rules="required" :value="newGroup.password" @input="newGroup.password = $event"></xen-input>
@@ -160,8 +160,8 @@
 
     data () {
       return {
-        user: this.$root.user || undefined,
-        character: this.$root.selectedCharacter || undefined,
+        // user: this.$root.user || undefined,
+        // character: this.$root.selectedCharacter || undefined,
         loaded: false,
         groups: [],
         characterGroups: [],
@@ -185,8 +185,8 @@
     mounted () {
       console.log(this)
       this.$bus.$on('errors-changed', (newErrors, oldErrors) => {
-        console.log('newErrors')
-        console.log(newErrors)
+        // console.log('newErrors')
+        // console.log(newErrors)
         newErrors.forEach(error => {
           if (!this.errors.has(error.field)) {
             this.errors.add(error.field, error.msg)
@@ -198,8 +198,8 @@
           })
         }
       })
-      this.$bus.$on('character-selected', character => {
-        this.character = Object.assign({}, character)
+      this.$bus.$on('character-selected', () => {
+        // this.character = Object.assign({}, character)
         if (this.$root.gameData) {
           this.getCharacterGroups()
           this.loaded = true
@@ -236,7 +236,7 @@
               }
               this.newGroup.members.push({
                 userId: this.$firebase.auth().currentUser.uid,
-                characterId: this.$root.characterId
+                characterId: this.character.id
               })
               // Set the owner to the currently logged in user
               this.newGroup.owner = this.$firebase.auth().currentUser.uid
@@ -255,7 +255,8 @@
       },
 
       getCharacterGroups () {
-        let charGroupsRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + this.$root.characterId + '/groups')
+        console.log('get the character groups...')
+        let charGroupsRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + this.character.id + '/groups')
         charGroupsRef.on('value', (snapshot) => {
           this.characterGroups = snapshot.val()
         })
@@ -279,7 +280,7 @@
           if (this.selectedGroup.private && !this.joinPassword) {
             this.errorMsg = 'A password is required'
             return
-          } else if (this.selectedGroup.password !== this.joinPassword) {
+          } else if (this.selectedGroup.private && this.selectedGroup.password !== this.joinPassword) {
             this.errorMsg = 'The passsword is incorrect'
             return
           }
@@ -321,7 +322,12 @@
 
     // Computed
     computed: {
-
+      user () {
+        return this.$store.state.user
+      },
+      character () {
+        return this.$store.state.character
+      }
     }
   }
 </script>

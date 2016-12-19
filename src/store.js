@@ -7,18 +7,21 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     user: window.localStorage.getItem('user') ? window.JSON.parse(window.localStorage.getItem('user')) : undefined,
-    character: window.localStorage.getItem('character') ? window.JSON.parse(window.localStorage.getItem('character')) : undefined
-    // characterList: window.localStorage.getItem('character') ? window.JSON.parse(window.localStorage.getItem('character')) : undefined,
+    character: window.localStorage.getItem('character') ? window.JSON.parse(window.localStorage.getItem('character')) : undefined,
+    characterList: undefined
   },
   mutations: {
-    user_login (state, user) {
+    login (state, user) {
       state.user = user
     },
-    user_logout (state) {
+    logout (state) {
       state.user = undefined
     },
     update_character (state, character) {
       state.character = character
+    },
+    update_character_list (state, characterList) {
+      state.characterList = characterList
     }
   }
 })

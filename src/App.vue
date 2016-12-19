@@ -8,7 +8,9 @@
         </div>
         <p class="dndhub-email"><strong>{{ user.email }}</strong></p>
         <!-- {{ characters }} -->
-        <xen-select v-if="characters" class="character-select xen-color-primary" placeholder="Select a Character" :options="characters" :value="characterName" optionKey="name" @input="selectCharacter($event)"></xen-select>
+        <xen-select v-if="characters" class="character-select xen-color-primary"
+        placeholder="Select a Character" :options="characters" :value="character ? character.name : undefined"
+        optionKey="name" @input="selectCharacter($event)"></xen-select>
       </section>
       <section class="xen-nav">
         <xen-list :dense="true">
@@ -31,7 +33,7 @@
 
         <xen-divider></xen-divider>
 
-        <xen-list :dense="true" v-if="user && selectedCharacter">
+        <xen-list :dense="true" v-if="user && character">
           <router-link to="/general">
             <xen-list-item text="General" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
@@ -54,13 +56,10 @@
 
         <xen-divider></xen-divider>
 
-        <xen-list :dense="true" v-if="user && selectedCharacter">
+        <xen-list :dense="true" v-if="user && character">
           <router-link to="/groups">
             <xen-list-item text="Groups" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
-          <div v-if="selectedCharacter">
-          <!-- <p v-if="selectedCharacter.groups" v-for="group in selectedCharacter.groups">TEST</p> -->
-          </div>
         </xen-list>
 
       </section>
@@ -103,7 +102,7 @@
       return {
         sidebarOpen: false,
         user: undefined,
-        characters: [],
+        // characters: [],
         gameData: {},
         characterName: undefined,
         characterId: undefined,
@@ -136,24 +135,21 @@
           id: group.id,
           name: group.name
         }
-        if (this.selectedCharacter.groups) {
-          this.selectedCharacter.groups.push(newGroup)
+        if (this.character.groups) {
+          this.character.groups.push(newGroup)
         } else {
-          this.$set(this.selectedCharacter, 'groups', [])
-          this.selectedCharacter.groups.push(newGroup)
+          this.$set(this.character, 'groups', [])
+          this.character.groups.push(newGroup)
         }
-        console.log(this.selectedCharacter)
-        this.updateCharacter('', 'groups', this.selectedCharacter.groups)
+        console.log(this.character)
+        this.updateCharacter('', 'groups', this.character.groups)
       })
 
       // Firebase
       Firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          this.$store.commit('user_login', user)
-          // this.user = user
+          this.$store.commit('login', user)
           console.log('a user has signed in', user)
-          // this.$bus.$emit('user-signin', user)
-          // User is signed in.
           this.getCharacters()
 
           if (window.localStorage.getItem('game-data')) {
@@ -183,8 +179,9 @@
       getCharacters () {
         let userId = this.$firebase.auth().currentUser.uid
         return this.$firebase.database().ref('/characters/' + userId).once('value').then((snapshot) => {
-          this.characters = snapshot.val()
-          this.$bus.$emit('characters-loaded', this.characters)
+          let characters = snapshot.val()
+          this.$store.commit('update_character_list', characters)
+          // this.$bus.$emit('characters-loaded', this.characters)
           // If there is a character in local storage, select it
           this.$nextTick(() => {
             if (window.localStorage.getItem('selected-character')) {
@@ -221,16 +218,21 @@
       selectCharacter (characterName) {
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
-            this.selectedCharacter = this.characters[i]
-            this.characterId = i
-            this.$bus.$emit('character-selected', this.selectedCharacter)
-            console.log('character selected...')
+            // let selectedCharacter = this.characters[i]
+            // selectedCharacter.id = i
+            // this.$store.commit('update_character', selectedCharacter)
+            // this.$bus.$emit('character-selected', this.selectedCharacter)
+            // console.log('character selected...')
+
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
-              this.selectedCharacter = snapshot.val()
-              console.log(this.selectedCharacter)
-              window.localStorage.setItem('selected-character', this.selectedCharacter.name)
-              this.characterName = this.selectedCharacter.name
+              let selectedCharacter = snapshot.val()
+              selectedCharacter.id = i
+              this.$store.commit('update_character', selectedCharacter)
+              console.log(selectedCharacter)
+              window.localStorage.setItem('selected-character', selectedCharacter.name)
+              this.$bus.$emit('character-selected')
+              // this.characterName = this.selectedCharacter.name
             })
           }
         }
@@ -239,9 +241,10 @@
       signOut () {
         this.$firebase.auth().signOut().then(() => {
           // Sign-out successful.
-          this.selectedCharacter = undefined
-          this.characterName = undefined
-          this.user = undefined
+          // this.selectedCharacter = undefined
+          // this.characterName = undefined
+          // this.user = undefined
+          this.$store.commit('logout')
           window.localStorage.removeItem('selected-character')
         }, (error) => {
           console.error(error)
@@ -265,7 +268,7 @@
         let update = {}
         value = value || ''
         update[prop] = value
-        this.$firebase.database().ref('/characters/' + userId + '/' + this.characterId + '/' + path).update(update)
+        this.$firebase.database().ref('/characters/' + userId + '/' + this.character.id + '/' + path).update(update)
       }
     },
 
@@ -273,6 +276,12 @@
     computed: {
       user () {
         return this.$store.state.user
+      },
+      characters () {
+        return this.$store.state.characterList
+      },
+      character () {
+        return this.$store.state.character
       }
     }
   }

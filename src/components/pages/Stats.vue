@@ -63,7 +63,7 @@
       <div slot="Ability Scores">
         <section class="page-tab-content">
           <div class="xen-data-table striped" v-if="loaded && character">
-            <!-- {{ character.abilityScores }} -->
+             <!--{{ character.abilityScores }}-->
             <table>
               <thead>
                 <tr>
@@ -221,7 +221,6 @@
     // Data
     data () {
       return {
-        character: this.$root.selectedCharacter || undefined,
         loaded: false,
         abilityScores: [{
           name: 'Strength'
@@ -279,8 +278,8 @@
     // Mounted
     mounted () {
       // When a character is selected
-      this.$bus.$on('character-selected', character => {
-        this.character = Object.assign({}, character)
+      this.$bus.$on('character-selected', () => {
+        // this.character = Object.assign({}, character)
         if (this.$root.gameData) {
           this.checkAbilityScores()
           this.checkSkills()
@@ -378,6 +377,13 @@
           }
         })
         this.$set(this.character.skills, this.character.skills)
+      }
+    },
+
+    // Computed
+    computed: {
+      character: function () {
+        return this.$store.state.character
       }
     }
   }

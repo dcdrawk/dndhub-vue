@@ -162,7 +162,6 @@
     // Data
     data () {
       return {
-        character: this.$root.selectedCharacter || undefined,
         disableInput: false,
         filter: '',
         loaded: false,
@@ -245,6 +244,9 @@
 
     // Computed
     computed: {
+      character: function () {
+        return this.$store.state.character
+      },
       // Order the armor alphabetically
       filteredArmor: function () {
         return _.orderBy(this.character.armor, 'name')

@@ -8,12 +8,12 @@
         <section class="page-tab-content">
 
           <!-- Loading Spinner -->
-          <xen-card class="margin-bottom" v-if="!loaded">
+          <xen-card class="margin-bottom" v-if="!character">
             <xen-card-content>
               <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
             </xen-card-content>
           </xen-card>
-          <div class="xen-data-table bordered hover" v-if="loaded">
+          <div class="xen-data-table bordered hover" v-if="character">
             <table>
               <thead>
                 <tr>
@@ -44,7 +44,7 @@
       <!-- Browse Feats Tab -->
       <div slot="Browse All">
         <section class="page-tab-content">
-          <div class="xen-data-table bordered hover" v-if="loaded">
+          <div class="xen-data-table bordered hover" v-if="character">
             <table>
               <thead class="hidden">
                 <tr>
@@ -95,6 +95,7 @@
 
 <script>
   import _ from 'lodash'
+  import DataService from '../services/DataService'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardContent from '../xen/CardContent'
@@ -133,8 +134,7 @@
     // Data
     data () {
       return {
-        character: this.$root.selectedCharacter || undefined,
-        feats: this.$root.gameData.feats || undefined,
+        feats: undefined,
         loaded: false,
         selectedFeat: undefined,
         showFeat: false,
@@ -143,16 +143,12 @@
       }
     },
 
+    created () {
+      this.fetchData()
+    },
+
     // Mounted
     mounted () {
-      // When a character is selected
-      this.$bus.$on('character-selected', character => {
-        this.loaded = false
-        this.character = Object.assign({}, character)
-        this.checkFeats()
-        this.loaded = true
-      })
-
       // When the game data has loaded
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
@@ -162,7 +158,7 @@
       })
 
       // Run this on mount
-      if (this.character && this.$root.gameData) {
+      if (this.character && this.feats) {
         this.checkFeats()
         this.loaded = true
       }
@@ -170,25 +166,31 @@
 
     // Methods
     methods: {
+      // Fetch data
+      fetchData () {
+        DataService.get('feats').then((feats) => {
+          console.log(feats)
+          this.feats = feats
+        })
+      },
+
       // Check the character for the feats attribute
       checkFeats () {
         if (!this.character.feats) {
           this.$set(this.character, 'feats', [])
         }
-        if (!this.feats && this.$root.gameData.feats) {
-          this.$set(this, 'feats', this.$root.gameData.feats)
-        }
       },
 
       // Remove a feat
       removeFeat (feat, index) {
-        this.character.feats = _.orderBy(this.character.feats, 'name').splice(index, 1)
+        this.character.feats = _.orderBy(this.character.feats, 'name')
         this.character.feats.splice(index, 1)
         this.$root.updateCharacter('', 'feats', this.character.feats)
       },
 
       // Select a feat
       selectFeat (feat) {
+        this.checkFeats()
         this.selectedFeat = feat
         this.$nextTick(() => {
           this.showFeat = true
@@ -207,27 +209,12 @@
 
       // Add a feat to character
       addFeat (feat) {
+        this.checkFeats()
         this.character.feats.push(feat)
         this.showToast = true
         this.toastMsg = feat.name + ' added'
         this.$root.updateCharacter('', 'feats', this.character.feats)
       }
-
-      // Toggle a feat on / off
-      // toggleFeat (event, feat) {
-      //   if (!this.searchFeats(feat)) {
-      //     if (event) {
-      //       this.character.feats.push(feat)
-      //     } else {
-      //       this.character.feats.forEach((charFeat, index) => {
-      //         if (charFeat.name === feat.name) {
-      //           this.character.feats.splice(index, 1)
-      //         }
-      //       })
-      //     }
-      //     this.$root.updateCharacter('', 'feats', this.character.feats)
-      //   }
-      // }
     },
 
     // Computed
@@ -238,9 +225,13 @@
       },
 
       gameFeats: function () {
-        return this.$root.gameData.feats.filter((row) => {
+        return this.feats.filter((row) => {
           return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
         })
+      },
+
+      character: function () {
+        return this.$store.state.character
       }
     }
   }
