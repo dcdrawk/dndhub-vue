@@ -208,8 +208,6 @@
     // Mounted
     mounted () {
       this.$bus.$on('character-selected', character => {
-        console.log(this)
-        console.log('char selected...')
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         this.getClassFeatures()
@@ -224,10 +222,7 @@
           this.loaded = true
         }
       })
-      console.log('mounted general')
       if (this.character) {
-        console.log('there is a charcter')
-        console.log(this.character)
         this.getSubraces(this.character.race)
         this.getArchetypes(this.character.class)
         this.getClassFeatures()
@@ -306,15 +301,12 @@
       // Get the list of class features
       getClassFeatures () {
         if (this.gameClassFeatures) {
-          console.log('class feautes>!@>!"@!@>!')
-          console.log(this.gameClassFeatures)
           this.classFeatures = []
           this.gameClassFeatures.forEach((feature) => {
             if (feature.class === this.character.class &&
             feature.archetype === 'None' ||
             feature.class === this.character.class &&
             feature.archetype === this.character.archetype) {
-              console.log('class feautes>!@>!"@!@>!')
               this.classFeatures = this.classFeatures.concat(feature.abilities)
             }
           })

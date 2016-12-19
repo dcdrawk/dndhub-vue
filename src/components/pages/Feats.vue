@@ -170,7 +170,6 @@
       // Fetch data
       fetchData () {
         DataService.get('feats').then((feats) => {
-          console.log(feats)
           this.feats = feats
         })
       },

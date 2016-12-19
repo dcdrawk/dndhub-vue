@@ -45,7 +45,7 @@
                   <xen-input :debounce="500" label="Current Hit Points" class="xen-color-primary" type="number" :value="character.currentHP" @input="character.currentHP = $event; $root.updateCharacter('', 'currentHP', character.currentHP);"></xen-input>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-6">
-                  <xen-input :disabled="true" label="Total Hit Points" class="xen-color-primary" type="number" :value="character.maxHP + character.tempHP" @input="character.totalHP = $event; $root.updateCharacter('', 'totalHP', character.totalHP);"></xen-input>
+                  <xen-input :disabled="true" label="Total Hit Points" class="xen-color-primary" type="number" :value="character.maxHP + character.tempHP"></xen-input>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-6">
                   <xen-input label="Max Hit Points" class="xen-color-primary card-last" type="number" :value="character.maxHP" @input="character.maxHP = $event; $root.updateCharacter('', 'maxHP', character.maxHP);"></xen-input>
@@ -370,7 +370,7 @@
 
       // Check the character for the skills attribute
       checkSkills () {
-        console.log(this.character.skills)
+        // console.log(this.character.skills)
         if (!this.character.skills) {
           this.$set(this.character, 'skills', {})
         }

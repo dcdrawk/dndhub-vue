@@ -52,6 +52,9 @@
           <router-link to="/spells">
             <xen-list-item text="Spells" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
           </router-link>
+          <router-link to="/inventory">
+            <xen-list-item text="Inventory" :bold="true" @click.native="toggleSidebar()"></xen-list-item>
+          </router-link>
         </xen-list>
 
         <xen-divider></xen-divider>
@@ -152,18 +155,18 @@
           console.log('a user has signed in', user)
           this.getCharacters()
 
-          if (window.localStorage.getItem('game-data')) {
-            let test = window.JSON.parse(window.localStorage.getItem('game-data'))
-            this.gameData = test
-            this.$set(this.gameData, this.gameData)
-            this.$bus.$emit('data-loaded')
-          } else {
-            this.getGameData().then(() => {
-              console.log('game data loaded...')
-              this.$bus.$emit('data-loaded')
-              window.localStorage.setItem('game-data', window.JSON.stringify(this.gameData))
-            })
-          }
+          // if (window.localStorage.getItem('game-data')) {
+          //   let test = window.JSON.parse(window.localStorage.getItem('game-data'))
+          //   this.gameData = test
+          //   this.$set(this.gameData, this.gameData)
+          //   this.$bus.$emit('data-loaded')
+          // } else {
+          //   this.getGameData().then(() => {
+          //     console.log('game data loaded...')
+          //     this.$bus.$emit('data-loaded')
+          //     window.localStorage.setItem('game-data', window.JSON.stringify(this.gameData))
+          //   })
+          // }
         } else {
           console.log('there is no user signed in')
           // No user is signed in.
@@ -202,18 +205,18 @@
         })
       },
 
-      getGameData () {
-        var promises = this.endpoints.map((endpoint) => {
-          return new Promise((resolve, reject) => {
-            this.$firebase.database().ref('/' + endpoint).once('value').then((snapshot) => {
-              this.gameData[endpoint] = snapshot.val()
-              this.$set(this.gameData, this.gameData)
-              resolve()
-            })
-          })
-        })
-        return Promise.all(promises)
-      },
+      // getGameData () {
+      //   var promises = this.endpoints.map((endpoint) => {
+      //     return new Promise((resolve, reject) => {
+      //       this.$firebase.database().ref('/' + endpoint).once('value').then((snapshot) => {
+      //         this.gameData[endpoint] = snapshot.val()
+      //         this.$set(this.gameData, this.gameData)
+      //         resolve()
+      //       })
+      //     })
+      //   })
+      //   return Promise.all(promises)
+      // },
 
       selectCharacter (characterName) {
         for (let i in this.characters) {

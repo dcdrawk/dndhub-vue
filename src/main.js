@@ -30,6 +30,7 @@ import Feats from './components/pages/Feats'
 import Weapons from './components/pages/Weapons'
 import Armor from './components/pages/Armor'
 import Spells from './components/pages/Spells'
+import Inventory from './components/pages/Inventory'
 import Groups from './components/pages/Groups'
 import Group from './components/pages/Group'
 
@@ -125,6 +126,10 @@ var router = new VueRouter({
     {
       path: '/spells',
       component: Spells
+    },
+    {
+      path: '/inventory',
+      component: Inventory
     },
     {
       path: '/groups',
