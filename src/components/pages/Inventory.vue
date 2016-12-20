@@ -8,9 +8,10 @@
         <section class="page-tab-content">
             <xen-card class="margin-bottom" v-if="!loaded">
               <xen-card-content>
-                <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
+                <xen-loading-spinner class="xen-color-primary xen-no-margin"></xen-loading-spinner>
               </xen-card-content>
             </xen-card>
+            <xen-button :raised="true" class="xen-theme-primary" @click.native="showAddDialog({})">Add Item</xen-button>
             <div class="xen-data-table bordered hover" v-if="loaded">
               <table>
                 <thead>
@@ -65,7 +66,7 @@
               <tbody>
                 <tr v-for="inventory in gameinventory">
                   <td class="xen-first-col icon-col">
-                  <xen-icon-button :raised="true" icon="add" class="xen-theme-blue table-icon-button" @click.native="addinventory(inventory)"></xen-icon-button>
+                    <xen-icon-button :raised="true" icon="add" class="xen-theme-blue table-icon-button" @click.native="showAddDialog(inventory)"></xen-icon-button>
                   </td>
                   <td class="text-left" @click="selectinventory(inventory, true);">
                     {{ inventory.name }}
@@ -85,10 +86,12 @@
     <div v-if="selectedInventory">
       <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedInventory.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
         <div class="row">
-          {{ selectedInventory }}
           <ul class="property-list">
             <li>
               <xen-input label="Name" class="xen-color-primary" :value="selectedInventory.name" :disabled="disableInput" @input="selectedInventory.name = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
+            </li>
+            <li v-if="!disableInput">
+              <xen-input label="Quantity" class="xen-color-primary" :value="selectedInventory.quantity" :disabled="disableInput" @input="selectedInventory.quantity = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
             </li>
             <li>
               <xen-textarea label="Description" class="xen-color-primary" :value="selectedInventory.description" :disabled="disableInput"></xen-input>
@@ -102,10 +105,6 @@
             <li>
               <xen-input label="Currency" class="xen-color-primary" :value="selectedInventory.currency" :disabled="disableInput" @input="selectedInventory.cost = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
             </li>
-            <li>
-              <h2 class="caption secondary-text">Properties</h2>
-              <xen-chips :chips="selectedInventory.properties" :read-only="disableInput"></xen-chips>
-            </li>
           </ul>
         </div>
         <div slot="actions">
@@ -113,6 +112,63 @@
         </div>
       </xen-dialog>
     </div>
+
+    <!-- Add Item -->
+    <xen-dialog :show="newItemDialog"
+    @hide="newItemDialog = false"
+    title="Add Item" :large="true"
+    :fullscreen="true" :primary="true">
+        <div class="row" v-if="newItem">
+          <ul class="property-list">
+            <li>
+              <xen-input label="Name"
+              class="xen-color-primary"
+              :value="newItem.name"
+              @input="newItem.name = $event;"></xen-input>
+            </li>
+            <li>
+              <xen-input label="Quantity"
+              class="xen-color-primary"
+              :value="newItem.quantity"
+              type="number"
+              @input="newItem.quantity = $event;"></xen-input>
+            </li>
+            <li v-if="showMore">
+              <xen-textarea label="Description"
+              class="xen-color-primary"
+              :value="newItem.description"></xen-input>
+            </li>
+            <li v-if="showMore">
+              <xen-input label="Weight"
+              class="xen-color-primary"
+              :value="newItem.weight"
+              @input="newItem.weight = $event;"></xen-input>
+            </li>
+            <li v-if="showMore">
+              <xen-input label="Cost"
+              class="xen-color-primary"
+              :value="newItem.cost"
+              :disabled="disableInput"
+              @input="newItem.cost = $event;"></xen-input>
+            </li>
+            <li v-if="showMore">
+              <xen-input label="Currency"
+              class="xen-color-primary"
+              :value="newItem.currency"
+              @input="selectedInventory.cost = $event;"></xen-input>
+            </li>
+            <div class="text-right">
+              <xen-button v-if="!showMore" @click.native="showMore = true" :raised="true">Show More</xen-button>
+              <xen-button v-else @click.native="showMore = false" :raised="true">Show Less</xen-button>
+              <xen-button @click.native="addinventory(newItem); newItemDialog = false;" :raised="true" class="xen-theme-primary">Add Item</xen-button>
+            </div>
+
+          </ul>
+        </div>
+        <div slot="actions">
+          <xen-button @click.native="newItemDialog = false" class="xen-color-primary">Close</xen-button>
+        </div>
+      </xen-dialog>
     <xen-toast :text="toastMsg" :toggle="showToast" @hide="showToast = false" ></xen-toast>
   </div>
 </template>
@@ -173,7 +229,10 @@
         selectedInventory: undefined,
         showDialog: false,
         showToast: false,
-        toastMsg: ''
+        toastMsg: '',
+        newItemDialog: false,
+        newItem: undefined,
+        showMore: false
       }
     },
 
@@ -227,6 +286,13 @@
         }
       },
 
+      // Show the add item dialog
+      showAddDialog (item) {
+        this.newItemDialog = true
+        this.newItem = Object.assign({}, item)
+        this.newItem.quantity = 1
+      },
+
       // Remove a piece of inventory
       removeinventory (inventory, index) {
         let array = _.orderBy(this.character.inventory, 'name')
@@ -248,6 +314,7 @@
 
       // Add a piece of inventory to a character
       addinventory (inventory) {
+        console.log('add inventory!')
         this.character.inventory.push(inventory)
         this.showToast = true
         this.toastMsg = inventory.name + ' equipped'
