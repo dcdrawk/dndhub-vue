@@ -6,18 +6,18 @@
       <!-- Character Tab -->
       <div slot="Character">
         <!-- Character Info -->
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <xen-card class="margin-bottom" v-if="character">
             <!-- {{ character }} -->
             <xen-card-content>
               <div class="row xen-color-primary">
-                <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-xs-12">
                   <xen-input label="Character Name" name="display" class="xen-no-margin xen-color-primary" :value="character.name" @input="character.name = $event; $root.updateCharacter('', 'name', character.name); $bus.$emit('name-updated', character.name)"></xen-input>
                 </div>
-                <div class="col-lg-3 col-md-3 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-xs-6">
                   <xen-input label="Level" name="display" class="xen-no-margin xen-color-primary" type="number" :value="character.level" @input="character.level = $event; $root.updateCharacter('', 'level', character.level);"></xen-input>
                 </div>
-                <div class="col-lg-3 col-md-3 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-xs-6">
                   <xen-input label="Experience" name="display" class="xen-no-margin xen-color-primary" type="number" :value="character.experience" @input="character.experience = $event; $root.updateCharacter('', 'experience', character.experience);"></xen-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
