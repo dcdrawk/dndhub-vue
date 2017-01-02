@@ -148,6 +148,10 @@
         this.updateCharacter('', 'groups', this.character.groups)
       })
 
+      this.$bus.$on('back', (group) => {
+        window.history.back()
+      })
+
       // Firebase
       Firebase.auth().onAuthStateChanged((user) => {
         if (user) {

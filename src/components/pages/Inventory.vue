@@ -5,7 +5,7 @@
 
       <!-- Equipped inventory Tab -->
       <div slot="Items">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
             <xen-card class="margin-bottom" v-if="!loaded">
               <xen-card-content>
                 <xen-loading-spinner class="xen-color-primary xen-no-margin"></xen-loading-spinner>
@@ -48,7 +48,7 @@
 
       <!-- Browse inventory Tab -->
       <div slot="Browse">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search inventory" @input="filter = $event"></xen-input>
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table>
@@ -84,7 +84,7 @@
 
     <!-- inventory Dialog -->
     <div v-if="selectedInventory">
-      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedInventory.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
+      <xen-dialog :show="showDialog" @hide="showDialog = $event" :title="selectedInventory.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
         <div class="row">
           <ul class="property-list">
             <li>
@@ -108,7 +108,7 @@
           </ul>
         </div>
         <div slot="actions">
-          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+          <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
         </div>
       </xen-dialog>
     </div>

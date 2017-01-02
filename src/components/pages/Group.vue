@@ -76,19 +76,19 @@
     </xen-tabs>
 
     <!-- Delete Group Dialog -->
-    <xen-dialog :show="deleteGroupDialog" @hide="deleteGroupDialog = false" title="Delete Group" :small="true" class="new-group-dialog">
+    <xen-dialog :show="deleteGroupDialog" @hide="deleteGroupDialog = $event" title="Delete Group" :small="true" class="new-group-dialog">
       <p>Are you sure you want to delete this group?</p>
       <div slot="actions">
-        <xen-button @click.native="deleteGroupDialog = false">Cancel</xen-button>
+        <xen-button @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="deleteGroup();">Delete</xen-button>
       </div>
     </xen-dialog>
 
     <!-- Leave Group Dialog -->
-    <xen-dialog :show="leaveGroupDialog" @hide="leaveGroupDialog = false" title="Leave Group" :small="true" class="new-group-dialog">
+    <xen-dialog :show="leaveGroupDialog" @hide="leaveGroupDialog = $event" title="Leave Group" :small="true" class="new-group-dialog">
       <p>Are you sure you want to leave this group?</p>
       <div slot="actions">
-        <xen-button @click.native="leaveGroupDialog = false">Cancel</xen-button>
+        <xen-button @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="leaveGroup();">Leave</xen-button>
       </div>
     </xen-dialog>

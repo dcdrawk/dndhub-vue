@@ -5,7 +5,7 @@
 
       <!-- Known Feats Tab -->
       <div slot="Known">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
 
           <!-- Loading Spinner -->
           <xen-card class="margin-bottom" v-if="!character">
@@ -43,7 +43,7 @@
 
       <!-- Browse Feats Tab -->
       <div slot="Browse All">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <div class="xen-data-table bordered hover" v-if="character">
             <table>
               <thead class="hidden">
@@ -77,12 +77,12 @@
 
     <!-- Feat Dialog -->
     <div v-if="selectedFeat">
-      <xen-dialog :show="showFeat" @hide="showFeat = false" :title="selectedFeat.name" :large="true" :fullscreen="true" :primary="true">
+      <xen-dialog :show="showFeat" @hide="showFeat = $event" :title="selectedFeat.name" :large="true" :fullscreen="true" :primary="true">
         <div class="row">
           <div class="dialog-description" v-html="selectedFeat.description"></div>
         </div>
         <div slot="actions">
-          <xen-button @click.native="showFeat = false" class="xen-color-primary">Close</xen-button>
+          <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
         </div>
       </xen-dialog>
     </div>

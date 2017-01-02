@@ -1,7 +1,7 @@
 <template>
   <div>
     <xen-page-toolbar class="xen-theme-indigo" title="General"></xen-page-toolbar>
-    <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Character">
+    <xen-tabs class="xen-page-tabs" theme="indigo" default-tab="Character" @change="$bus.$emit('autosize')">
 
       <!-- Character Tab -->
       <div slot="Character">
@@ -34,22 +34,58 @@
 
       <!-- Class Tab -->
       <div slot="Class">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <xen-card class="margin-bottom" v-if="character">
+            <xen-card-header>
+              <h2 class="title">Primary Class {{character.archetype}}</h2>
+            </xen-card-header>
             <xen-card-content>
               <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <xen-select class="xen-color-primary" label="Class" :options="classes" optionKey="name" :value="character.class" @input="$set(character, 'class', $event); getArchetypes(character.class); getClassFeatures(); $root.updateCharacter('', 'class', character.class);"></xen-select>
+                <div
+                :class="{'col-xs-12 col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-select
+                  label="Class Name" :options="classes"
+                  class="xen-color-primary"
+                  optionKey="name" :value="character.class"
+                  @input="$set(character, 'class', $event); getArchetypes(character.class);
+                  getClassFeatures(); $root.updateCharacter('', 'class', character.class);">
+                  </xen-select>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" v-if="archetypes.length > 0">
-                  <xen-select class="xen-color-primary" label="Archetype" :options="archetypes" optionKey="title" :value="character.archetype" @input="$set(character, 'archetype', $event); getClassFeatures(); $root.updateCharacter('', 'archetype', character.archetype);"></xen-select>
+                <div
+                v-if="archetypes.length > 0"
+                :class="{'col-xs-12 col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-select
+                  label="Archetype" class="xen-color-primary"
+                  :options="archetypes" optionKey="title"
+                  :value="character.archetype"
+                  @input="$set(character, 'archetype', $event); getClassFeatures();
+                  $root.updateCharacter('', 'archetype', character.archetype);"></xen-select>
+                </div>
+                <div v-if="character.enableSecondaryClass"
+                :class="{'col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-input
+                  label="Class Level"
+                  name="classLevel"
+                  type="number"
+                  class="xen-no-margin xen-color-primary"
+                  :value="character.primaryClassLevel"
+                  @input="$set(character, 'primaryClassLevel', $event);
+                  $root.updateCharacter('', 'primaryClassLevel', character.primaryClassLevel);"></xen-input>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-12" v-if="classInfo">
-                  <xen-input ref="hitdice" label="Hit Dice" name="display" class="xen-no-margin xen-color-primary card-last" :value="classInfo.hitDice" :disabled="true" ></xen-input>
+                  <xen-input
+                    label="Hit Dice"
+                    ref="hitdice" name="display"
+                    class="xen-no-margin xen-color-primary card-last"
+                    :value="classInfo.hitDice" :disabled="true"></xen-input>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12" v-if="classInfo">
+                <div
+                v-if="classInfo"
+                class="col-lg-6 col-md-6 col-xs-12">
                   <div class="">
-                    <xen-checkbox class="xen-color-primary"></xen-checkbox>
+                    <xen-checkbox class="xen-color-primary"
+                    :value="character.enableSecondaryClass"
+                    @input="$set(character, 'enableSecondaryClass', $event); $root.updateCharacter('', 'enableSecondaryClass', character.enableSecondaryClass);"></xen-checkbox>
                     <span class="body-1">Secondary Class</span>
                   </div>
                 </div>
@@ -57,41 +93,82 @@
             </xen-card-content>
           </xen-card>
 
-          <xen-card class="margin-bottom">
+          <xen-card class="margin-bottom" v-if="character && character.enableSecondaryClass">
             <xen-card-header>
-              <h2 class="title">Features</h2>
+              <h2 class="title">Secondary Class</h2>
             </xen-card-header>
             <xen-card-content>
               <div class="row">
-                <div class="col-xs-3">
+                <div
+                :class="{'col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-select
+                  label="Class Name" :options="classes"
+                  class="xen-color-primary"
+                  optionKey="name" :value="character.secondaryClass"
+                  @input="$set(character, 'secondaryClass', $event); $set(character, 'secondaryArchetype', undefined); getSecondaryArchetypes(character.secondaryClass);
+                  getSecondaryClassFeatures(); $root.updateCharacter('', 'secondaryClass', character.secondaryClass); $root.updateCharacter('', 'secondaryArchetype', '');">
+                  </xen-select>
+                </div>
+                <div
+                v-if="archetypes.length > 0"
+                :class="{'col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-select
+                  label="Archetype" class="xen-color-primary"
+                  :options="secondaryArchetypes" optionKey="title"
+                  :value="character.secondaryArchetype"
+                  @input="$set(character, 'secondaryArchetype', $event); getSecondaryClassFeatures();
+                  $root.updateCharacter('', 'secondaryArchetype', character.secondaryArchetype);"></xen-select>
+                </div>
+                <div v-if="character.enableSecondaryClass"
+                :class="{'col-sm-6 col-md-6 col-lg-6': !character.enableSecondaryClass, 'col-xs-12 col-sm-12 col-md-4 col-lg-4': character.enableSecondaryClass}">
+                  <xen-input
+                  label="Class Level"
+                  name="classLevel"
+                  type="number"
+                  class="xen-no-margin xen-color-primary"
+                  :value="character.secondaryClassLevel"
+                  @input="$set(character, 'secondaryClassLevel', $event);
+                  $root.updateCharacter('', 'secondaryClassLevel', character.secondaryClassLevel);"></xen-input>
+                </div>
+                <div class="col-xs-12" v-if="secondaryClassInfo">
+                  <xen-input
+                    label="Hit Dice"
+                    ref="hitdice" name="display"
+                    class="xen-no-margin xen-color-primary card-last"
+                    :value="secondaryClassInfo.hitDice" :disabled="true"></xen-input>
+                </div>
+              </div>
+            </xen-card-content>
+          </xen-card>
+
+          <xen-card class="margin-bottom">
+            <xen-card-header>
+              <h2 class="title">Class Features</h2>
+            </xen-card-header>
+            <xen-card-content>
+              <div class="row">
+                <div class="col-xs-6">
                   <xen-select label="Order By" :options="['Level', 'Title']" :value="featOrder" @input="featOrder = $event;" class="xen-no-margin"></xen-select>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-6">
                   <xen-select label="Direction" :options="['Descending', 'Ascending']" :value="direction" @input="direction = $event;" class="xen-no-margin"></xen-select>
-                </div>
-                <div class="col-xs-3">
-                  <xen-select label="Page" :options="pages" :value="page" @input="page = $event" class="xen-no-margin"></xen-select>
-                </div>
-                <div class="col-xs-3">
-                  <xen-select label="Per Page" :options="[5, 10, 15]" :value="limit" @input="limit = $event" class="xen-no-margin"></xen-select>
                 </div>
               </div>
             </xen-card-content>
             <xen-divider></xen-divider>
-            <!--{{ classFeatures }}-->
-            <xen-list v-if="classFeatures.length > 0" :dense="true">
+            <xen-list v-if="filteredFeats.length > 0" :dense="true">
               <xen-list-item v-for="feature in filteredFeats" :text="feature.title" :secondary-text="'Level ' + feature.level" @click.native="selectFeat(feature)"></xen-list-item>
             </xen-list>
           </xen-card>
 
           <!-- Class Features Dialog -->
           <div v-if="selectedFeat">
-            <xen-dialog :show="showFeat" @hide="showFeat = false" :title="selectedFeat.title" :large="true" :fullscreen="true">
+            <xen-dialog :show="showFeat" @hide="showFeat = $event" :title="selectedFeat.title" :large="true" :fullscreen="true" :primary="true">
               <div class="row">
                 <div v-html="selectedFeat.description"></div>
               </div>
               <div slot="actions">
-                <xen-button @click.native="showFeat = false" class="xen-color-primary">Close</xen-button>
+                <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
               </div>
             </xen-dialog>
           </div>
@@ -101,14 +178,14 @@
 
       <!-- Background Tab -->
       <div slot="Background">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <xen-card class="margin-bottom" v-if="character">
             <xen-card-content>
               <div class="row xen-color-primary">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 xen-no-margin">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 xen-no-margin">
                   <xen-select label="Alignment" :options="alignments" optionKey="name" :value="character.alignment" @input="$set(character, 'alignment', $event); $root.updateCharacter('', 'alignment', character.alignment);"></xen-select>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 xen-no-margin">
                   <xen-select label="Background" :options="backgrounds" optionKey="name" :value="character.background" @input="$set(character, 'background', $event); $root.updateCharacter('', 'background', character.background);"></xen-select>
                 </div>
                 <div class="col-xs-12 col-md-12 col-lg-12">
@@ -186,6 +263,7 @@
     data () {
       return {
         archetypes: [],
+        secondaryArchetypes: [],
         races: [],
         classes: [],
         alignments: [],
@@ -193,6 +271,7 @@
         gameClassFeatures: undefined,
         classFeatures: [],
         classInfo: undefined,
+        secondaryClassInfo: undefined,
         direction: 'Descending',
         featOrder: 'Level',
         filter: undefined,
@@ -208,24 +287,18 @@
     // Mounted
     mounted () {
       this.$bus.$on('character-selected', character => {
-        this.getSubraces(this.character.race)
-        this.getArchetypes(this.character.class)
-        this.getClassFeatures()
+        this.init()
         this.loaded = true
       })
 
       this.$bus.$on('data-loaded', () => {
         if (this.character) {
-          this.getSubraces(this.character.race)
-          this.getArchetypes(this.character.class)
-          this.getClassFeatures()
+          this.init()
           this.loaded = true
         }
       })
       if (this.character) {
-        this.getSubraces(this.character.race)
-        this.getArchetypes(this.character.class)
-        this.getClassFeatures()
+        this.init()
         this.loaded = true
       }
     },
@@ -233,6 +306,17 @@
     // Methods
     methods: {
       // Fetch data
+
+      init () {
+        this.getSubraces(this.character.race)
+        this.getArchetypes(this.character.class)
+        this.getClassFeatures()
+        if (this.character.enableSecondaryClass && this.character.secondaryClass) {
+          this.getSecondaryClassFeatures(this.character.race)
+          this.getSecondaryArchetypes(this.character.secondaryClass)
+        }
+      },
+
       fetchData () {
         // Races
         DataService.get('races').then((races) => {
@@ -254,6 +338,7 @@
         // Class Features
         DataService.get('classFeatures').then((classFeatures) => {
           this.gameClassFeatures = classFeatures
+          this.getClassFeatures()
         })
 
         // Alignments
@@ -298,14 +383,45 @@
         }
       },
 
+      // Get the list of class archetypes
+      getSecondaryArchetypes (className) {
+        if (this.classes) {
+          if (className !== this.character.secondaryClass) {
+            this.$set(this.character, 'secondaryArchetype', undefined)
+          }
+          this.classes.forEach((classObj, index) => {
+            if (classObj.name === className) {
+              this.secondaryClassInfo = classObj
+              this.secondaryArchetypes = classObj.specializations
+              return
+            }
+          })
+        }
+      },
+
       // Get the list of class features
       getClassFeatures () {
-        if (this.gameClassFeatures) {
+        if (this.gameClassFeatures && this.character) {
           this.classFeatures = []
           this.gameClassFeatures.forEach((feature) => {
             if (feature.class === this.character.class &&
             feature.archetype === 'None' ||
             feature.class === this.character.class &&
+            feature.archetype === this.character.archetype) {
+              this.classFeatures = this.classFeatures.concat(feature.abilities)
+            }
+          })
+        }
+      },
+
+      // Get the list of class features
+      getSecondaryClassFeatures () {
+        if (this.gameClassFeatures) {
+          this.classFeatures = []
+          this.gameClassFeatures.forEach((feature) => {
+            if (feature.class === this.character.secondaryClass &&
+            feature.archetype === 'None' ||
+            feature.class === this.character.secondaryClass &&
             feature.archetype === this.character.archetype) {
               this.classFeatures = this.classFeatures.concat(feature.abilities)
             }
@@ -352,7 +468,8 @@
         let orderedArray = this.direction === 'Descending'
         ? _.orderBy(this.classFeatures, this.featOrder.toLowerCase())
         : _.orderBy(this.classFeatures, this.featOrder.toLowerCase()).reverse()
-        return orderedArray.slice((this.page - 1) * this.limit, this.limit * this.page)
+        return orderedArray
+        // return orderedArray.slice((this.page - 1) * this.limit, this.limit * this.page)
       }
     }
   }

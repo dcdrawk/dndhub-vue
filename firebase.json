@@ -1,4 +1,6 @@
 {
+  "firebase": "codex-9bc8c",
+  "public": "./dist",
   "hosting": {
     "public": "dist"
   }

@@ -57,7 +57,7 @@
     </xen-tabs>
 
     <!-- New Group Dialog -->
-    <xen-dialog :show="newGroupDialog" @hide="newGroupDialog = false;" title="Create a New Group" :small="true" class="new-group-dialog">
+    <xen-dialog :show="newGroupDialog" @hide="newGroupDialog = $event;" title="Create a New Group" :small="true" class="new-group-dialog">
       <!-- <p>Are you sure you want to delete this character?</p> -->
       <form class="row">
         <div class="col-xs-12">
@@ -71,13 +71,13 @@
       </form>
       <p v-if="errorMsg" class="xen-color-red">{{ errorMsg }}</p>
       <div slot="actions">
-        <xen-button @click.native="newGroupDialog = false">Cancel</xen-button>
+        <xen-button @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="createGroup();">Create</xen-button>
       </div>
     </xen-dialog>
 
     <!-- Join Group Dialog -->
-    <xen-dialog :show="joinGroupDialog" @hide="joinGroupDialog = false; errorMsg = ''" title="Join Group" :small="true" class="new-group-dialog">
+    <xen-dialog :show="joinGroupDialog" @hide="joinGroupDialog = $event; errorMsg = ''" title="Join Group" :small="true" class="new-group-dialog">
       <p v-if="selectedGroup">Join the group <span class="body-2 xen-color-primary">{{ selectedGroup.name }}</span>?</p>
       <form class="row" v-if="selectedGroup">
         <div class="col-xs-12" v-if="selectedGroup.private">
@@ -86,7 +86,7 @@
       </form>
       <p v-if="errorMsg" class="xen-color-red">{{ errorMsg }}</p>
       <div slot="actions">
-        <xen-button @click.native="joinGroupDialog = false">Cancel</xen-button>
+        <xen-button @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="joinGroup();">Join</xen-button>
       </div>
     </xen-dialog>

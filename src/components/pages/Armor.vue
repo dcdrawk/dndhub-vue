@@ -5,7 +5,7 @@
 
       <!-- Equipped Armor Tab -->
       <div slot="Equipped">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
             <xen-card class="margin-bottom" v-if="!loaded">
               <xen-card-content>
                 <xen-loading-spinner class="xen-color-primary"></xen-loading-spinner>
@@ -47,7 +47,7 @@
 
       <!-- Browse Armor Tab -->
       <div slot="Browse All">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Armor" @input="filter = $event"></xen-input>
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table>
@@ -83,7 +83,7 @@
 
     <!-- Armor Dialog -->
     <div v-if="selectedArmor">
-      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedArmor.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
+      <xen-dialog :show="showDialog" @hide="showDialog = $event" :title="selectedArmor.name || 'undefined'" :large="true" :fullscreen="true" :primary="true">
         <div class="row">
           <ul class="property-list">
             <li>
@@ -111,7 +111,7 @@
           </ul>
         </div>
         <div slot="actions">
-          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+          <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
         </div>
       </xen-dialog>
     </div>

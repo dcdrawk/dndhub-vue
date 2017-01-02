@@ -197,3 +197,12 @@
 .xen-data-table .group-table tr td {
 	transition: none;
 }
+
+.dndhub-tab-content {
+	.xen-card {
+		@media screen and (max-width: $small-breakpoint) {
+			margin-bottom: 0;
+			border-bottom: 1px solid rgba(0, 0, 0, .24);
+		}
+	}
+}

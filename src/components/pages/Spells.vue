@@ -103,7 +103,7 @@
     </xen-tabs>
     <!-- Feat Dialog -->
     <div v-if="selectedSpell">
-      <xen-dialog :show="showDialog" @hide="showDialog = false" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true" class="spell-dialog">
+      <xen-dialog :show="showDialog" @hide="showDialog = $event" :title="selectedSpell.name || 'undefined'" :large="true" :fullscreen="true" :primary="true" class="spell-dialog">
         <div class="row spell-info">
           <div class="col-xs-12 spell-school">
             <span class="text-center body-2 xen-color-primary">{{ selectedSpell.level }} {{ selectedSpell.school }}</span>
@@ -132,7 +132,7 @@
           </div>
         </div>
         <div slot="actions">
-          <xen-button @click.native="showDialog = false" class="xen-color-primary">Close</xen-button>
+          <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
         </div>
       </xen-dialog>
     </div>

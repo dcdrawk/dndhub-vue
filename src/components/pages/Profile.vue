@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <xen-dialog :show="updatePhoto" @hide="updatePhoto = false" title="Update Profile Photo" :medium="true">
+    <xen-dialog :show="updatePhoto" @hide="updatePhoto = $event" title="Update Profile Photo" :medium="true">
       <div class="row">
 
         <input v-if="!uploading"  ref="photo" class="col-xs-12" type="file" @change="uploadErrorMessage = undefined"/>
@@ -50,7 +50,7 @@
 
       </div>
       <div slot="actions">
-        <xen-button class="xen-color-primary" @click.native="updatePhoto = false">Cancel</xen-button>
+        <xen-button class="xen-color-primary" @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="uploadPhoto()">Confirm</xen-button>
       </div>
     </xen-dialog>
@@ -109,7 +109,6 @@
         updatePhoto: false,
         uploading: false,
         uploadErrorMessage: undefined,
-        user: this.$root.user || undefined,
         tempUser: {
           displayName: '',
           email: ''
@@ -181,6 +180,13 @@
             this.updatePhoto = false
           })
         })
+      }
+    },
+
+    // Computed
+    computed: {
+      user () {
+        return this.$store.state.user
       }
     }
   }

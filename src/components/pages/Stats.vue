@@ -6,7 +6,7 @@
       <!-- Combat Tab -->
       <div slot="Combat">
         <!-- Combat Info -->
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
 
           <xen-card class="margin-bottom">
             <!-- <div class="row" v-if="!loaded"> -->
@@ -61,7 +61,7 @@
 
       <!-- Ability Scores Tab -->
       <div slot="Ability Scores">
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <div class="xen-data-table striped" v-if="loaded && character">
             <table>
               <thead>
@@ -103,7 +103,7 @@
       <!-- Skills Tab -->
       <div slot="Skills">
         <!-- Skills Info -->
-        <section class="page-tab-content">
+        <section class="dndhub-tab-content">
           <!-- {{ character.skills }} -->
           <div class="xen-data-table striped" v-if="loaded && skills && character">
             <table>

@@ -25,16 +25,16 @@
     </div>
 
     <!-- Delete Character Dialog -->
-    <xen-dialog :show="deleteDialog" @hide="deleteDialog = false" title="Delete Character" :small="true">
+    <xen-dialog :show="deleteDialog" @hide="deleteDialog = $event" title="Delete Character" :small="true">
       <p>Are you sure you want to delete this character?</p>
       <div slot="actions">
-        <xen-button @click.native="deleteDialog = false">Cancel</xen-button>
+        <xen-button @click.native="$bus.$emit('back')">Cancel</xen-button>
         <xen-button class="xen-color-primary" @click.native="deleteCharacter(deleteKey); deleteDialog = false">Delete</xen-button>
       </div>
     </xen-dialog>
 
     <!-- New Character Dialog -->
-    <xen-dialog :show="newCharacter" @hide="newCharacter = false" title="New Character" :large="true" :fullscreen="true">
+    <xen-dialog :show="newCharacter" @hide="newCharacter = $event" title="New Character" :large="true" :fullscreen="true">
       <div class="row xen-color-primary">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <xen-input label="Name" class="xen-color-primary xen-no-margin" type="text" :value="character.name" @input="$set(character, 'name', $event)"></xen-input>
@@ -160,7 +160,8 @@
       // Cancel character dialog
       cancel () {
         this.character = {}
-        this.newCharacter = false
+        this.$bus.$emit('back')
+        // this.newCharacter = false
       },
 
       // Fetch data
