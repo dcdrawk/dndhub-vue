@@ -42,16 +42,16 @@
       </div>
     </div>
     <xen-dialog :show="updatePhoto" @hide="updatePhoto = $event" title="Update Profile Photo" :medium="true">
-      <div class="row">
-
-        <input v-if="!uploading"  ref="photo" class="col-xs-12" type="file" @change="uploadErrorMessage = undefined"/>
+      <div>
+        <canvas id="canvas" ref="canvas" width="200" height="200"></canvas>
+        <input v-if="!uploading"  ref="photo" class="col-xs-12" type="file" @change="uploadErrorMessage = undefined; selectPhoto()"/>
         <xen-loading-spinner v-else class="xen-color-primary col-xs-12"></xen-loading-spinner>
         <p class="xen-color-red col-xs-12" v-if="uploadErrorMessage">{{ uploadErrorMessage }}</p>
 
       </div>
       <div slot="actions">
         <xen-button class="xen-color-primary" @click.native="$bus.$emit('back')">Cancel</xen-button>
-        <xen-button class="xen-color-primary" @click.native="uploadPhoto()">Confirm</xen-button>
+        <xen-button class="xen-color-primary" @click.native="uploadPhoto()">Upload</xen-button>
       </div>
     </xen-dialog>
     <xen-toast text="Your profile has been updated." :toggle="successToast" @hide="successToast = false"></xen-toast>
@@ -68,9 +68,16 @@
     margin: auto;
     display: block;
   }
+  #canvas {
+    margin: auto;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: block;
+  }
 </style>
 
 <script>
+  import Hammer from 'hammerjs'
   import XenButton from '../xen/Button'
   import XenCard from '../xen/Card'
   import XenCardActions from '../xen/CardActions'
@@ -81,6 +88,7 @@
   import XenLoadingSpinner from '../xen/LoadingSpinner'
   import XenPageToolbar from '../xen/PageToolbar'
   import XenToast from '../xen/Toast'
+  import XenSlider from '../xen/Slider'
 
   export default {
     // Name
@@ -97,7 +105,8 @@
       XenInput,
       XenLoadingSpinner,
       XenPageToolbar,
-      XenToast
+      XenToast,
+      XenSlider
     },
 
     // Data
@@ -109,6 +118,14 @@
         updatePhoto: false,
         uploading: false,
         uploadErrorMessage: undefined,
+        imageObj: {},
+        canvas: undefined,
+        contact: undefined,
+        photoScale: 1,
+        destX: 0,
+        destY: 0,
+        posX: 0,
+        posY: 0,
         tempUser: {
           displayName: '',
           email: ''
@@ -147,9 +164,8 @@
         })
       },
 
-      // Upload a profile photo
       /* eslint-disable no-undef, no-unused-vars */
-      uploadPhoto (photo) {
+      selectPhoto () {
         let reader = new FileReader()
         let file = this.$refs.photo.files[0]
 
@@ -158,28 +174,117 @@
           return
         }
 
-        // Set up references for firebase file upload
-        let storageRef = this.$firebase.storage().ref()
-        let uploadTask = storageRef.child('images/' + file.name).put(file)
-        this.uploading = true
+        console.log(file)
+        this.canvas = document.getElementById('canvas')
+        this.context = canvas.getContext('2d')
+        this.imageObj = new window.Image()
 
-        // Upload the file to firebase
-        uploadTask.on('state_changed', function (snapshot) {
-          // Observe state change events such as progress, pause, and resume
-          // See below for more detail
-        }, (error) => {
-          console.error(error) // Handle unsuccessful uploads
-        }, () => {
-          // Handle successful uploads on complete
-          this.$nextTick(() => {
-            let downloadURL = uploadTask.snapshot.downloadURL
-            this.user.photoURL = downloadURL
-            let user = Object.assign({}, this.user)
-            this.$root.user.updateProfile(user)
-            this.uploading = false
-            this.updatePhoto = false
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          // console.log(reader.result)
+          this.imageObj.src = reader.result
+        }
+
+        this.imageObj.onload = () => {
+          this.drawCanvas()
+          // draw cropped image
+          // var sourceX = 150
+          // var sourceY = 0
+          // var sourceWidth = 150
+          // var sourceHeight = 150
+          // var destWidth = sourceWidth
+          // var destHeight = sourceHeight
+          // var destX = 0
+          // var destY = 0
+
+          // this.context.drawImage(this.imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
+        }
+        // imageObj.src = file
+        // console.log(imageObj)
+      },
+
+      setScale (ev) {
+        // console.log(ev)
+        this.photoScale = ev / 100
+        this.drawCanvas()
+      },
+
+      // Upload a profile photo
+      /* eslint-disable no-undef, no-unused-vars */
+      uploadPhoto (photo) {
+        let reader = new FileReader()
+        let file = new window.Image()
+
+          // let file = this.$refs.photo.files[0]
+        this.canvas.toBlob(blob => {
+          console.log(blob)
+          let file = blob
+          // console.log(file)
+          if (!file) {
+            this.uploadErrorMessage = 'No File Selected'
+            return
+          }
+
+          // Set up references for firebase file upload
+          let storageRef = this.$firebase.storage().ref()
+          let uploadTask = storageRef.child('images/' + file.name).put(file)
+          this.uploading = true
+
+          // Upload the file to firebase
+          uploadTask.on('state_changed', function (snapshot) {
+            // Observe state change events such as progress, pause, and resume
+            // See below for more detail
+          }, (error) => {
+            console.error(error) // Handle unsuccessful uploads
+          }, () => {
+            // Handle successful uploads on complete
+            this.$nextTick(() => {
+              let downloadURL = uploadTask.snapshot.downloadURL
+              this.user.photoURL = downloadURL
+              let user = Object.assign({}, this.user)
+              this.$root.user.updateProfile(user)
+              this.uploading = false
+              this.updatePhoto = false
+            })
           })
         })
+      },
+
+      hammer () {
+        let canvas = new Hammer(this.$refs.canvas)
+        canvas.on('pan', (ev) => {
+          // var value = (this.translateX + ev.deltaX) / this.$refs.slider.clientWidth
+        })
+
+        canvas.on('panstart', (ev) => {
+          // this.focused = true
+        })
+
+        canvas.on('panend', (ev) => {
+          this.translate = this.translate + ev.deltaX
+        })
+      },
+
+      drawCanvas () {
+        this.context.clearRect(0, 0, canvas.width, canvas.height)
+        console.dir(this.imageObj)
+        // var sourceX = 0
+        // var sourceY = 0
+        // var sourceWidth = sourceWidth
+        // var sourceHeight = sourceHeight
+        // var destWidth = sourceWidth * this.photoScale
+        // var destHeight = sourceHeight * this.photoScale
+        // var destX = 0
+        // var destY = 0
+
+        // this.context.drawImage(this.imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
+        this.context.save()
+        // this.context.translate(0, 0)
+        // this.context.scale(this.photoScale, this.photoScale)
+        let size = 200
+        let ratio = size / this.imageObj.height
+        this.context.drawImage(this.imageObj, 0, 0, size, this.imageObj.height * ratio)
+        this.context.restore()
       }
     },
 
