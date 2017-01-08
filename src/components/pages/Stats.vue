@@ -173,7 +173,7 @@
               </thead>
               <tbody v-if="character.abilityScores">
                 <tr v-for="score in abilityScores" v-if="character.savingThrows[score.name]">
-                  <td class="xen-first-col">{{ score.name }} {{ character.savingThrows[score.name] }}</td>
+                  <td class="xen-first-col">{{ score.name }}</td>
                   <td class="text-center">
                   <xen-checkbox class="xen-color-primary" :value="character.savingThrows[score.name].proficiency"
                   @input="character.savingThrows[score.name].proficiency = $event;
