@@ -59,47 +59,6 @@
         </section>
       </div>
 
-      <!-- Ability Scores Tab -->
-      <div slot="Ability Scores">
-        <section class="dndhub-tab-content">
-          <div class="xen-data-table striped" v-if="loaded && character">
-            <table>
-              <thead>
-                <tr>
-                  <th class="xen-first-col">
-                    Stat
-                  </th>
-                  <th class="text-center">
-                    Base
-                  </th>
-                  <th class="text-center">
-                    Bonus
-                  </th>
-                  <th class="text-center">
-                    Modifier
-                  </th>
-                </tr>
-              </thead>
-              <tbody v-if="character.abilityScores">
-                <tr v-for="score in abilityScores" v-if="character.abilityScores[score.name]">
-                  <td class="xen-first-col">{{ score.name }}</td>
-                  <td class="text-center">
-                  <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].base || 0"
-                    @input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>
-                  </td>
-                  <td class="text-center" v-if="character.abilityScores[score.name]">
-                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
-                    @input="$set(character.abilityScores[score.name], 'bonus', $event); $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
-                  <td class="text-center">
-                    <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(+character.abilityScores[score.name].base, +character.abilityScores[score.name].bonus)"></xen-input>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
       <!-- Skills Tab -->
       <div slot="Skills">
         <!-- Skills Info -->
@@ -149,6 +108,95 @@
           </div>
         </section>
       </div>
+
+      <!-- Ability Scores Tab -->
+      <div slot="Ability Scores">
+        <section class="dndhub-tab-content">
+          <div class="xen-data-table striped" v-if="loaded && character">
+            <table>
+              <thead>
+                <tr>
+                  <th class="xen-first-col">
+                    Stat
+                  </th>
+                  <th class="text-center">
+                    Base
+                  </th>
+                  <th class="text-center">
+                    Bonus
+                  </th>
+                  <th class="text-center">
+                    Modifier
+                  </th>
+                </tr>
+              </thead>
+              <tbody v-if="character.abilityScores">
+                <tr v-for="score in abilityScores" v-if="character.abilityScores[score.name]">
+                  <td class="xen-first-col">{{ score.name }}</td>
+                  <td class="text-center">
+                  <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].base || 0"
+                    @input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>
+                  </td>
+                  <td class="text-center" v-if="character.abilityScores[score.name]">
+                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].bonus || 0"
+                    @input="$set(character.abilityScores[score.name], 'bonus', $event); $root.updateCharacter('abilityScores/' + score.name + '/', 'bonus', character.abilityScores[score.name].bonus);"></xen-input>
+                  <td class="text-center">
+                    <xen-input :disabled="true" class="xen-color-primary small-table-input" type="number" :value="getAbilityScoreModifier(+character.abilityScores[score.name].base, +character.abilityScores[score.name].bonus)"></xen-input>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Saving Throws Tab -->
+      <div slot="Saving Throws">
+        <section class="dndhub-tab-content">
+          <div class="xen-data-table striped" v-if="loaded && character">
+            <table>
+              <thead>
+                <tr>
+                  <th class="xen-first-col">
+                    Stat
+                  </th>
+                  <th class="text-center">
+                    Prof.
+                  </th>
+                  <th class="text-center">
+                    Bonus
+                  </th>
+                  <th class="text-center">
+                    Total
+                  </th>
+                </tr>
+              </thead>
+              <tbody v-if="character.abilityScores">
+                <tr v-for="score in abilityScores" v-if="character.savingThrows[score.name]">
+                  <td class="xen-first-col">{{ score.name }} {{ character.savingThrows[score.name] }}</td>
+                  <td class="text-center">
+                  <xen-checkbox class="xen-color-primary" :value="character.savingThrows[score.name].proficiency"
+                  @input="character.savingThrows[score.name].proficiency = $event;
+                  $root.updateCharacter('savingThrows/' + score.name + '/', 'proficiency', character.savingThrows[score.name].proficiency);">
+                  </xen-checkbox>
+                  </td>
+                  <td class="text-center" v-if="character.savingThrows[score.name]">
+                    <xen-input class="xen-color-primary small-table-input" type="number" :value="+character.savingThrows[score.name].bonus || 0"
+                    @input="$set(character.savingThrows[score.name], 'bonus', $event); $root.updateCharacter('savingThrows/' + score.name + '/', 'bonus', character.savingThrows[score.name].bonus);"></xen-input>
+                  <td class="text-center">
+                    <xen-input :disabled="true"
+                    class="xen-color-primary small-table-input"
+                    type="number"
+                    :value="getSavingThrowModifier(score.name)"></xen-input>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+
     </xen-tabs>
   </div>
 </template>
@@ -159,15 +207,6 @@
 .combat-divider {
   margin-bottom: 16px;
 }
-/*.small-table-input {
-  margin: auto;
-  padding-top: 16px;
-}
-.small-table-input,
-.small-table-input input {
-  text-align: center;
-  width: 40px;
-}*/
 @media screen and (max-width: $small-breakpoint) {
   th.xen-first-col {
     width: 100px;
@@ -283,10 +322,10 @@
     mounted () {
       // When a character is selected
       this.$bus.$on('character-selected', () => {
-        // this.character = Object.assign({}, character)
         if (this.character) {
           this.checkAbilityScores()
           this.checkSkills()
+          this.checkSavingThrows()
           this.loaded = true
         }
       })
@@ -296,6 +335,7 @@
         if (this.character) {
           this.checkAbilityScores()
           this.checkSkills()
+          this.checkSavingThrows()
           this.loaded = true
         }
       })
@@ -303,6 +343,7 @@
       if (this.character) {
         this.checkAbilityScores()
         this.checkSkills()
+        this.checkSavingThrows()
         this.loaded = true
       }
     },
@@ -388,6 +429,36 @@
           }
         })
         this.$set(this.character.skills, this.character.skills)
+      },
+
+      // Check the character for the skills attribute
+      checkSavingThrows () {
+        if (!this.character.savingThrows) {
+          this.$set(this.character, 'savingThrows', {})
+        }
+        this.abilityScores.forEach(score => {
+          if (!this.character.savingThrows.hasOwnProperty(score.name)) {
+            this.$set(this.character.savingThrows, score.name, { proficiency: false, bonus: 0 })
+          } else {
+            if (!this.character.savingThrows[score.name].proficiency) {
+              this.$set(this.character.savingThrows[score.name], 'proficiency', false)
+            }
+            if (!this.character.savingThrows[score.name].bonus) {
+              this.$set(this.character.savingThrows[score.name], 'bonus', 0)
+            }
+          }
+        })
+        this.$set(this.character.savingThrows, this.character.savingThrows)
+      },
+
+      getSavingThrowModifier (score) {
+        let total = this.character.abilityScores[score].base + this.character.abilityScores[score].bonus
+        let modifier = Math.floor((parseInt(total, 0) / 2 - 5))
+        if (this.character.savingThrows[score].proficiency) {
+          modifier += this.character.proficiencyBonus
+        }
+        return modifier + this.character.savingThrows[score].bonus
+        // return ()
       }
     },
 
