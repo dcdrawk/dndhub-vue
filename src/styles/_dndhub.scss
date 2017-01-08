@@ -206,3 +206,32 @@
 		}
 	}
 }
+
+.xen-input-container.small-table-input {
+  margin: auto;
+  padding-top: 16px;
+}
+.xen-input-container.small-table-input,
+.xen-input-container.small-table-input input {
+  text-align: center;
+  width: 40px;
+}
+
+.xen-input-container.medium-table-input {
+  margin: auto;
+  padding-top: 8px;
+}
+.xen-input-container.medium-table-input,
+.xen-input-container.medium-table-input input {
+  text-align: center;
+  width: 64px;
+}
+.search-bar {
+	padding: 16px 16px 0 16px;
+	.xen-input-container {
+		margin-bottom: 0;
+	}
+}
+.search-input.xen-input-container {
+	margin-bottom: 0;
+}

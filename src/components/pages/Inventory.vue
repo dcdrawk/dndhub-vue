@@ -49,7 +49,9 @@
       <!-- Browse inventory Tab -->
       <div slot="Browse">
         <section class="dndhub-tab-content">
-          <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search inventory" @input="filter = $event"></xen-input>
+          <div class="search-bar">
+            <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search inventory" @input="filter = $event"></xen-input>
+          </div>
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table>
               <thead>
@@ -78,6 +80,51 @@
               </tbody>
             </table>
           </div>
+        </section>
+      </div>
+
+      <!-- Currency Tab -->
+      <div slot="Currency">
+        <section class="dndhub-tab-content">
+            <xen-card class="margin-bottom" v-if="!loaded">
+              <xen-card-content>
+                <xen-loading-spinner class="xen-color-primary xen-no-margin"></xen-loading-spinner>
+              </xen-card-content>
+            </xen-card>
+            <div class="xen-data-table bordered hover" v-if="loaded">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="text-left xen-first-col">
+                      Name
+                    </th>
+                    <th class="text-center">
+                      Quantity
+                    </th>
+                  </tr>
+                </thead>
+                <tbody v-if="character.currency">
+                  <tr v-for="(currency, index) in currency">
+                    <td class="text-left xen-first-col">
+                      {{ currency.name }} ({{ currency.abbr }})
+                    </td>
+                    <td class="text-center">
+                      <xen-input :debounce="500"
+                      class="xen-color-primary medium-table-input"
+                      type="number"
+                      :value="character.currency[currency.abbr] || 0"
+                      @input="character.currency[currency.abbr] = $event; $root.updateCharacter('currency/', currency.abbr, character.currency[currency.abbr]);">
+                      </xen-input>
+                      <!--<xen-input class="xen-color-primary small-table-input" type="number" :value="+character.abilityScores[score.name].base || 0"-->
+                    <!--@input="character.abilityScores[score.name].base = $event; $root.updateCharacter('abilityScores/' + score.name + '/', 'base', character.abilityScores[score.name].base);"></xen-input>-->
+                    </td>
+                  </tr>
+                  <tr v-if="filteredinventory.length === 0">
+                    <td colspan="3" class="xen-first-col text-left">You haven't added any inventory yet</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </section>
       </div>
     </xen-tabs>
@@ -232,7 +279,23 @@
         toastMsg: '',
         newItemDialog: false,
         newItem: undefined,
-        showMore: false
+        showMore: false,
+        currency: [{
+          name: 'Copper',
+          abbr: 'cp'
+        }, {
+          name: 'Silver',
+          abbr: 'sp'
+        }, {
+          name: 'Electrum',
+          abbr: 'ep'
+        }, {
+          name: 'Gold',
+          abbr: 'gp'
+        }, {
+          name: 'Platinum',
+          abbr: 'pp'
+        }]
       }
     },
 
@@ -283,6 +346,9 @@
       checkinventory () {
         if (!this.character.inventory) {
           this.$set(this.character, 'inventory', [])
+        }
+        if (!this.character.currency) {
+          this.$set(this.character, 'currency', {})
         }
       },
 

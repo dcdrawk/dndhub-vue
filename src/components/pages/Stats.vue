@@ -159,7 +159,7 @@
 .combat-divider {
   margin-bottom: 16px;
 }
-.small-table-input {
+/*.small-table-input {
   margin: auto;
   padding-top: 16px;
 }
@@ -167,7 +167,7 @@
 .small-table-input input {
   text-align: center;
   width: 40px;
-}
+}*/
 @media screen and (max-width: $small-breakpoint) {
   th.xen-first-col {
     width: 100px;

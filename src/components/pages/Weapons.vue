@@ -49,7 +49,9 @@
       <!-- Browse Weapons Tab -->
       <div slot="Browse All">
         <section class="dndhub-tab-content">
-          <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Weapons" @input="filter = $event"></xen-input>
+          <div class="search-bar">
+            <xen-input class="xen-color-primary search-input" :value="filter" placeholder="Search Weapons" @input="filter = $event"></xen-input>
+          </div>
           <div class="xen-data-table bordered hover" v-if="loaded">
             <table>
               <thead>

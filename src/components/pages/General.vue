@@ -37,7 +37,7 @@
         <section class="dndhub-tab-content">
           <xen-card class="margin-bottom" v-if="character">
             <xen-card-header>
-              <h2 class="title">Primary Class {{character.archetype}}</h2>
+              <h2 class="title">Primary Class</h2>
             </xen-card-header>
             <xen-card-content>
               <div class="row">
