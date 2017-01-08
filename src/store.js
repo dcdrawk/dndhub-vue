@@ -12,10 +12,17 @@ const store = new Vuex.Store({
   },
   mutations: {
     login (state, user) {
+      console.log('login!')
+      console.log(user)
       state.user = user
     },
     logout (state) {
       state.user = undefined
+    },
+    update_profile_photo (state, url) {
+      state.user.photoURL = url
+      window.localStorage.setItem('user', window.JSON.stringify(state.user))
+      state.user.updateProfile(state.user)
     },
     update_character (state, character) {
       state.character = character

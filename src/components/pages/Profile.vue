@@ -43,7 +43,7 @@
     </div>
     <xen-dialog :show="updatePhoto" @hide="updatePhoto = $event" title="Update Profile Photo" :medium="true">
       <div>
-        <canvas id="canvas" ref="canvas" width="200" height="200"></canvas>
+        <canvas id="canvas" ref="canvas" width="200" height="200" v-show="canvas"></canvas>
         <input v-if="!uploading"  ref="photo" class="col-xs-12" type="file" @change="uploadErrorMessage = undefined; selectPhoto()"/>
         <xen-loading-spinner v-else class="xen-color-primary col-xs-12"></xen-loading-spinner>
         <p class="xen-color-red col-xs-12" v-if="uploadErrorMessage">{{ uploadErrorMessage }}</p>
@@ -173,10 +173,8 @@
           this.uploadErrorMessage = 'No File Selected'
           return
         }
-
-        console.log(file)
         this.canvas = document.getElementById('canvas')
-        this.context = canvas.getContext('2d')
+        this.context = this.canvas.getContext('2d')
         this.imageObj = new window.Image()
 
         reader.readAsDataURL(file)
@@ -187,24 +185,10 @@
 
         this.imageObj.onload = () => {
           this.drawCanvas()
-          // draw cropped image
-          // var sourceX = 150
-          // var sourceY = 0
-          // var sourceWidth = 150
-          // var sourceHeight = 150
-          // var destWidth = sourceWidth
-          // var destHeight = sourceHeight
-          // var destX = 0
-          // var destY = 0
-
-          // this.context.drawImage(this.imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
         }
-        // imageObj.src = file
-        // console.log(imageObj)
       },
 
       setScale (ev) {
-        // console.log(ev)
         this.photoScale = ev / 100
         this.drawCanvas()
       },
@@ -217,7 +201,6 @@
 
           // let file = this.$refs.photo.files[0]
         this.canvas.toBlob(blob => {
-          console.log(blob)
           let file = blob
           // console.log(file)
           if (!file) {
@@ -240,9 +223,7 @@
             // Handle successful uploads on complete
             this.$nextTick(() => {
               let downloadURL = uploadTask.snapshot.downloadURL
-              this.user.photoURL = downloadURL
-              let user = Object.assign({}, this.user)
-              this.$root.user.updateProfile(user)
+              this.$store.commit('update_profile_photo', downloadURL)
               this.uploading = false
               this.updatePhoto = false
             })
@@ -267,20 +248,7 @@
 
       drawCanvas () {
         this.context.clearRect(0, 0, canvas.width, canvas.height)
-        console.dir(this.imageObj)
-        // var sourceX = 0
-        // var sourceY = 0
-        // var sourceWidth = sourceWidth
-        // var sourceHeight = sourceHeight
-        // var destWidth = sourceWidth * this.photoScale
-        // var destHeight = sourceHeight * this.photoScale
-        // var destX = 0
-        // var destY = 0
-
-        // this.context.drawImage(this.imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
         this.context.save()
-        // this.context.translate(0, 0)
-        // this.context.scale(this.photoScale, this.photoScale)
         let size = 200
         let ratio = size / this.imageObj.height
         this.context.drawImage(this.imageObj, 0, 0, size, this.imageObj.height * ratio)
