@@ -173,7 +173,9 @@
               </thead>
               <tbody v-if="character.abilityScores">
                 <tr v-for="score in abilityScores" v-if="character.savingThrows[score.name]">
-                  <td class="xen-first-col">{{ score.name }}</td>
+                  <td class="xen-first-col">
+                    {{ score.name }}
+                  </td>
                   <td class="text-center">
                   <xen-checkbox class="xen-color-primary" :value="character.savingThrows[score.name].proficiency"
                   @input="character.savingThrows[score.name].proficiency = $event;
@@ -452,12 +454,14 @@
       },
 
       getSavingThrowModifier (score) {
-        let total = this.character.abilityScores[score].base + this.character.abilityScores[score].bonus
+        let bonus = +this.character.abilityScores[score].bonus || 0
+        let base = +this.character.abilityScores[score].base || 0
+        let total = bonus + base
         let modifier = Math.floor((parseInt(total, 0) / 2 - 5))
         if (this.character.savingThrows[score].proficiency) {
-          modifier += this.character.proficiencyBonus
+          modifier += +this.character.proficiencyBonus || 0
         }
-        return modifier + this.character.savingThrows[score].bonus
+        return modifier + +this.character.savingThrows[score].bonus || 0
         // return ()
       }
     },

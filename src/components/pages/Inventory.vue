@@ -26,7 +26,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(inventory, index) in filteredinventory">
+                  <tr v-for="(inventory, index) in character.inventory">
                     <td class="text-left xen-first-col" @click="selectinventory(inventory, false);">
                       {{ inventory.name }}
                     </td>
@@ -37,7 +37,7 @@
                       <xen-icon-button class="table-icon-button" icon="delete" @click.native="removeinventory(inventory, index)"></xen-icon-button>
                     </td>
                   </tr>
-                  <tr v-if="filteredinventory.length === 0">
+                  <tr v-if="inventory.length === 0">
                     <td colspan="3" class="xen-first-col text-left">You haven't added any inventory yet</td>
                   </tr>
                 </tbody>
@@ -135,7 +135,9 @@
         <div class="row">
           <ul class="property-list">
             <li>
-              <xen-input label="Name" class="xen-color-primary" :value="selectedInventory.name" :disabled="disableInput" @input="selectedInventory.name = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
+              <xen-input label="Name" class="xen-color-primary"
+              :value="selectedInventory.name" :disabled="disableInput"
+              @input="selectedInventory.name = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
             </li>
             <li v-if="!disableInput">
               <xen-input label="Quantity" class="xen-color-primary" :value="selectedInventory.quantity" :disabled="disableInput" @input="selectedInventory.quantity = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
@@ -153,6 +155,7 @@
               <xen-input label="Currency" class="xen-color-primary" :value="selectedInventory.currency" :disabled="disableInput" @input="selectedInventory.cost = $event; $root.updateCharacter('', 'inventory', character.inventory);"></xen-input>
             </li>
           </ul>
+          {{ character.inventory }}
         </div>
         <div slot="actions">
           <xen-button @click.native="$bus.$emit('back')" class="xen-color-primary">Close</xen-button>
@@ -396,14 +399,14 @@
       // Order the inventory alphabetically
       filteredinventory: function () {
         return _.orderBy(this.character.inventory, 'name')
-      },
+      }
 
       // Filter the list of in-game inventory
-      gameinventory: function () {
-        return this.inventory.filter((row) => {
-          return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
-        })
-      }
+      // gameinventory: function () {
+      //   return this.inventory.filter((row) => {
+      //     return row.name.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+      //   })
+      // }
     }
   }
 </script>

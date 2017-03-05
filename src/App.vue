@@ -223,6 +223,7 @@
       // },
 
       selectCharacter (characterName) {
+        console.log('character selected')
         for (let i in this.characters) {
           if (this.characters[i].name === characterName) {
             // let selectedCharacter = this.characters[i]
@@ -233,6 +234,8 @@
 
             let charRef = this.$firebase.database().ref('characters/' + this.$firebase.auth().currentUser.uid + '/' + i)
             charRef.on('value', (snapshot) => {
+              console.log('HEY DA CHAR WAS UPDTED')
+              console.log(snapshot.val())
               let selectedCharacter = snapshot.val()
               selectedCharacter.id = i
               this.$store.commit('update_character', selectedCharacter)
@@ -270,12 +273,16 @@
       // Save a character, requires a path to the property and value being assigned
       // e.g. path = 'skills/dexterity' value: {5}
       updateCharacter (path, prop, value) {
-        console.log('updating ' + prop + '...')
+        console.log('updating ' + prop + ' = ' + value)
         let userId = this.$firebase.auth().currentUser.uid
         let update = {}
         value = value || ''
         update[prop] = value
-        this.$firebase.database().ref('/characters/' + userId + '/' + this.character.id + '/' + path).update(update)
+        console.log(update)
+        this.$firebase.database().ref('/characters/' + userId + '/' + this.character.id + '/' + path).update(update).then((snapshot) => {
+          console.log(snapshot)
+        })
+        // this.$store.commit('update_character', )
       }
     },
 
